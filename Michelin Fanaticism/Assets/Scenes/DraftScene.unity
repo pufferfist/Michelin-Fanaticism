@@ -558,6 +558,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 496109692}
+    - target: {fileID: 8389990756262255664, guid: 219e253d2043b4bf382f7fbe08130e26, type: 3}
+      propertyPath: m_Size.y
+      value: 1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 219e253d2043b4bf382f7fbe08130e26, type: 3}
 --- !u!1001 &123815039
@@ -1365,6 +1369,26 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 681991326}
+    - target: {fileID: 8389990756262255664, guid: 219e253d2043b4bf382f7fbe08130e26, type: 3}
+      propertyPath: m_Size.x
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8389990756262255664, guid: 219e253d2043b4bf382f7fbe08130e26, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8389990756262255664, guid: 219e253d2043b4bf382f7fbe08130e26, type: 3}
+      propertyPath: m_Size.z
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8389990756262255664, guid: 219e253d2043b4bf382f7fbe08130e26, type: 3}
+      propertyPath: m_Center.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8389990756262255664, guid: 219e253d2043b4bf382f7fbe08130e26, type: 3}
+      propertyPath: m_Center.z
+      value: 0.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 219e253d2043b4bf382f7fbe08130e26, type: 3}
 --- !u!43 &235915155
@@ -2969,6 +2993,18 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 197050156}
+    - target: {fileID: 8302951571081606021, guid: d1e3a6c529e9c4ecc9260a8dcbc4e6bc, type: 3}
+      propertyPath: m_Size.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302951571081606021, guid: d1e3a6c529e9c4ecc9260a8dcbc4e6bc, type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8302951571081606021, guid: d1e3a6c529e9c4ecc9260a8dcbc4e6bc, type: 3}
+      propertyPath: m_Size.z
+      value: 1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d1e3a6c529e9c4ecc9260a8dcbc4e6bc, type: 3}
 --- !u!1001 &942661426
@@ -3088,8 +3124,8 @@ Camera:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.8773585, g: 0.8642211, b: 0.7325116, a: 0.94509804}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -4142,7 +4178,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f91153f24e90f4b6796c236b929f443c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 3
 --- !u!135 &1377550005
 SphereCollider:
   m_ObjectHideFlags: 0
