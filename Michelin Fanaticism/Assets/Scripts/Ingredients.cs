@@ -10,12 +10,13 @@ public class Ingredients : MonoBehaviour
         var player = other.GetComponent<MainCharacter>();
 
         if (player)
-        {
-            
-            //gameObject.SetActive(canPickUp(gameObject.name));
+        {          
             print(gameObject.name);
+            string[] strArray = gameObject.name.Split('(');
+            print(strArray[0]);
+            //gameObject.SetActive(canPickUp(strArray[0]));
             gameObject.SetActive(false);
-            
+           
         }
     }
 
