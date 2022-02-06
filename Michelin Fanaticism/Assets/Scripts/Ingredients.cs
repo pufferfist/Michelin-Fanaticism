@@ -11,7 +11,7 @@ public class Ingredients : MonoBehaviour
 
         if (player)
         {          
-            print(gameObject.name);
+            //print(gameObject.name);
             string[] strArray = gameObject.name.Split('(');
             print(strArray[0]);
             //gameObject.SetActive(canPickUp(strArray[0]));
