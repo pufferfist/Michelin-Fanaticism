@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     private Menu currentMenu;
     private List<string> pickedIngredients;
     private int currentScore;
-    private int resTime=180;
+    private int resTime=60;
     private float gameStartTime;
     private void Start()
     {
@@ -79,6 +79,7 @@ public class GameManager : MonoBehaviour
                 if (resTime <= 0)
                 {
                     gameState = GameState.GameOver;
+                   // Application.Quit();
                 }
                 
                 //Update menu
@@ -91,6 +92,7 @@ public class GameManager : MonoBehaviour
                 timeSlider.value = Time.time - currentMenu.startTime;
                 break;
             case GameState.GameOver:
+                Debug.Log("Game is Over");
                 Application.Quit();
                 break;
         }
@@ -99,6 +101,7 @@ public class GameManager : MonoBehaviour
     
     public bool canPickUp(string ingredientName)
     {
+        
         if (currentMenu.ingredients.Contains(ingredientName) && !pickedIngredients.Contains(ingredientName))
         {
             if (pickedIngredients.Count == 0)
@@ -136,6 +139,9 @@ public class GameManager : MonoBehaviour
         currentIngredientText1.text = "";
         currentIngredientText2.text = "";
         currentIngredientText3.text = "";
+        ingredientText1.text = "";
+        ingredientText2.text = "";
+        ingredientText3.text = "";
         int index = Random.Range(0, menus.Count);
         currentMenu = menus[index];
         currentMenu.startTime = Time.time;

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace MenuNameSpace
 {
-    public struct Menu
+    public class Menu
     {
         public int menuId;
         public string name;
