@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     private Menu currentMenu;
     private List<string> pickedIngredients;
     private int currentScore;
-    private float resTime=180.0f;
+    private int resTime=180;
     private float gameStartTime;
     private void Start()
     {
@@ -71,7 +71,8 @@ public class GameManager : MonoBehaviour
                 {
                     gameStartTime = Time.time;
                     resTime--;
-                    timeText.text=string.Format("{0:d2}:{1:d2}", resTime/ 60, resTime % 60);
+                    timeText.text = string.Format("{0:D2}:{1:D2}", resTime/ 60, resTime % 60);
+                    
                 }
                 
                 //If there is no remaining time, game is over.
