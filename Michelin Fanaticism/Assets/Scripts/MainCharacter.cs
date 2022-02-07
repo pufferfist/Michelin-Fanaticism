@@ -11,12 +11,15 @@ public class MainCharacter : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
+
         var h = Input.GetAxis("Horizontal");
-        rb.AddForce(new Vector3(1, 0, -h) * speed);
+        rb.AddForce(new Vector3(0, 0, -h) * speed);
     }
 }
