@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
     
     public bool canPickUp(string ingredientName)
     {
-        if (currentMenu.ingredients.Contains(ingredientName))
+        if (currentMenu.ingredients.Contains(ingredientName) && !pickedIngredients.Contains(ingredientName))
         {
             if (pickedIngredients.Count == 0)
             {
@@ -136,7 +136,7 @@ public class GameManager : MonoBehaviour
         currentIngredientText1.text = "";
         currentIngredientText2.text = "";
         currentIngredientText3.text = "";
-        int index = Random.Range(0, menus.Count - 1);
+        int index = Random.Range(0, menus.Count);
         currentMenu = menus[index];
         currentMenu.startTime = Time.time;
         currentMenu.endTime = Time.time + EXPIRE_TIME;

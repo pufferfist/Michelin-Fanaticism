@@ -11,12 +11,13 @@ public class Ingredients : MonoBehaviour
 
         if (player)
         {          
-            //print(gameObject.name);
+            print(gameObject.name);
             string[] strArray = gameObject.name.Split('(');
             print(strArray[0]);
             gameObject.SetActive(GameManager.gm.canPickUp(strArray[0]));
             //gameObject.SetActive(false);
-           
+            print(GameManager.gm.canPickUp(strArray[0]));
+
         }
     }
 
