@@ -5,7 +5,7 @@ using UnityEngine;
 public class MainCharacter : MonoBehaviour
 {
     private Rigidbody rb;
-    public float speed = 5;
+    public float speed = 25;
 
     // Start is called before the first frame update
     void Start()
@@ -20,6 +20,7 @@ public class MainCharacter : MonoBehaviour
 
 
         var h = Input.GetAxis("Horizontal");
-        rb.AddForce(new Vector3(0, 0, -h) * speed);
+//        rb.AddForce(new Vector3(0, 0, -h) * speed);
+        rb.velocity = new Vector3(rb.velocity.x,rb.velocity.y,-h*speed);
     }
 }
