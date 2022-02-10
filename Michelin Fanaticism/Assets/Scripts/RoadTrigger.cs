@@ -1,33 +1,119 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class RoadTrigger : MonoBehaviour
 {
-    public GameObject nextRoadObject;
-    public int roadLength = 300;
-    public bool skipFirstTrigger = true;
-    // Start is called before the first frame update
+    
+    public GameObject[] ingredientSourceObject;
+    public int roadLength = 600;
+    public int roadWidth = 30;
+    // ingridientCloseFactor is small means ingridient can be closer
+    public int ingridientCloseFactor = 4;
+    // for the firstRoad
+    public bool  startToCreate = false;
+
+    // ingridient type guarantee
+    bool  gachaGuarantee = true;
+
+    GameObject[] roadObject;  
+    GameObject triggerObject;
+    GameObject curRoadObject;  
+    GameObject nextRoadObject;  
+    List<GameObject> ingridientDynamicObject;
+    List<GameObject> ingridientDynamicObjectYoung;
+    List<List<bool>>  ingredientMap = new List<List<bool>>();
+    double densityRatio = 0.04;
+    int maxIngridientId = 2147483647;
     void Start()
     {
+
+        Debug.Log("OnTriggerStart");
+        ingridientDynamicObject =new List<GameObject> ();
+        ingridientDynamicObjectYoung = new List<GameObject> ();
+        roadObject =  GameObject.FindGameObjectsWithTag("OriginRoad");
         
+        triggerObject =  GameObject.FindGameObjectsWithTag("RoadTrigger")[0];
+
+        if(roadObject[0].transform.position.x<roadObject[1].transform.position.x){
+            CreateIngridients(roadObject[1]);
+        }else{
+            CreateIngridients(roadObject[0]);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
-    void OnTriggerEnter(Collider co) {
-
-        if (co.CompareTag("Player")){
-            if(skipFirstTrigger){
-                skipFirstTrigger = false;
-                return;
+    bool CheckMoveRoad(){
+        if(triggerObject.transform.position.x < curRoadObject.transform.position.x-roadLength/2 ){
+            return false;
+        }
+        return true;
+    }
+    // extend road and trigger
+    void MoveRoad(){
+        nextRoadObject.transform.position = new Vector3(nextRoadObject.transform.position.x+roadLength*2, nextRoadObject.transform.position.y, nextRoadObject.transform.position.z);
+        triggerObject.transform.position = new Vector3(triggerObject.transform.position.x+roadLength, triggerObject.transform.position.y, triggerObject.transform.position.z);
+    }
+    // clear old road ingridient
+     void ClearIngridients(){
+        foreach (GameObject obj in ingridientDynamicObject)
+        {
+            Destroy(obj);
+        }
+        ingridientDynamicObject.Clear();
+         foreach (GameObject obj in ingridientDynamicObjectYoung)
+        {
+            ingridientDynamicObject.Add(obj);
+        }
+        ingridientDynamicObjectYoung.Clear();
+    }
+    // create ingridients randomly
+    void CreateIngridients(GameObject road){
+        
+        Debug.Log("create ingridient for "+road.name);
+        int ingridientCounts = (int)( densityRatio * (roadLength/ingridientCloseFactor) * (roadWidth/ingridientCloseFactor));
+        int sourceTypeCount = ingredientSourceObject.Length;
+        
+        int sourceIndex = 0;
+        for(int i=0;i<ingridientCounts;i++){
+            if(sourceTypeCount == 0){
+                break;
             }
-            nextRoadObject.transform.position = new Vector3(nextRoadObject.transform.position.x+roadLength, nextRoadObject.transform.position.y, nextRoadObject.transform.position.z);
+            if(sourceIndex == sourceTypeCount){
+                sourceIndex = 0;
+            }
+            GameObject obj = (GameObject)Instantiate(ingredientSourceObject[sourceIndex]);
+            
+            int x = Random.Range(0,(int)(roadLength/ingridientCloseFactor))*ingridientCloseFactor;
 
-     }
+            int y = Random.Range(0,(int)(roadWidth/ingridientCloseFactor))*ingridientCloseFactor;
+            obj.name  = ingredientSourceObject[sourceIndex].name +" "+ Random.Range(0,maxIngridientId).ToString();
+            obj.transform.position = road.transform.position + new Vector3(x-roadLength/2+1, 0 , y-roadWidth/2+1);
+            obj.SetActive(true);
+            ingridientDynamicObjectYoung.Add(obj);
+            sourceIndex++;
+        }
+    }
+    // road extend trigger
+    void OnTriggerEnter(Collider co) {
+        Debug.Log("OnTriggerEnter");
+        if(roadObject[0].transform.position.x<roadObject[1].transform.position.x){
+           curRoadObject = roadObject[1];
+           nextRoadObject = roadObject[0];
+        }else{
+           curRoadObject = roadObject[0];
+           nextRoadObject = roadObject[1];
+        }
+        if (co.CompareTag("Player") && CheckMoveRoad()){
+
+            Debug.Log("OnTriggerValid");
+            MoveRoad();
+            ClearIngridients();
+            CreateIngridients(nextRoadObject);
+        }
 
     }
 }
