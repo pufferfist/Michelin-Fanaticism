@@ -18,12 +18,13 @@ public class RoadTrigger : MonoBehaviour
     GameObject[] roadObject;  
     GameObject triggerObject;
     GameObject curRoadObject;  
-    GameObject nextRoadObject;  
+    GameObject nextRoadObject;
     List<GameObject> ingridientDynamicObject;
     List<GameObject> ingridientDynamicObjectYoung;
     List<List<bool>>  ingredientMap = new List<List<bool>>();
     double densityRatio = 0.04;
     int maxIngridientId = 2147483647;
+
     void Start()
     {
 
