@@ -58,10 +58,13 @@ public class GameManager : MonoBehaviour
     private List<string> pickedIngredients1;
     private List<string> pickedIngredients2;
     private int currentScore;
-    private int resTime=60;
+    public int resTime=60;
+    public int[] successScore = {10};
     private float gameStartTime;
+    public GameObject successPanel;
+    public GameObject failPanel;    
     private float recipe2UpdateTime;
-    private float recipe3UpdateTime;
+    private float recipe3UpdateTime;    
     private void Start()
     {
         if (gm == null) 
@@ -144,7 +147,14 @@ public class GameManager : MonoBehaviour
                 break;
             case GameState.GameOver:
                 Debug.Log("Game is Over");
-                Application.Quit();
+                //Application.Quit();
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>().velocity = Vector3.zero;
+                //stop game--by speed
+                if(currentScore >= successScore[0]){
+                    successPanel.SetActive(true);
+                }else{
+                    failPanel.SetActive(true);
+                }
                 break;
         }
         
