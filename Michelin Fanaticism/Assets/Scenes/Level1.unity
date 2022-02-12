@@ -4387,7 +4387,7 @@ MonoBehaviour:
   recipe3: {fileID: 2054947634}
   panel1: {fileID: 703764906}
   panel2: {fileID: 1199619070}
-  resTime: 600
+  resTime: 150
   successScore: 05000000
   successPanel: {fileID: 1772188738}
   failPanel: {fileID: 1005591986}
@@ -4662,11 +4662,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5556131708906856020, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -510
+      value: -568
       objectReference: {fileID: 0}
     - target: {fileID: 5556131708906856020, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -266
+      value: -222
       objectReference: {fileID: 0}
     - target: {fileID: 5556131708906856021, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_Name
@@ -4806,11 +4806,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8494364042905031417, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -335
+      value: -395
       objectReference: {fileID: 0}
     - target: {fileID: 8494364042905031417, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -263
+      value: -222
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b92541840f824e0c9190485418740d5, type: 3}

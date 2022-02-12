@@ -86,7 +86,7 @@ public class GameManager : MonoBehaviour
         Menu menu1 = new Menu(1, "Burger", new List<string>(ingredients1));
         Menu menu2 = new Menu(2, "ChickenSandwich", new List<string>(ingredients2));
         Menu menu3 = new Menu(3, "SummerPudding", new List<string>(ingredients3));
-        Menu menu4 = new Menu(3, "HealthyFood", new List<string>(ingredients4));
+        Menu menu4 = new Menu(4, "HealthyFood", new List<string>(ingredients4));
         easyMenus = new List<Menu>();
         easyMenus.Add(menu1);
         easyMenus.Add(menu2);
