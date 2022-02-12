@@ -8,7 +8,7 @@ public class RoadTrigger : MonoBehaviour
     public int roadLength = 600;
     public int roadWidth = 30;
     // ingridientCloseFactor is small means ingridient can be closer
-    public int ingridientCloseFactor = 4;
+    public int ingridientCloseFactor = 2;
     // for the firstRoad
     public bool  startToCreate = false;
 
@@ -22,7 +22,7 @@ public class RoadTrigger : MonoBehaviour
     List<GameObject> ingridientDynamicObject;
     List<GameObject> ingridientDynamicObjectYoung;
     List<List<bool>>  ingredientMap = new List<List<bool>>();
-    double densityRatio = 0.04;
+    double densityRatio = 0.2;
     int maxIngridientId = 2147483647;
     void Start()
     {

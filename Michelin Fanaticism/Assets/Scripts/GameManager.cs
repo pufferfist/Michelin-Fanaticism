@@ -18,30 +18,50 @@ public class GameManager : MonoBehaviour
     }
     public GameState gameState;
     public Text scoreText;
+    //menu1
     public Text ingredientText1;
     public Text ingredientText2;
     public Text ingredientText3;
+    public Slider timeSlider1;
+    //menu2
     public Text ingredientText4;
     public Text ingredientText5;
-    public Text ingredientText6;
+    public Text ingredientText6;    
+    public Slider timeSlider2;
+    //menu3
     public Text ingredientText7;
     public Text ingredientText8;
     public Text ingredientText9;
-    public Text timeText;
-    public Slider timeSlider1;
-    public Slider timeSlider2;
     public Slider timeSlider3;
+    
+    public Text timeText;
+    
+    // names in collected panel1
     public Text currentIngredientText1;
     public Text currentIngredientText2;
     public Text currentIngredientText3;
+    // names in collected panel2
+    public Text currentIngredientText4;
+    public Text currentIngredientText5;
+    public Text currentIngredientText6;
+    public GameObject recipe1;
+    public GameObject recipe2;
+    public GameObject recipe3;
+    public GameObject panel1;
+    public GameObject panel2;
     private const float EXPIRE_TIME = 30.0f;
     private List<Menu> easyMenus;
     private List<Menu> hardMenus;
-    private Menu currentMenu;
-    private List<string> pickedIngredients;
+    private Menu currentMenu1;
+    private Menu currentMenu2;
+    private Menu currentMenu3;
+    private List<string> pickedIngredients1;
+    private List<string> pickedIngredients2;
     private int currentScore;
     private int resTime=60;
     private float gameStartTime;
+    private float recipe2UpdateTime;
+    private float recipe3UpdateTime;
     private void Start()
     {
         if (gm == null) 
@@ -51,6 +71,11 @@ public class GameManager : MonoBehaviour
         timeSlider1.maxValue = EXPIRE_TIME;
         timeSlider1.minValue = 0;
         timeSlider1.value = EXPIRE_TIME;
+        recipe1.SetActive(true);
+        recipe2.SetActive(false);
+        recipe3.SetActive(false);
+        panel1.SetActive(true);
+        panel2.SetActive(true);
         string[] ingredients1 = {"Beef", "Lettuce", "Bread"};
         string[] ingredients2 = {"Chicken", "Lettuce", "Bread"};
         string[] ingredients3 = {"Bread", "Strawberry"};
@@ -65,10 +90,12 @@ public class GameManager : MonoBehaviour
         easyMenus.Add(menu3);
         hardMenus = new List<Menu>();
         hardMenus.Add(menu4);
-        pickedIngredients = new List<string>();
+        pickedIngredients1 = new List<string>();
+        pickedIngredients2 = new List<string>();
         updateMenu();
         gameStartTime = Time.time;
-        
+        recipe2UpdateTime = gameStartTime;
+        recipe3UpdateTime = gameStartTime;
     }
 
     private void Update()
@@ -96,13 +123,24 @@ public class GameManager : MonoBehaviour
                 }
                 
                 //Update menu
-                if (currentMenu.endTime <= Time.time) 
+                if (currentMenu1.endTime <= Time.time) 
                 {
                     updateMenu();
                 }
                 
                 //Update timesLide for the current menu.
-                timeSlider1.value = Time.time - currentMenu.startTime;
+                timeSlider1.value = Time.time - currentMenu1.startTime;
+                if (recipe2.activeSelf == true)
+                {
+                    timeSlider2.value = Time.time - currentMenu2.startTime;
+                }
+                if (Time.time - recipe2UpdateTime > 3f && recipe2.activeSelf==false)
+                {
+                    recipe2.SetActive(true);
+                    currentMenu2 = getAMenu();
+                    setUpMenu(currentMenu2);
+                    recipe2UpdateTime = Time.time;
+                }
                 break;
             case GameState.GameOver:
                 Debug.Log("Game is Over");
@@ -115,25 +153,96 @@ public class GameManager : MonoBehaviour
     public bool canPickUp(string ingredientName)
     {
         
-        if (currentMenu.ingredients.Contains(ingredientName) && !pickedIngredients.Contains(ingredientName))
+        if (currentMenu1.ingredients.Contains(ingredientName) && !pickedIngredients1.Contains(ingredientName))
         {
-            if (pickedIngredients.Count == 0)
+            if (pickedIngredients1.Count == 0)
             {
                 currentIngredientText1.text = ingredientName;
             }
-            else if (pickedIngredients.Count == 1)
+            else if (pickedIngredients1.Count == 1)
             {
                 currentIngredientText2.text = ingredientName;
             }
-            else if(pickedIngredients.Count==2)
+            else if(pickedIngredients1.Count==2)
             {
                 currentIngredientText3.text = ingredientName;
             }
-            pickedIngredients.Add(ingredientName);
-            if (pickedIngredients.Count == currentMenu.ingredients.Count)
+            pickedIngredients1.Add(ingredientName);
+            if (pickedIngredients1.Count == currentMenu1.ingredients.Count)
             {
-                addScore(currentMenu);
+                addScore(currentMenu1);
                 updateMenu();
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    public bool canPickUpWithThreeMenusTwoPanels(string ingredientName)
+    {
+        // first find if it is still needed
+        int needIn1 = getIngreNeedNum(currentMenu1, ingredientName);
+        int needIn2 = getIngreNeedNum(currentMenu2, ingredientName);
+        int needIn3 = getIngreNeedNum(currentMenu3, ingredientName);
+        // int needNum = 2;
+        int needNum = needIn1 + needIn2 + needIn3;
+        int haveTotal = getIngreHaveNum(ingredientName);
+        Boolean isAdded = false;
+        //still need
+        if (currentMenu1.ingredients.Contains(ingredientName) ||currentMenu2.ingredients.Contains(ingredientName) && needNum > haveTotal)
+        {
+            //if add to the first panel
+            if (pickedIngredients1.Count == 0)
+            {
+                currentIngredientText1.text = ingredientName;
+                isAdded = true;
+            }
+            else if (pickedIngredients1.Count == 1 && !pickedIngredients1.Contains(ingredientName))
+            {
+                currentIngredientText2.text = ingredientName;
+                isAdded = true;
+            }
+            else if(pickedIngredients1.Count==2 && !pickedIngredients1.Contains(ingredientName))
+            {
+                currentIngredientText3.text = ingredientName;
+                isAdded = true;
+            }
+
+            if (isAdded)
+            {
+                pickedIngredients1.Add(ingredientName);
+            }
+            //need but first panel cannot be added, add to second
+            else 
+            {
+                if (pickedIngredients2.Count == 0)
+                {
+                    currentIngredientText4.text = ingredientName;
+                }
+                else if (pickedIngredients2.Count == 1)
+                {
+                    currentIngredientText5.text = ingredientName;
+                }
+                else if(pickedIngredients2.Count==2)
+                {
+                    currentIngredientText6.text = ingredientName;
+                }
+                pickedIngredients2.Add(ingredientName);
+            }
+            
+            if (pickedIngredients1.Count == currentMenu1.ingredients.Count)
+            {
+                addScore(currentMenu1);
+                updateWhichMenu(1);
+            }
+
+            if (pickedIngredients2.Count == currentMenu2.ingredients.Count)
+            {
+                addScore(currentMenu2);
+                recipe2.SetActive(false);
+                currentIngredientText4.text = "";
+                currentIngredientText5.text = "";
+                currentIngredientText6.text = "";
             }
             return true;
         }
@@ -142,66 +251,202 @@ public class GameManager : MonoBehaviour
 
     private void addScore(Menu menu)
     {
-        Boolean isFind = false;
-        for (var i = 0; i < easyMenus.Count; i++)
+        if (menu.name == "ChickenSandwich")
         {
-            if (menu.name == easyMenus[i].name)
-            {
-                currentScore++;
-                isFind = true;
-                break;
-            }
-        }
-        if (!isFind)
+            currentScore += 2;
+        } else if (menu.name == "Burger")
         {
-            for (var i = 0; i < hardMenus.Count; i++)
-            {
-                if (menu.name == hardMenus[i].name)
-                {
-                    currentScore+=3; 
-                }
-            }
+            currentScore += 3;
+        }else if (menu.name == "SummerPudding")
+        {
+            currentScore += 4;
+        }else if (menu.name == "HealthyFood")
+        {
+            currentScore += 5;
         }
-
     }
     
     private void updateMenu()
     {
         timeSlider1.value = EXPIRE_TIME;
-        pickedIngredients = new List<string>();
+        pickedIngredients1 = new List<string>();
+        //clear panel1
         currentIngredientText1.text = "";
         currentIngredientText2.text = "";
         currentIngredientText3.text = "";
+        //clear menu1
         ingredientText1.text = "";
         ingredientText2.text = "";
         ingredientText3.text = "";
+        //select a menu to show
+        currentMenu1 = getAMenu();
+        //set up menu expiration time
+        currentMenu1.startTime = Time.time;
+        currentMenu1.endTime = Time.time + EXPIRE_TIME;
+        //show the menu
+        if (currentMenu1.ingredients.Count == 3)
+        {
+            ingredientText1.text = currentMenu1.ingredients[0];
+            ingredientText2.text = currentMenu1.ingredients[1];
+            ingredientText3.text = currentMenu1.ingredients[2];
+        }
+        else if (currentMenu1.ingredients.Count == 2)
+        {
+            ingredientText1.text = currentMenu1.ingredients[0];
+            ingredientText2.text = currentMenu1.ingredients[1];
+        }
+        else if(currentMenu1.ingredients.Count==1)
+        {
+            ingredientText1.text = currentMenu1.ingredients[0];
+        }
+    }
+    //update which menu
+    private void updateWhichMenu(int whichMenu)
+    {
+        if (whichMenu == 1) {
+            updateMenu();
+        }
+        else if (whichMenu == 2)
+        {
+            if (recipe2.activeSelf == false)
+            {
+                recipe2.SetActive(true);
+            }
+            currentMenu2 = getAMenu();
+            setUpMenu(currentMenu2);
+        }else if (whichMenu == 3)
+        {
+            if (recipe3.activeSelf == false)
+            {
+                recipe3.SetActive(true);
+            }
+            currentMenu3 = getAMenu();
+            setUpMenu(currentMenu3);
+        }
+    }
+    //get How many this ingredients are needed
+    private int getIngreNeedNum(Menu menu, String ingredientName)
+    {
+        int needNum = 0;
+        if (menu != null)
+        {
+            for (var i = 0; i < menu.ingredients.Count; i++)
+            {
+                if (ingredientName == menu.ingredients[i])
+                {
+                    needNum++;
+                }
+            }
+        }
+
+        return needNum;
+    }
+    
+    //get How many Ingredients we have
+    private int getIngreHaveNum(String ingredientName)
+    {
+        int haveNum = 0;
+        if (pickedIngredients1 != null)
+        {
+            for (var i = 0; i < pickedIngredients1.Count; i++)
+            {
+                if (pickedIngredients1[i] == ingredientName)
+                {
+                    haveNum++;
+                }
+            }
+        }
+        if (pickedIngredients2 != null)
+        {
+            for (var i = 0; i < pickedIngredients2.Count; i++)
+            {
+                if (pickedIngredients2[i] == ingredientName)
+                {
+                    haveNum++;
+                }
+            }
+        }
+        return haveNum;
+    }
+
+    private Menu getAMenu()
+    {
         int isHard = Random.Range(0, 2);
         if (isHard == 1)
         {
             int index = Random.Range(0, hardMenus.Count);
-            currentMenu = hardMenus[index];
+            return hardMenus[index];
         }
         else
         {
             int index = Random.Range(0, easyMenus.Count);
-            currentMenu = easyMenus[index];
-        }
-        currentMenu.startTime = Time.time;
-        currentMenu.endTime = Time.time + EXPIRE_TIME;
-        if (currentMenu.ingredients.Count == 3)
-        {
-            ingredientText1.text = currentMenu.ingredients[0];
-            ingredientText2.text = currentMenu.ingredients[1];
-            ingredientText3.text = currentMenu.ingredients[2];
-        }
-        else if (currentMenu.ingredients.Count == 2)
-        {
-            ingredientText1.text = currentMenu.ingredients[0];
-            ingredientText2.text = currentMenu.ingredients[1];
-        }
-        else if(currentMenu.ingredients.Count==1)
-        {
-            ingredientText1.text = currentMenu.ingredients[0];
+            return easyMenus[index];
         }
     }
+
+    private void setUpMenu(Menu menu)
+    {
+        //set up menu expiration time
+        menu.startTime = Time.time;
+        menu.endTime = Time.time + EXPIRE_TIME;
+        //show the menu
+        if ( menu == currentMenu1 )
+        {
+            timeSlider1.value = EXPIRE_TIME;
+            if (menu.ingredients.Count == 3)
+            {
+                ingredientText1.text = menu.ingredients[0];
+                ingredientText2.text = menu.ingredients[1];
+                ingredientText3.text = menu.ingredients[2];
+            }
+            else if (menu.ingredients.Count == 2)
+            {
+                ingredientText1.text = menu.ingredients[0];
+                ingredientText2.text = menu.ingredients[1];
+            }
+            else if(menu.ingredients.Count==1)
+            {
+                ingredientText1.text = menu.ingredients[0];
+            }
+        }else if (menu == currentMenu2)
+        {
+            timeSlider2.value = EXPIRE_TIME;
+            if (menu.ingredients.Count == 3)
+            {
+                ingredientText4.text = menu.ingredients[0];
+                ingredientText5.text = menu.ingredients[1];
+                ingredientText6.text = menu.ingredients[2];
+            }
+            else if (menu.ingredients.Count == 2)
+            {
+                ingredientText4.text = menu.ingredients[0];
+                ingredientText5.text = menu.ingredients[1];
+            }
+            else if(menu.ingredients.Count==1)
+            {
+                ingredientText4.text = menu.ingredients[0];
+            }
+        }else if (menu == currentMenu3)
+        {
+            timeSlider3.value = EXPIRE_TIME;
+            if (menu.ingredients.Count == 3)
+            {
+                ingredientText7.text = menu.ingredients[0];
+                ingredientText8.text = menu.ingredients[1];
+                ingredientText9.text = menu.ingredients[2];
+            }
+            else if (menu.ingredients.Count == 2)
+            {
+                ingredientText7.text = menu.ingredients[0];
+                ingredientText8.text = menu.ingredients[1];
+            }
+            else if(menu.ingredients.Count==1)
+            {
+                ingredientText7.text = menu.ingredients[0];
+            }
+        }
+        menu.startTime = Time.time;
+        menu.endTime = Time.time + EXPIRE_TIME;
+    }
+    
 }
