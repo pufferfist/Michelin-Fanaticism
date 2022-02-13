@@ -28,7 +28,7 @@ namespace PanelSpace
             return isBusy;
         }
 
-        public void finish()
+        public void reset()
         {
             forwhichmenu = -1;
             pickedIngredients.Clear();
