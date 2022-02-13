@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +16,8 @@ public class Ingredients : MonoBehaviour
             string[] strArray = gameObject.name.Split(' ');
             ingredientName = strArray[0];
             // gameObject.SetActive(!GameManager.gm.canPickUp(ingredientName));
-            gameObject.SetActive(!GameManager.gm.canPickUpWithThreeMenusTwoPanels(ingredientName));
+            Boolean colleced = GameManager.gm.canPickUpWithThreeMenusTwoPanels(ingredientName);
+            gameObject.SetActive(!colleced);
         }
     }
 

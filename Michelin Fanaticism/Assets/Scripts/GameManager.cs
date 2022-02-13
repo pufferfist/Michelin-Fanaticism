@@ -73,6 +73,7 @@ public class GameManager : MonoBehaviour
     public int resTime = 60;
     public int[] successScore = {10};
     private float gameStartTime;
+    private float updateTimer;
     public GameObject successPanel;
     public GameObject failPanel;
     private float recipe2UpdateTime;
@@ -119,10 +120,18 @@ public class GameManager : MonoBehaviour
                 }
 
                 //Update menu
-                if (currentMenu1.endTime <= Time.time)
+                // if (currentMenu1.endTime <= Time.time)
+                // {
+                //     updateMenu();
+                // }
+
+                if (Time.time - updateTimer > 0.5)
                 {
-                    updateMenu();
+                    showMenus();
+                    showPanels();
+                    updateTimer = Time.time;
                 }
+
 
                 //Update timesLide for the current menu.
                 timeSlider1.value = Time.time - currentMenu1.startTime;
@@ -168,7 +177,7 @@ public class GameManager : MonoBehaviour
             if (pickedIngredients1.Count == currentMenu1.ingredients.Count)
             {
                 addScore(currentMenu1);
-                updateMenu();
+                // updateMenu();
             }
 
             return true;
@@ -189,12 +198,13 @@ public class GameManager : MonoBehaviour
         if (isPanel1Busy && isPanel2Busy)
         {
             // see if someone need and add to it
+            // they both need
             if (toBeDoneMenus[preparingMenuOfPanel1].ingredients.Contains(ingredientName) &&
                 !panel1.getPickedIngre().Contains(ingredientName) &&
                 toBeDoneMenus[preparingMenuOfPanel2].ingredients.Contains(ingredientName) &&
                 !panel2.getPickedIngre().Contains(ingredientName))
             {
-                //panel1 & panel2 needs(ingreName in menu but not appears in pickedIngreList) simultaneously, give it to the old one
+                //panel1 & panel2 need(ingreName in menu but not appears in pickedIngreList) simultaneously, give it to the old one
                 if (preparingMenuOfPanel1 > preparingMenuOfPanel2)
                 {
                     panel2.addIngre(ingredientName);
@@ -206,6 +216,7 @@ public class GameManager : MonoBehaviour
                 finishAMenu();
                 return true;
             }
+            //only panel1 need
             if (toBeDoneMenus[preparingMenuOfPanel1].ingredients.Contains(ingredientName) &&
                 !panel1.getPickedIngre().Contains(ingredientName))
             {
@@ -213,7 +224,9 @@ public class GameManager : MonoBehaviour
                 panel1.addIngre(ingredientName);
                 finishAMenu();
                 return true;
-            }else if (toBeDoneMenus[preparingMenuOfPanel2].ingredients.Contains(ingredientName) &&
+            }
+            //only panel2 need
+            if (toBeDoneMenus[preparingMenuOfPanel2].ingredients.Contains(ingredientName) &&
                       !panel2.getPickedIngre().Contains(ingredientName))
             {
                 //panel2 needs
@@ -235,7 +248,6 @@ public class GameManager : MonoBehaviour
                     return true; 
                 }
             }
-            return true;
         }
         // one of them is busy
         else
@@ -295,7 +307,8 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        showPanels();
+        
+        // showPanels();
         return false;
     }
 
@@ -527,7 +540,7 @@ public class GameManager : MonoBehaviour
     private void finishAMenu()
     {
         //if a panel has enough ingre
-        if (panel1.getPickedIngre().Count == toBeDoneMenus[panel1.getForWhichMenu()].ingredients.Count)
+        if (panel1.getIsBusy() && panel1.getPickedIngre().Count == toBeDoneMenus[panel1.getForWhichMenu()].ingredients.Count)
         {
             addScore(toBeDoneMenus[panel1.getForWhichMenu()]);
             //移除待做
@@ -538,7 +551,7 @@ public class GameManager : MonoBehaviour
             panel1.reset();
         }
 
-        if (panel2.getPickedIngre().Count == toBeDoneMenus[panel2.getForWhichMenu()].ingredients.Count)
+        if (panel2.getIsBusy() && panel2.getPickedIngre().Count == toBeDoneMenus[panel2.getForWhichMenu()].ingredients.Count)
         {
             addScore(toBeDoneMenus[panel2.getForWhichMenu()]);
             //移除待做
@@ -548,7 +561,7 @@ public class GameManager : MonoBehaviour
             //重置panel
             panel2.reset();
         }
-        showMenus();
+        // showMenus();
     }
 
     private void showMenus()
@@ -619,8 +632,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private int showPanelTimes; 
     private void showPanels()
     {
+        Debug.Log(showPanelTimes++);
         if (panel1.getPickedIngre().Count == 0)
         {
             currentIngredientText1.text = "";
@@ -662,5 +677,10 @@ public class GameManager : MonoBehaviour
             currentIngredientText5.text = panel2.getPickedIngre()[1];
             currentIngredientText6.text = panel2.getPickedIngre()[2];
         }
+    }
+
+    private void manageSlider()
+    {
+        
     }
 }
