@@ -22,5 +22,6 @@ public class MainCharacter : MonoBehaviour
         var h = Input.GetAxis("Horizontal");
 //        rb.AddForce(new Vector3(0, 0, -h) * speed);
         rb.velocity = new Vector3(rb.velocity.x,rb.velocity.y,-h*speed);
+        rb.position = new Vector3 (rb.position.x, rb.position.y, Mathf.Clamp(rb.position.z ,-14, 14));
     }
 }
