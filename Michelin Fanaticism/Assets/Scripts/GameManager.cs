@@ -636,6 +636,12 @@ public class GameManager : MonoBehaviour
             currentIngredientText1.text = panel1.getPickedIngre()[0];
             currentIngredientText2.text = panel1.getPickedIngre()[1];
         }
+        else if (panel1.getPickedIngre().Count == 3)
+        {
+            currentIngredientText1.text = panel1.getPickedIngre()[0];
+            currentIngredientText2.text = panel1.getPickedIngre()[1];
+            currentIngredientText3.text = panel1.getPickedIngre()[2];
+        }
         if (panel2.getPickedIngre().Count == 0)
         {
             currentIngredientText4.text = "";
@@ -644,12 +650,17 @@ public class GameManager : MonoBehaviour
         }
         else if (panel2.getPickedIngre().Count == 1)
         {
-            currentIngredientText4.text = panel1.getPickedIngre()[0];
+            currentIngredientText4.text = panel2.getPickedIngre()[0];
         }
         else if (panel2.getPickedIngre().Count == 2)
         {
-            currentIngredientText4.text = panel1.getPickedIngre()[0];
-            currentIngredientText5.text = panel1.getPickedIngre()[1];
+            currentIngredientText4.text = panel2.getPickedIngre()[0];
+            currentIngredientText5.text = panel2.getPickedIngre()[1];
+        }else if (panel2.getPickedIngre().Count == 3)
+        {
+            currentIngredientText4.text = panel2.getPickedIngre()[0];
+            currentIngredientText5.text = panel2.getPickedIngre()[1];
+            currentIngredientText6.text = panel2.getPickedIngre()[2];
         }
     }
 }
