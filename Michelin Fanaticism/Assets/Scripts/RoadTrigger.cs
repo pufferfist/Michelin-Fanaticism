@@ -21,8 +21,8 @@ public class RoadTrigger : MonoBehaviour
     GameObject nextRoadObject;
     List<GameObject> ingridientDynamicObject;
     List<GameObject> ingridientDynamicObjectYoung;
-    List<List<bool>>  ingredientMap = new List<List<bool>>();
-    double densityRatio = 0.2;
+    List<bool>  ingredientMap;
+    public double densityRatio = 0.2;
     int maxIngridientId = 2147483647;
 
     void Start()
@@ -73,11 +73,12 @@ public class RoadTrigger : MonoBehaviour
     }
     // create ingridients randomly
     void CreateIngridients(GameObject road){
-        
         Debug.Log("create ingridient for "+road.name);
         int ingridientCounts = (int)( densityRatio * (roadLength/ingridientCloseFactor) * (roadWidth/ingridientCloseFactor));
+        int widthMap = (roadWidth/ingridientCloseFactor)+1;
+        int lengthMap = (roadLength/ingridientCloseFactor)+1 ;
+        ingredientMap = new List<bool>(new bool[(widthMap)*(lengthMap)]);
         int sourceTypeCount = ingredientSourceObject.Length;
-        
         int sourceIndex = 0;
         for(int i=0;i<ingridientCounts;i++){
             if(sourceTypeCount == 0){
@@ -86,11 +87,21 @@ public class RoadTrigger : MonoBehaviour
             if(sourceIndex == sourceTypeCount){
                 sourceIndex = 0;
             }
-            GameObject obj = (GameObject)Instantiate(ingredientSourceObject[sourceIndex]);
-            
-            int x = Random.Range(0,(int)(roadLength/ingridientCloseFactor))*ingridientCloseFactor;
 
-            int y = Random.Range(0,(int)(roadWidth/ingridientCloseFactor))*ingridientCloseFactor;
+            int x = Random.Range(0,(int)(roadLength/ingridientCloseFactor));
+            int y = Random.Range(0,(int)(roadWidth/ingridientCloseFactor));
+
+            if(ingredientMap[x*widthMap+y]){
+                //Debug.Log("ingridient not pass "+x.ToString() + " " +y.ToString());
+                i--;
+                continue;
+            }
+
+            ingredientMap[x*widthMap+y] = true;
+            x = x* ingridientCloseFactor;
+            y = y* ingridientCloseFactor;
+            GameObject obj = (GameObject)Instantiate(ingredientSourceObject[sourceIndex]);
+        
             obj.name  = ingredientSourceObject[sourceIndex].name +" "+ Random.Range(0,maxIngridientId).ToString();
             obj.transform.position = road.transform.position + new Vector3(x-roadLength/2+1, 0 , y-roadWidth/2+1);
             obj.SetActive(true);
