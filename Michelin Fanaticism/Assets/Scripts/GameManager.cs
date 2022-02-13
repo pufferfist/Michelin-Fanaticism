@@ -129,12 +129,12 @@ public class GameManager : MonoBehaviour
                 {
                     showMenus();
                     showPanels();
+                    updateSlider();
+                    sliderExpire();
                     updateTimer = Time.time;
                 }
-
-
                 //Update timesLide for the current menu.
-                timeSlider1.value = Time.time - currentMenu1.startTime;
+                // timeSlider1.value = Time.time - currentMenu1.startTime;
                 break;
             case GameState.GameOver:
                 Debug.Log("Game is Over");
@@ -564,6 +564,21 @@ public class GameManager : MonoBehaviour
         // showMenus();
     }
 
+    private void expireMenu(int whichMenu)
+    {
+        //移除待做
+        toBeDoneMenus.RemoveAt(whichMenu);
+        //增加待做
+        toBeDoneMenus.Add(MenuTools.getAMenu(easyMenus));
+        if (panel1.getForWhichMenu() == whichMenu)
+        {
+            panel1.reset();
+        }else if (panel2.getForWhichMenu() == whichMenu)
+        {
+            panel2.reset();
+        }
+    }
+
     private void showMenus()
     {
         Menu[] toBeDoneMenusArray = toBeDoneMenus.ToArray();
@@ -679,8 +694,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void manageSlider()
+    private void updateSlider()
     {
-        
+        timeSlider1.value = Time.time - toBeDoneMenus[0].startTime;
+        timeSlider2.value = Time.time - toBeDoneMenus[1].startTime;
+        timeSlider3.value = Time.time - toBeDoneMenus[2].startTime;
+    }
+
+    private void sliderExpire()
+    {
+        if (timeSlider1.value >= EXPIRE_TIME)
+        {
+            expireMenu(0);
+        }
+        if (timeSlider2.value >= EXPIRE_TIME)
+        {
+            expireMenu(1);
+        }
+        if (timeSlider2.value >= EXPIRE_TIME)
+        {
+            expireMenu(2);
+        }
     }
 }
