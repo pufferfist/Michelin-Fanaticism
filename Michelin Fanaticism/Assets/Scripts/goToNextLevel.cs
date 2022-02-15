@@ -10,7 +10,8 @@ public class goToNextLevel : MonoBehaviour
     }
 
     public void ExitClick(){
-        Application.Quit();
+        SceneManager.LoadScene(0);
+//        Application.Quit();
     }
 
 
