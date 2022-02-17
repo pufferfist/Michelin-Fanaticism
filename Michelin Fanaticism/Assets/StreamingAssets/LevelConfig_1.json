@@ -1,0 +1,24 @@
+{
+    "IngridientsWeights":[
+        {
+            "Name":"Chicken",
+            "Weight":50
+        },
+        {
+            "Name":"Lettuce",
+            "Weight":10
+        },
+        {
+            "Name":"Strawberry",
+            "Weight":10
+        },
+        {
+            "Name":"Bread",
+            "Weight":10
+        },
+        {
+            "Name":"Beef",
+            "Weight":50
+        }
+    ]
+}

@@ -1,6 +1,29 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+public class IngridientSelector
+{
+    LevelConfigObj m_configObj;
+    Dictionary<string, int> indexMap;
+    List<int> randomMap;
+    public void init(int level,GameObject[] ingredientSourceObject){
+          LevelConfigObj configObj = ConfigReader.LoadJsonFromFile<LevelConfigObj>(level);
+          indexMap = new Dictionary<string, int>();
+          randomMap = new List<int>();
+          for(int i=0;i<ingredientSourceObject.Length;i++){
+              indexMap[ingredientSourceObject[i].name] = i;
+          }
+          for(int i=0;i<configObj.IngridientsWeights.Length;i++){
+              for(int j=0;j<configObj.IngridientsWeights[i].Weight;j++){
+                    randomMap.Add(indexMap[configObj.IngridientsWeights[i].Name]);
+              }
+          }
+    }
+    public int nextIngredientTypeIndex(){
+        return randomMap[Random.Range(0,randomMap.Count-1)];
+    }
+   
+}
 public class RoadTrigger : MonoBehaviour
 {
     
@@ -71,8 +94,15 @@ public class RoadTrigger : MonoBehaviour
         }
         ingridientDynamicObjectYoung.Clear();
     }
+    void GetIngridientsConfig(int level){
+         LevelConfigObj configObj = ConfigReader.LoadJsonFromFile<LevelConfigObj>(level);
+     
+        
+    }
     // create ingridients randomly
     void CreateIngridients(GameObject road){
+        IngridientSelector ingridientSelector = new IngridientSelector();
+        ingridientSelector.init(1,ingredientSourceObject);
         Debug.Log("create ingridient for "+road.name);
         int ingridientCounts = (int)( densityRatio * (roadLength/ingridientCloseFactor) * (roadWidth/ingridientCloseFactor));
         int widthMap = (roadWidth/ingridientCloseFactor)+1;
@@ -84,10 +114,7 @@ public class RoadTrigger : MonoBehaviour
             if(sourceTypeCount == 0){
                 break;
             }
-            if(sourceIndex == sourceTypeCount){
-                sourceIndex = 0;
-            }
-
+          
             int x = Random.Range(0,(int)(roadLength/ingridientCloseFactor));
             int y = Random.Range(0,(int)(roadWidth/ingridientCloseFactor));
 
@@ -100,13 +127,14 @@ public class RoadTrigger : MonoBehaviour
             ingredientMap[x*widthMap+y] = true;
             x = x* ingridientCloseFactor;
             y = y* ingridientCloseFactor;
+            sourceIndex = ingridientSelector.nextIngredientTypeIndex();
             GameObject obj = (GameObject)Instantiate(ingredientSourceObject[sourceIndex]);
         
             obj.name  = ingredientSourceObject[sourceIndex].name +" "+ Random.Range(0,maxIngridientId).ToString();
             obj.transform.position = road.transform.position + new Vector3(x-roadLength/2+1, 0 , y-roadWidth/2+1);
             obj.SetActive(true);
             ingridientDynamicObjectYoung.Add(obj);
-            sourceIndex++;
+            
         }
     }
     // road extend trigger
