@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using UnityEngine;
 using MenuNameSpace;
 using UnityEngine.UI;
@@ -9,19 +10,18 @@ using Random = UnityEngine.Random;
 using MenuToolsSpace;
 using PanelSpace;
 using UnityEngine.Analytics;
+using UnityEngine.Serialization;
 
 public class GameManager : MonoBehaviour
 {
-    static public GameManager gm;
-
-    public enum GameState
-    {
-        Playing,
-        GameOver,
-        OnHold
-    }
+    public static GameManager gm;
 
     public GameState gameState;
+
+    public MainCharacter character;
+
+    public GameObject ui;
+    private UIHandler uiHandler;
 
     public Text scoreText;
 
@@ -61,11 +61,11 @@ public class GameManager : MonoBehaviour
     public GameObject recipe2;
     public GameObject recipe3;
     private const float EXPIRE_TIME = 30.0f;
-    private List<Menu> easyMenus;
-    private List<Menu> toBeDoneMenus;
-    private Menu currentMenu1;
-    private Menu currentMenu2;
-    private Menu currentMenu3;
+    private List<Recipe> easyMenus;
+    private List<Recipe> toBeDoneMenus;
+    private Recipe currentMenu1;
+    private Recipe currentMenu2;
+    private Recipe currentMenu3;
     private Panel panel1 = new Panel();
     private Panel panel2 = new Panel();
 
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
     private List<string> pickedIngredients2;
     private int currentScore;
     public int resTime = 60;
-    public int[] successScore = {10};
+    public int successScore;
     private float gameStartTime;
     private float updateTimer;
     public GameObject successPanel;
@@ -84,12 +84,20 @@ public class GameManager : MonoBehaviour
     //data tracking
     private Dictionary<String, int> recipePopularity;
 
+    private void setGameState(GameState state)
+    {
+        gameState = state;
+        character.changeState(state);
+    }
+
     private void Start()
     {
         if (gm == null)
             gm = GetComponent<GameManager>();
+        uiHandler = new UIHandler(ui);
+        
         currentScore = 0;
-        gm.gameState = GameState.Playing;
+        setGameState(GameState.Playing);
         initialMenuAndPanel();
         initialToBeDoneMenus();
         showMenus();
@@ -128,11 +136,11 @@ public class GameManager : MonoBehaviour
                 //If there is no remaining time, game is over.
                 if (resTime <= 0)
                 {
-                    gameState = GameState.GameOver;
+                    setGameState(GameState.GameOver);
                     // Application.Quit();
                 }
 
-                //Update menu
+                //Update recipe
                 // if (currentMenu1.endTime <= Time.time)
                 // {
                 //     updateMenu();
@@ -147,41 +155,31 @@ public class GameManager : MonoBehaviour
                     updateTimer = Time.time;
                 }
 
-                //Update timesLide for the current menu.
-                // timeSlider1.value = Time.time - currentMenu1.startTime;
                 break;
             case GameState.GameOver:
-                gameState = GameState.OnHold;
+                setGameState(GameState.OnHold);
                 //score tracking
                 //todo add a enum object to indicate current level
-                AnalyticsResult scoreAnalytics = Analytics.CustomEvent("TotalScore",
-                    new Dictionary<string, object>
-                    {
-                        {"level", "tbf"},
-                        {"score", currentScore}
-                    });
-                Debug.Log("analyticResult:" + scoreAnalytics + ", current score: " + currentScore);
-                
-                //recipe popularity tracking
-                // AnalyticsResult popularityAnalytics = Analytics.CustomEvent("Recipe Popularity",
+                // AnalyticsResult scoreAnalytics = Analytics.CustomEvent("TotalScore",
                 //     new Dictionary<string, object>
                 //     {
                 //         {"level", "tbf"},
-                //         {"popularity", recipePopularity}
+                //         {"score", currentScore}
                 //     });
-                Dictionary<String, object> popularityResult = new Dictionary<string, object>();
-                recipePopularity.ToList().ForEach(x => popularityResult.Add(x.Key, x.Value));
-                AnalyticsResult popularityAnalytics = Analytics.CustomEvent("Recipe Popularity",
-                    popularityResult);
-                Debug.Log("popularityResult:" + popularityAnalytics);
-                recipePopularity.ToList().ForEach(x => Debug.Log(x.Key+" "+x.Value));
+                // Debug.Log("analyticResult:" + scoreAnalytics + ", current score: " + currentScore);
+                //
+                // Dictionary<String, object> popularityResult = new Dictionary<string, object>();
+                // recipePopularity.ToList().ForEach(x => popularityResult.Add(x.Key, x.Value));
+                // AnalyticsResult popularityAnalytics = Analytics.CustomEvent("Recipe Popularity",
+                //     popularityResult);
+                // Debug.Log("popularityResult:" + popularityAnalytics);
+                // recipePopularity.ToList().ForEach(x => Debug.Log(x.Key + " " + x.Value));
 
-                
 
                 //stop game--by speed
                 GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>().velocity = Vector3.zero;
-                
-                if (currentScore >= successScore[0])
+
+                if (currentScore >= successScore)
                 {
                     successPanel.SetActive(true);
                 }
@@ -189,6 +187,7 @@ public class GameManager : MonoBehaviour
                 {
                     failPanel.SetActive(true);
                 }
+
                 break;
 
             case GameState.OnHold:
@@ -198,31 +197,7 @@ public class GameManager : MonoBehaviour
 
     public bool canPickUp(string ingredientName)
     {
-        if (currentMenu1.ingredients.Contains(ingredientName) && !pickedIngredients1.Contains(ingredientName))
-        {
-            if (pickedIngredients1.Count == 0)
-            {
-                currentIngredientText1.text = ingredientName;
-            }
-            else if (pickedIngredients1.Count == 1)
-            {
-                currentIngredientText2.text = ingredientName;
-            }
-            else if (pickedIngredients1.Count == 2)
-            {
-                currentIngredientText3.text = ingredientName;
-            }
-
-            pickedIngredients1.Add(ingredientName);
-            if (pickedIngredients1.Count == currentMenu1.ingredients.Count)
-            {
-                addScore(currentMenu1);
-                // updateMenu();
-            }
-
-            return true;
-        }
-
+        
         return false;
     }
 
@@ -244,7 +219,7 @@ public class GameManager : MonoBehaviour
                 toBeDoneMenus[preparingMenuOfPanel2].ingredients.Contains(ingredientName) &&
                 !panel2.getPickedIngre().Contains(ingredientName))
             {
-                //panel1 & panel2 need(ingreName in menu but not appears in pickedIngreList) simultaneously, give it to the old one
+                //panel1 & panel2 need(ingreName in recipe but not appears in pickedIngreList) simultaneously, give it to the old one
                 if (preparingMenuOfPanel1 > preparingMenuOfPanel2)
                 {
                     panel2.addIngre(ingredientName);
@@ -285,7 +260,7 @@ public class GameManager : MonoBehaviour
             {
                 if (toBeDoneMenus[i].ingredients.Contains(ingredientName))
                 {
-                    //if a menu need the ingre,assign the menu to panel1
+                    //if a recipe need the ingre,assign the recipe to panel1
                     panel1.setForWhichMenu(i);
                     panel1.addIngre(ingredientName);
                     return true;
@@ -316,7 +291,7 @@ public class GameManager : MonoBehaviour
                         //escape the one that is being prepared
                         if (toBeDoneMenus[i].ingredients.Contains(ingredientName))
                         {
-                            //if a menu need the ingre,assign the menu to panel2
+                            //if a recipe need the ingre,assign the recipe to panel2
                             panel2.setForWhichMenu(i);
                             panel2.addIngre(ingredientName);
                             return true;
@@ -344,7 +319,7 @@ public class GameManager : MonoBehaviour
                         //escape the one that is being prepared
                         if (toBeDoneMenus[i].ingredients.Contains(ingredientName))
                         {
-                            //if a menu need the ingre,assign the menu to panel1
+                            //if a recipe need the ingre,assign the recipe to panel1
                             panel1.setForWhichMenu(i);
                             panel1.addIngre(ingredientName);
                             return true;
@@ -358,65 +333,30 @@ public class GameManager : MonoBehaviour
         return false;
     }
 
-    private void addScore(Menu menu)
+    private void addScore(Recipe recipe)
     {
-        if (menu.name == "ChickenSandwich")
+        if (recipe.name == "ChickenSandwich")
         {
             currentScore += 2;
             recipePopularity["ChickenSandwich"]++;
         }
-        else if (menu.name == "Burger")
+        else if (recipe.name == "Burger")
         {
             currentScore += 3;
             recipePopularity["Burger"]++;
         }
-        else if (menu.name == "SummerPudding")
+        else if (recipe.name == "SummerPudding")
         {
             currentScore += 4;
             recipePopularity["SummerPudding"]++;
         }
-        else if (menu.name == "HealthyFood")
+        else if (recipe.name == "HealthyFood")
         {
             currentScore += 5;
             recipePopularity["HealthyFood"]++;
         }
     }
-
-    private void updateMenu()
-    {
-        timeSlider1.value = EXPIRE_TIME;
-        pickedIngredients1 = new List<string>();
-        //clear panel1
-        currentIngredientText1.text = "";
-        currentIngredientText2.text = "";
-        currentIngredientText3.text = "";
-        //clear menu1
-        ingredientText1.text = "";
-        ingredientText2.text = "";
-        ingredientText3.text = "";
-        //select a menu to show
-        currentMenu1 = MenuTools.getAMenu(easyMenus);
-        //set up menu expiration time
-        currentMenu1.startTime = Time.time;
-        currentMenu1.endTime = Time.time + EXPIRE_TIME;
-        //show the menu
-        if (currentMenu1.ingredients.Count == 3)
-        {
-            ingredientText1.text = currentMenu1.ingredients[0];
-            ingredientText2.text = currentMenu1.ingredients[1];
-            ingredientText3.text = currentMenu1.ingredients[2];
-        }
-        else if (currentMenu1.ingredients.Count == 2)
-        {
-            ingredientText1.text = currentMenu1.ingredients[0];
-            ingredientText2.text = currentMenu1.ingredients[1];
-        }
-        else if (currentMenu1.ingredients.Count == 1)
-        {
-            ingredientText1.text = currentMenu1.ingredients[0];
-        }
-    }
-
+    
     private void initialTimeSilder(Slider timeSlider, float max, float min, float value)
     {
         // timeSlider.maxValue = EXPIRE_TIME;
@@ -439,11 +379,11 @@ public class GameManager : MonoBehaviour
         string[] ingredients2 = {"Chicken", "Lettuce", "Bread"};
         string[] ingredients3 = {"Bread", "Strawberry"};
         string[] ingredients4 = {"Bread", "Strawberry", "Beef"};
-        Menu menu1 = new Menu(1, "Burger", new List<string>(ingredients1));
-        Menu menu2 = new Menu(2, "ChickenSandwich", new List<string>(ingredients2));
-        Menu menu3 = new Menu(3, "SummerPudding", new List<string>(ingredients3));
-        Menu menu4 = new Menu(4, "HealthyFood", new List<string>(ingredients4));
-        easyMenus = new List<Menu>();
+        Recipe menu1 = new Recipe(1, "Burger", 30,new List<string>(ingredients1));
+        Recipe menu2 = new Recipe(2, "ChickenSandwich", 30,new List<string>(ingredients2));
+        Recipe menu3 = new Recipe(3, "SummerPudding", 30,new List<string>(ingredients3));
+        Recipe menu4 = new Recipe(4, "HealthyFood", 30,new List<string>(ingredients4));
+        easyMenus = new List<Recipe>();
         easyMenus.Add(menu1);
         easyMenus.Add(menu2);
         easyMenus.Add(menu3);
@@ -454,7 +394,7 @@ public class GameManager : MonoBehaviour
 
     private void initialToBeDoneMenus()
     {
-        toBeDoneMenus = new List<Menu>();
+        toBeDoneMenus = new List<Recipe>();
         toBeDoneMenus.Add(MenuTools.getAMenu(easyMenus));
         toBeDoneMenus.Add(MenuTools.getAMenu(easyMenus));
         toBeDoneMenus.Add(MenuTools.getAMenu(easyMenus));
@@ -507,7 +447,7 @@ public class GameManager : MonoBehaviour
 
     private void showMenus()
     {
-        Menu[] toBeDoneMenusArray = toBeDoneMenus.ToArray();
+        Recipe[] toBeDoneMenusArray = toBeDoneMenus.ToArray();
         if (toBeDoneMenusArray[0] != null)
         {
             if (toBeDoneMenusArray[0].ingredients.Count == 3)
