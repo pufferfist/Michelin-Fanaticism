@@ -14,6 +14,7 @@ namespace DefaultNamespace
         private Recipe[] recipes;
         private List<Recipe> easyRecipes;
         private float modifyTimer; //last modify time(menu finished, expired or added)
+        private bool lastAdd;// true if last modifyTimer change is by add;
         private float updateTimer; //last slider update time
 
         public MenuHandler(UIHandler uiHandler, MenuConfig config = null)
@@ -56,9 +57,8 @@ namespace DefaultNamespace
                         recipe.ingredients.ToArray().OrderBy(i => i));
                     if (equal)
                     {
-                        recipes[i] = null;
+                        expireRecipe(i);
                         uiHandler.updateMenuPanel(recipes);
-                        modifyTimer = Time.time;
                         return recipe;
                     }
                 }
@@ -83,8 +83,7 @@ namespace DefaultNamespace
                     recipes[i].remainTime -= Time.time - updateTimer;
                     if (recipes[i].remainTime < 0)
                     {
-                        recipes[i] = null;
-                        modifyTimer = Time.time;
+                        expireRecipe(i);
                     }
                 }
 
@@ -109,10 +108,21 @@ namespace DefaultNamespace
                 {
                     recipes[i] = easyRecipes[UnityEngine.Random.Range(0, easyRecipes.Count)].Clone() as Recipe;
                     modifyTimer = Time.time;
+                    lastAdd = true;
                     break;
                 }
             }
             uiHandler.updateMenuPanel(recipes);
+        }
+
+        private void expireRecipe(int index)
+        {
+            recipes[index] = null;
+            if (lastAdd)
+            {
+                modifyTimer = Time.time;
+            }
+            lastAdd = false;
         }
     }
 }

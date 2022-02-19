@@ -6,6 +6,7 @@ TagManager:
   tags:
   - OriginRoad
   - RoadTrigger
+  - Ingredient
   layers:
   - Default
   - TransparentFX

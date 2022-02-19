@@ -33,11 +33,12 @@ namespace DefaultNamespace
             }
         }
 
-        public Stack<String> drop(int index, String ingre)
+        public Stack<String> drop(int index)
         {
             if (collected[index].Count>=1)
             {
                 collected[index].Pop();
+                uiHandler.updateCollectedPanel(index,collected[index]);
             }
 
             return collected[index];

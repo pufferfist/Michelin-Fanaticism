@@ -27,6 +27,8 @@ namespace DefaultNamespace
                 resetCollectedPanel(i);
                 Debug.Log(collectedPanel[i].name);
             }
+
+            collectedPanel[0].transform.position += new Vector3(0, 20, 0);
             
             //find menu panel
             for (int i = 0; i < menuPanel.Length; i++)
@@ -110,7 +112,8 @@ namespace DefaultNamespace
 
         public void switchBag(int activeBag)
         {
-            
+            collectedPanel[activeBag].transform.position += new Vector3(0, 20, 0);
+            collectedPanel[activeBag^=1].transform.position += new Vector3(0, -20, 0);
         }
 
         private void resetCollectedPanel(int index)

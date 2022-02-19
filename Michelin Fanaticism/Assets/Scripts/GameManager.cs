@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DefaultNamespace;
 using UnityEngine;
 using MenuNameSpace;
+using UnityEngine.Analytics;
 
 public class GameManager : MonoBehaviour
 {
@@ -74,6 +76,11 @@ public class GameManager : MonoBehaviour
                     currentActiveBag ^= 1;
                     uiHandler.switchBag(currentActiveBag);
                 }
+                
+                if (Input.GetKeyUp(KeyCode.X))
+                {
+                    collectedHandler.drop(currentActiveBag);
+                }
 
                 uiHandler.updateScore(currentScore);
 
@@ -98,20 +105,20 @@ public class GameManager : MonoBehaviour
                 setGameState(GameState.OnHold);
                 //score tracking
                 //todo add a enum object to indicate current level
-                // AnalyticsResult scoreAnalytics = Analytics.CustomEvent("TotalScore",
-                //     new Dictionary<string, object>
-                //     {
-                //         {"level", "tbf"},
-                //         {"score", currentScore}
-                //     });
-                // Debug.Log("analyticResult:" + scoreAnalytics + ", current score: " + currentScore);
-                //
-                // Dictionary<String, object> popularityResult = new Dictionary<string, object>();
-                // recipePopularity.ToList().ForEach(x => popularityResult.Add(x.Key, x.Value));
-                // AnalyticsResult popularityAnalytics = Analytics.CustomEvent("Recipe Popularity",
-                //     popularityResult);
-                // Debug.Log("popularityResult:" + popularityAnalytics);
-                // recipePopularity.ToList().ForEach(x => Debug.Log(x.Key + " " + x.Value));
+                AnalyticsResult scoreAnalytics = Analytics.CustomEvent("TotalScore",
+                    new Dictionary<string, object>
+                    {
+                        {"level", "tbf"},
+                        {"score", currentScore}
+                    });
+                Debug.Log("analyticResult:" + scoreAnalytics + ", current score: " + currentScore);
+                
+                Dictionary<String, object> popularityResult = new Dictionary<string, object>();
+                recipePopularity.ToList().ForEach(x => popularityResult.Add(x.Key, x.Value));
+                AnalyticsResult popularityAnalytics = Analytics.CustomEvent("Recipe Popularity",
+                    popularityResult);
+                Debug.Log("popularityResult:" + popularityAnalytics);
+                recipePopularity.ToList().ForEach(x => Debug.Log(x.Key + " " + x.Value));
 
 
                 //stop game--by speed
