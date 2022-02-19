@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     private MenuHandler menuHandler;
     private CollectedHandler collectedHandler;
 
-    private int currentActiveBag;
+    private int currentActiveBag;//indicates which bag is currently used  0: the left one 1: the right one
     
     private int currentScore;
     public int resTime = 60;
@@ -140,11 +140,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /*
-     * currentActiveBag indicates which bag is currently used
-     * 0: the left one
-     * 1: the right one
-     */
+
     public bool canPickUp(string ingredient)
     {
         Stack<String> pickUp = collectedHandler.pickUp(currentActiveBag,ingredient);//collected handler will update the ui

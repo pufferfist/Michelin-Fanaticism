@@ -38,7 +38,7 @@ namespace DefaultNamespace
             }
             else
             {
-                //todo
+                //todo use config file to load menu
             }
         }
 
