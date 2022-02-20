@@ -3,22 +3,49 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public class ConfigReader {
-    public static T LoadJsonFromFile<T>(int level) where T : class {
-        if (!File.Exists(Application.dataPath + "/StreamingAssets/LevelConfig_"+level.ToString()+".json")) {
-            Debug.LogError("配置文件路径不正确");
-            return null;
-        }
+using UnityEngine.Networking;
+public class ConfigReader :  MonoBehaviour{
 
-        StreamReader sr = new StreamReader(Application.dataPath + "/StreamingAssets/LevelConfig_"+level.ToString()+".json");
-        if (sr == null) {
-            return null;
-        }
-        string json = sr.ReadToEnd();
-
-        if (json.Length > 0) {
-            return JsonUtility.FromJson<T>(json);
-        }
-        return null;
+    public  string fileName = "LevelConfig.json"; 
+    public bool configReady = false;
+    public  string result = "";
+    public   LevelConfigList configResult;
+    public void GetConfig()
+    {
+       // StartCoroutine(Example());//开启协程运行函数
     }
+
+    public  IEnumerator Example(System.Action<bool> done) {
+        if(Application.platform == RuntimePlatform.WebGLPlayer){
+            var  uri = new  System.Uri(Path.Combine(Application.streamingAssetsPath,fileName));
+            Debug.Log(uri.ToString());
+            Debug.Log("using web io");
+            UnityWebRequest www = UnityWebRequest.Get(uri);
+            yield return www.SendWebRequest();
+    
+            if(www.isNetworkError || www.isHttpError) {
+        
+                Debug.Log(www.error);
+            }
+            else
+            {
+        
+                Debug.Log(www.downloadHandler.text);
+                result = www.downloadHandler.text;
+                
+                
+            }
+        }else{
+              string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
+    
+            Debug.Log("using local io");
+             result = System.IO.File.ReadAllText(filePath);
+        }
+        Debug.Log("finish get config");
+        configResult = JsonUtility.FromJson<LevelConfigList>(result);
+        configReady  = true;
+        done(true);
+       
+    }
+   
 }

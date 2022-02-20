@@ -10,9 +10,15 @@ public class IngridientWeights{
     public  int Weight;
 
 }
-
+[Serializable]
 public class LevelConfigObj {
     public IngridientWeights[] IngridientsWeights;
+    
+}
+[Serializable]
+public class LevelConfigList {
+    public int Level;
+    public LevelConfigObj[] LevelConfigObj;
     
 }
 

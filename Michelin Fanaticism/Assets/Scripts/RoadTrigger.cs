@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 public class IngridientSelector
 {
     LevelConfigObj m_configObj;
     Dictionary<string, int> indexMap;
     List<int> randomMap;
     public void init(int level,GameObject[] ingredientSourceObject){
-          LevelConfigObj configObj = ConfigReader.LoadJsonFromFile<LevelConfigObj>(level);
+      
+          GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
+          ConfigReader cr = configReader.GetComponent<ConfigReader>();
+       
+           LevelConfigObj configObj = cr.configResult.LevelConfigObj[level-1];
           indexMap = new Dictionary<string, int>();
           randomMap = new List<int>();
           for(int i=0;i<ingredientSourceObject.Length;i++){
@@ -47,7 +52,6 @@ public class RoadTrigger : MonoBehaviour
     List<bool>  ingredientMap;
     public double densityRatio = 0.01;
     int maxIngridientId = 2147483647;
-
     void Start()
     {
 
@@ -57,7 +61,6 @@ public class RoadTrigger : MonoBehaviour
         roadObject =  GameObject.FindGameObjectsWithTag("OriginRoad");
         
         triggerObject =  GameObject.FindGameObjectsWithTag("RoadTrigger")[0];
-
         if(roadObject[0].transform.position.x<roadObject[1].transform.position.x){
             CreateIngridients(roadObject[1]);
         }else{
@@ -95,7 +98,7 @@ public class RoadTrigger : MonoBehaviour
         ingridientDynamicObjectYoung.Clear();
     }
     void GetIngridientsConfig(int level){
-         LevelConfigObj configObj = ConfigReader.LoadJsonFromFile<LevelConfigObj>(level);
+        // LevelConfigObj configObj = ConfigReader.LoadJsonFromFile<LevelConfigObj>(level);
      
         
     }
