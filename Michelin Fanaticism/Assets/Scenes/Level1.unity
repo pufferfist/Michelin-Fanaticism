@@ -2951,7 +2951,7 @@ MonoBehaviour:
   gameState: 0
   character: {fileID: 1377550004}
   ui: {fileID: 240831996}
-  resTime: 20
+  resTime: 150
   successScore: 5
   successPanel: {fileID: 1772188738}
   failPanel: {fileID: 1005591986}
