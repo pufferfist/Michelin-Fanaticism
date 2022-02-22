@@ -502,7 +502,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ingre3
+  m_Text: collected3
 --- !u!222 &65029866
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1255,7 +1255,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ingre2
+  m_Text: collected2
 --- !u!1 &189667099
 GameObject:
   m_ObjectHideFlags: 0
@@ -1334,7 +1334,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 03:00
+  m_Text: 01:00
 --- !u!43 &197050156
 Mesh:
   m_ObjectHideFlags: 0
@@ -4726,7 +4726,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2357392411613909724, guid: 2d320cf187a144d498c06ace5dad7e98, type: 3}
       propertyPath: m_Text
-      value: 
+      value: ingre1
       objectReference: {fileID: 0}
     - target: {fileID: 2357392412481403946, guid: 2d320cf187a144d498c06ace5dad7e98, type: 3}
       propertyPath: m_AnchorMax.x
@@ -4738,11 +4738,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2357392412860916431, guid: 2d320cf187a144d498c06ace5dad7e98, type: 3}
       propertyPath: m_Text
-      value: 
+      value: ingre2
       objectReference: {fileID: 0}
     - target: {fileID: 2357392413030695940, guid: 2d320cf187a144d498c06ace5dad7e98, type: 3}
       propertyPath: m_Text
-      value: 
+      value: ingre3
       objectReference: {fileID: 0}
     - target: {fileID: 6087045415475235471, guid: 2d320cf187a144d498c06ace5dad7e98, type: 3}
       propertyPath: m_Pivot.x
@@ -6719,7 +6719,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ingre1
+  m_Text: collected1
 --- !u!1 &1952915604
 GameObject:
   m_ObjectHideFlags: 0
