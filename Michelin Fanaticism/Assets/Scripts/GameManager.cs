@@ -1,61 +1,69 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DefaultNamespace;
 using UnityEngine;
 using MenuNameSpace;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
+using UnityEngine.Analytics;
 
 public class GameManager : MonoBehaviour
 {
-    static public GameManager gm;
+    public static GameManager gm;
 
-    public enum GameState
-    { 
-        Playing,
-        GameOver
-    }
     public GameState gameState;
-    public Text scoreText;
-    public Text ingredientText1;
-    public Text ingredientText2;
-    public Text ingredientText3;
-    public Text timeText;
-    public Slider timeSlider;
-    public Text currentIngredientText1;
-    public Text currentIngredientText2;
-    public Text currentIngredientText3;
-    private const float EXPIRE_TIME = 30.0f;
-    private List<Menu> menus;
-    private Menu currentMenu;
-    private List<string> pickedIngredients;
+
+    public MainCharacter character;
+
+    public GameObject ui;
+    private UIHandler uiHandler;
+    private MenuHandler menuHandler;
+    private CollectedHandler collectedHandler;
+
+    private int currentActiveBag;//indicates which bag is currently used  0: the left one 1: the right one
+    
     private int currentScore;
-    private int resTime=60;
-    private float gameStartTime;
+    public int resTime = 60;
+    public int successScore;
+    private float gameProcessingTimer;//game timer last update time
+    
+    public GameObject successPanel;
+    public GameObject failPanel;
+
+    //data tracking
+    private Dictionary<String, int> recipePopularity;
+
+    private void setGameState(GameState state)
+    {
+        gameState = state;
+        character.changeState(state);
+    }
+
     private void Start()
     {
-        if (gm == null) 
-            gm = GetComponent<GameManager>();
-        currentScore = 0;
-        gm.gameState = GameState.Playing;
-        timeSlider.maxValue = EXPIRE_TIME;
-        timeSlider.minValue = 0;
-        timeSlider.value = EXPIRE_TIME;
-        string[] ingredients1 = {"Beef", "Lettuce", "Bread"};
-        string[] ingredients2 = {"Chicken", "Lettuce", "Bread"};
-        string[] ingredients3 = {"Bread", "Strawberry"};
-        Menu menu1 = new Menu(1, "Burger", new List<string>(ingredients1));
-        Menu menu2 = new Menu(2, "ChickenSandwich", new List<string>(ingredients2));
-        Menu menu3 = new Menu(3, "SummerPudding", new List<string>(ingredients3));
-        menus = new List<Menu>();
-        menus.Add(menu1);
-        menus.Add(menu2);
-        menus.Add(menu3);
-        pickedIngredients = new List<string>();
-        updateMenu();
-        gameStartTime = Time.time;
+        setGameState(GameState.Playing);
         
+        if (gm == null)
+            gm = GetComponent<GameManager>();
+        uiHandler = new UIHandler(ui);
+        menuHandler = new MenuHandler(uiHandler);
+        collectedHandler = new CollectedHandler(uiHandler);
+        
+        currentScore = 0;
+        currentActiveBag = 0;
+        
+        uiHandler.updateScore(currentScore);
+        uiHandler.updateTime(resTime);
+        
+        gameProcessingTimer = Time.time;
+
+        //init data tracking variables
+        recipePopularity = new Dictionary<string, int>
+        {
+            {"ChickenSandwich", 0},
+            {"Burger", 0},
+            {"SummerPudding", 0},
+            {"HealthyFood", 0}
+        };
     }
 
     private void Update()
@@ -63,103 +71,96 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Playing:
-                
-                scoreText.text = currentScore+"";
-                
-                //Update every second and display the remaining time.
-                if ((Time.time - gameStartTime) >= 1)
+                if (Input.GetKeyUp(KeyCode.S))
                 {
-                    gameStartTime = Time.time;
-                    resTime--;
-                    timeText.text = string.Format("{0:D2}:{1:D2}", resTime/ 60, resTime % 60);
-                    
+                    currentActiveBag ^= 1;
+                    uiHandler.switchBag(currentActiveBag);
                 }
+                
+                if (Input.GetKeyUp(KeyCode.X))
+                {
+                    collectedHandler.drop(currentActiveBag);
+                }
+
+                uiHandler.updateScore(currentScore);
+
+                //Update every second and display the remaining time.
+                if ((Time.time - gameProcessingTimer) >= 1)
+                {
+                    gameProcessingTimer = Time.time;
+                    resTime--;
+                    uiHandler.updateTime(resTime);
+                }
+
+                menuHandler.updateRecipes();
                 
                 //If there is no remaining time, game is over.
                 if (resTime <= 0)
                 {
-                    gameState = GameState.GameOver;
-                   // Application.Quit();
+                    setGameState(GameState.GameOver);
                 }
-                
-                //Update menu
-                if (currentMenu.endTime <= Time.time) 
-                {
-                    updateMenu();
-                }
-                
-                //Update timesLide for the current menu.
-                timeSlider.value = Time.time - currentMenu.startTime;
+
                 break;
             case GameState.GameOver:
-                Debug.Log("Game is Over");
-                Application.Quit();
+                setGameState(GameState.OnHold);
+                //score tracking
+                //todo add a enum object to indicate current level
+                AnalyticsResult scoreAnalytics = Analytics.CustomEvent("TotalScore",
+                    new Dictionary<string, object>
+                    {
+                        {"level", "tbf"},
+                        {"score", currentScore}
+                    });
+                Debug.Log("analyticResult:" + scoreAnalytics + ", current score: " + currentScore);
+                
+                Dictionary<String, object> popularityResult = new Dictionary<string, object>();
+                recipePopularity.ToList().ForEach(x => popularityResult.Add(x.Key, x.Value));
+                AnalyticsResult popularityAnalytics = Analytics.CustomEvent("Recipe Popularity",
+                    popularityResult);
+                Debug.Log("popularityResult:" + popularityAnalytics);
+                recipePopularity.ToList().ForEach(x => Debug.Log(x.Key + " " + x.Value));
+
+
+                //stop game--by speed
+                GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+                if (currentScore >= successScore)
+                {
+                    successPanel.SetActive(true);
+                }
+                else
+                {
+                    failPanel.SetActive(true);
+                }
+
+                break;
+
+            case GameState.OnHold:
                 break;
         }
-        
-    }
-    
-    public bool canPickUp(string ingredientName)
-    {
-        
-        if (currentMenu.ingredients.Contains(ingredientName) && !pickedIngredients.Contains(ingredientName))
-        {
-            if (pickedIngredients.Count == 0)
-            {
-                currentIngredientText1.text = ingredientName;
-            }
-            else if (pickedIngredients.Count == 1)
-            {
-                currentIngredientText2.text = ingredientName;
-            }
-            else if(pickedIngredients.Count==2)
-            {
-                currentIngredientText3.text = ingredientName;
-            }
-            pickedIngredients.Add(ingredientName);
-            if (pickedIngredients.Count == currentMenu.ingredients.Count)
-            {
-                addScore();
-                updateMenu();
-            }
-            return true;
-        }
-        return false;
     }
 
-    private void addScore()
+
+    public bool canPickUp(string ingredient)
     {
-        currentScore++;
-    }
-    
-    private void updateMenu()
-    {
-        timeSlider.value = EXPIRE_TIME;
-        pickedIngredients = new List<string>();
-        currentIngredientText1.text = "";
-        currentIngredientText2.text = "";
-        currentIngredientText3.text = "";
-        ingredientText1.text = "";
-        ingredientText2.text = "";
-        ingredientText3.text = "";
-        int index = Random.Range(0, menus.Count);
-        currentMenu = menus[index];
-        currentMenu.startTime = Time.time;
-        currentMenu.endTime = Time.time + EXPIRE_TIME;
-        if (currentMenu.ingredients.Count == 3)
+        Stack<String> pickUp = collectedHandler.pickUp(currentActiveBag,ingredient);//collected handler will update the ui
+        if (pickUp != null)
         {
-            ingredientText1.text = currentMenu.ingredients[0];
-            ingredientText2.text = currentMenu.ingredients[1];
-            ingredientText3.text = currentMenu.ingredients[2];
+            Recipe finish = menuHandler.checkFinish(pickUp);//menu handler will update the ui
+            if (finish != null)
+            {
+                collectedHandler.finish(currentActiveBag);
+                currentScore += finish.score;
+                uiHandler.updateScore(currentScore);
+                recipePopularity[finish.name]++;
+            }
+
+            return true;
         }
-        else if (currentMenu.ingredients.Count == 2)
+        else
         {
-            ingredientText1.text = currentMenu.ingredients[0];
-            ingredientText2.text = currentMenu.ingredients[1];
+            //todo prompt player that bag is full
         }
-        else if(currentMenu.ingredients.Count==1)
-        {
-            ingredientText1.text = currentMenu.ingredients[0];
-        }
+        return false;
     }
 }
