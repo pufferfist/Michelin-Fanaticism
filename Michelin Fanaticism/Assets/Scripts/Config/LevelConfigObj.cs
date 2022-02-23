@@ -5,14 +5,14 @@ using MenuNameSpace;
 using UnityEngine;
 
 [Serializable]
-public class IngridientWeights{
+public class IngredientWeights{
     public  string Name;
     public  int Weight;
 
 }
 [Serializable]
 public class LevelConfigObj {
-    public IngridientWeights[] IngridientsWeights;
+    public IngredientWeights[] IngredientsWeights;
     
 }
 [Serializable]

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-public class IngridientSelector
+
+public class IngredientSelector
 {
     LevelConfigObj m_configObj;
     Dictionary<string, int> indexMap;
@@ -12,15 +13,15 @@ public class IngridientSelector
           GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
           ConfigReader cr = configReader.GetComponent<ConfigReader>();
        
-           LevelConfigObj configObj = cr.configResult.LevelConfigObj[level-1];
+          LevelConfigObj configObj = cr.configResult.LevelConfigObj[level-1];
           indexMap = new Dictionary<string, int>();
           randomMap = new List<int>();
           for(int i=0;i<ingredientSourceObject.Length;i++){
               indexMap[ingredientSourceObject[i].name] = i;
           }
-          for(int i=0;i<configObj.IngridientsWeights.Length;i++){
-              for(int j=0;j<configObj.IngridientsWeights[i].Weight;j++){
-                    randomMap.Add(indexMap[configObj.IngridientsWeights[i].Name]);
+          for(int i=0;i<configObj.IngredientsWeights.Length;i++){
+              for(int j=0;j<configObj.IngredientsWeights[i].Weight;j++){
+                    randomMap.Add(indexMap[configObj.IngredientsWeights[i].Name]);
               }
           }
     }
@@ -35,36 +36,37 @@ public class RoadTrigger : MonoBehaviour
     public GameObject[] ingredientSourceObject;
     public int roadLength = 600;
     public int roadWidth = 30;
-    // ingridientCloseFactor is small means ingridient can be closer
-    public int ingridientCloseFactor = 2;
+    // ingredientInterval
+    public int ingredientInterval = 20;
     // for the firstRoad
     public bool  startToCreate = false;
 
-    // ingridient type guarantee
+    // ingredient type guarantee
     bool  gachaGuarantee = true;
 
     GameObject[] roadObject;  
     GameObject triggerObject;
     GameObject curRoadObject;  
     GameObject nextRoadObject;
-    List<GameObject> ingridientDynamicObject;
-    List<GameObject> ingridientDynamicObjectYoung;
+    List<GameObject> ingredientDynamicObject;
+    List<GameObject> ingredientDynamicObjectYoung;
     List<bool>  ingredientMap;
     public double densityRatio = 0.01;
-    int maxIngridientId = 2147483647;
+    int maxIngredientId = 2147483647;
+    public int roadWidthCount = 3;
     void Start()
     {
 
         Debug.Log("OnTriggerStart");
-        ingridientDynamicObject =new List<GameObject> ();
-        ingridientDynamicObjectYoung = new List<GameObject> ();
+        ingredientDynamicObject =new List<GameObject> ();
+        ingredientDynamicObjectYoung = new List<GameObject> ();
         roadObject =  GameObject.FindGameObjectsWithTag("OriginRoad");
         
         triggerObject =  GameObject.FindGameObjectsWithTag("RoadTrigger")[0];
         if(roadObject[0].transform.position.x<roadObject[1].transform.position.x){
-            CreateIngridients(roadObject[1]);
+            CreateIngredients(roadObject[1]);
         }else{
-            CreateIngridients(roadObject[0]);
+            CreateIngredients(roadObject[0]);
         }
     }
 
@@ -84,59 +86,69 @@ public class RoadTrigger : MonoBehaviour
         nextRoadObject.transform.position = new Vector3(nextRoadObject.transform.position.x+roadLength*2, nextRoadObject.transform.position.y, nextRoadObject.transform.position.z);
         triggerObject.transform.position = new Vector3(triggerObject.transform.position.x+roadLength, triggerObject.transform.position.y, triggerObject.transform.position.z);
     }
-    // clear old road ingridient
-     void ClearIngridients(){
-        foreach (GameObject obj in ingridientDynamicObject)
+    // clear old road ingredient
+     void ClearIngredients(){
+        foreach (GameObject obj in ingredientDynamicObject)
         {
             Destroy(obj);
         }
-        ingridientDynamicObject.Clear();
-         foreach (GameObject obj in ingridientDynamicObjectYoung)
+        ingredientDynamicObject.Clear();
+         foreach (GameObject obj in ingredientDynamicObjectYoung)
         {
-            ingridientDynamicObject.Add(obj);
+            ingredientDynamicObject.Add(obj);
         }
-        ingridientDynamicObjectYoung.Clear();
+        ingredientDynamicObjectYoung.Clear();
     }
-    void GetIngridientsConfig(int level){
+    void GetIngredientsConfig(int level){
         // LevelConfigObj configObj = ConfigReader.LoadJsonFromFile<LevelConfigObj>(level);
      
         
     }
-    // create ingridients randomly
-    void CreateIngridients(GameObject road){
-        IngridientSelector ingridientSelector = new IngridientSelector();
-        ingridientSelector.init(1,ingredientSourceObject);
-        Debug.Log("create ingridient for "+road.name);
-        int ingridientCounts = (int)( densityRatio * (roadLength/ingridientCloseFactor) * (roadWidth/ingridientCloseFactor));
-        int widthMap = (roadWidth/ingridientCloseFactor)+1;
-        int lengthMap = (roadLength/ingridientCloseFactor)+1 ;
-        ingredientMap = new List<bool>(new bool[(widthMap)*(lengthMap)]);
-        int sourceTypeCount = ingredientSourceObject.Length;
-        int sourceIndex = 0;
-        for(int i=0;i<ingridientCounts;i++){
-            if(sourceTypeCount == 0){
-                break;
-            }
-          
-            int x = Random.Range(0,(int)(roadLength/ingridientCloseFactor));
-            int y = Random.Range(0,(int)(roadWidth/ingridientCloseFactor));
+    // create ingredients randomly
+    void CreateIngredients(GameObject road){
+        IngredientSelector ingredientSelector = new IngredientSelector();
+        ingredientSelector.init(1,ingredientSourceObject);
+        Debug.Log("create ingredient for "+road.name);
 
-            if(ingredientMap[x*widthMap+y]){
-                //Debug.Log("ingridient not pass "+x.ToString() + " " +y.ToString());
+
+        int lengthMapCount = (roadLength/ingredientInterval)+1;
+        // total ingrident counts need to be generate
+        // control by densityRatio and ingredientInterval
+        int ingredientCounts = (int)( densityRatio * lengthMapCount * roadWidthCount);
+        
+        
+        Debug.Log("ingredientCounts:"+ingredientCounts.ToString());
+        Debug.Log("lengthMapCount:"+lengthMapCount.ToString());
+
+        // map to check overlapped
+        ingredientMap = new List<bool>(new bool[(roadWidthCount)*(lengthMapCount)]);
+
+
+        for(int i=0;i<ingredientCounts;i++){
+            
+            int x = Random.Range(0,lengthMapCount);
+            int y = Random.Range(0,roadWidthCount);
+            Debug.Log("x:"+x.ToString());
+            Debug.Log("y:"+y.ToString());
+            Debug.Log("lengthMapCount:"+lengthMapCount.ToString());
+
+            Debug.Log("roadWidthCount:"+roadWidthCount.ToString());
+            if(ingredientMap[x*roadWidthCount+y]){
+                //Debug.Log("ingredient not pass "+x.ToString() + " " +y.ToString());
                 i--;
                 continue;
             }
 
-            ingredientMap[x*widthMap+y] = true;
-            x = x* ingridientCloseFactor;
-            y = y* ingridientCloseFactor;
-            sourceIndex = ingridientSelector.nextIngredientTypeIndex();
+            ingredientMap[x*roadWidthCount+y] = true;
+           
+            int sourceIndex = ingredientSelector.nextIngredientTypeIndex();
             GameObject obj = (GameObject)Instantiate(ingredientSourceObject[sourceIndex]);
         
-            obj.name  = ingredientSourceObject[sourceIndex].name +" "+ Random.Range(0,maxIngridientId).ToString();
-            obj.transform.position = road.transform.position + new Vector3(x-roadLength/2+1, 0 , y-roadWidth/2+1);
+            obj.name  = ingredientSourceObject[sourceIndex].name +" "+ Random.Range(0,maxIngredientId).ToString();
+            int roadWidthInterval = roadWidth/roadWidthCount;
+            obj.transform.position = road.transform.position + new Vector3(-roadLength/2+x*ingredientInterval, 0 , -roadWidth/2+roadWidthInterval/2 + y*roadWidthInterval);
             obj.SetActive(true);
-            ingridientDynamicObjectYoung.Add(obj);
+            ingredientDynamicObjectYoung.Add(obj);
             
         }
     }
@@ -154,8 +166,8 @@ public class RoadTrigger : MonoBehaviour
 
             Debug.Log("OnTriggerValid");
             MoveRoad();
-            ClearIngridients();
-            CreateIngridients(nextRoadObject);
+            ClearIngredients();
+            CreateIngredients(nextRoadObject);
         }
 
     }

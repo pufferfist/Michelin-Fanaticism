@@ -1726,10 +1726,11 @@ MonoBehaviour:
   - {fileID: 135167339}
   - {fileID: 576406956}
   roadLength: 600
-  roadWidth: 30
-  ingridientCloseFactor: 2
+  roadWidth: 20
+  ingredientInterval: 30
   startToCreate: 1
-  densityRatio: 0.01
+  densityRatio: 0.7
+  roadWidthCount: 3
 --- !u!65 &969509940
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2000,7 +2001,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5186818781549621857, guid: a05c996766eda4bd897db81cd017daac, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5186818781549621857, guid: a05c996766eda4bd897db81cd017daac, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2998,7 +2999,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5186818781549621857, guid: a05c996766eda4bd897db81cd017daac, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5186818781549621857, guid: a05c996766eda4bd897db81cd017daac, type: 3}
       propertyPath: m_LocalPosition.x

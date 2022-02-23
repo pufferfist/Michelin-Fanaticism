@@ -2,7 +2,7 @@
     "LevelConfigObj":[
         {
             "Level":1,
-            "IngridientsWeights":[
+            "IngredientsWeights":[
                 {
                     "Name":"Chicken",
                     "Weight":10
@@ -27,7 +27,7 @@
         },
         {
             "Level":2,
-            "IngridientsWeights":[
+            "IngredientsWeights":[
                 {
                     "Name":"Chicken",
                     "Weight":10
