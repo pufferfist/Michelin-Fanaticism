@@ -17,31 +17,20 @@ namespace DefaultNamespace
         private bool lastAdd;// true if last modifyTimer change is by add;
         private float updateTimer; //last slider update time
 
-        public MenuHandler(UIHandler uiHandler, MenuConfig config = null)
+        public MenuHandler(UIHandler uiHandler, LevelConfig levelConfig)
         {
             this.uiHandler = uiHandler;
             recipes = new Recipe[3];
-
-            if (config == null)
-            {
-                string[] ingredients1 = {"Beef", "Lettuce", "Bread"};
-                string[] ingredients2 = {"Chicken", "Lettuce", "Bread"};
-                string[] ingredients3 = {"Bread", "Strawberry"};
-                string[] ingredients4 = {"Bread", "Strawberry", "Beef"};
-                Recipe menu1 = new Recipe(1, "Burger", 30, 30, new List<string>(ingredients1));
-                Recipe menu2 = new Recipe(2, "ChickenSandwich", 30, 40, new List<string>(ingredients2));
-                Recipe menu3 = new Recipe(3, "SummerPudding", 30, 20, new List<string>(ingredients3));
-                Recipe menu4 = new Recipe(4, "HealthyFood", 30, 35, new List<string>(ingredients4));
-                easyRecipes = new List<Recipe>() {menu1, menu2, menu3, menu4};
-
-                addRecipe();
-            }
-            else
-            {
-                //todo use config file to load menu
-            }
+			easyRecipes = new List<Recipe>();
+			for (int i = 0; i < levelConfig.Recipes.Length; ++i) {
+				easyRecipes.Add(new Recipe(levelConfig.Recipes[i].ID,
+										   levelConfig.Recipes[i].Name,
+										   levelConfig.Recipes[i].TotalTime,
+										   levelConfig.Recipes[i].Score,
+										   levelConfig.Recipes[i].Ingredients));
+			}
+			addRecipe();
         }
-
         /*
          * return null: no finished recipe
          * called by gameManager if a pickup happens

@@ -44,8 +44,12 @@ public class GameManager : MonoBehaviour
         
         if (gm == null)
             gm = GetComponent<GameManager>();
+        GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
+        ConfigReader cr = configReader.GetComponent<ConfigReader>();
+       
+        LevelConfig levelConfig = cr.configResult;
         uiHandler = new UIHandler(ui);
-        menuHandler = new MenuHandler(uiHandler);
+        menuHandler = new MenuHandler(uiHandler, levelConfig);
         collectedHandler = new CollectedHandler(uiHandler);
         
         currentScore = 0;

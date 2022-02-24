@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class IngredientSelector
 {
-    LevelConfigObj m_configObj;
+    LevelConfig m_configObj;
     Dictionary<string, int> indexMap;
     List<int> randomMap;
     public void init(int level,GameObject[] ingredientSourceObject){
@@ -13,7 +13,7 @@ public class IngredientSelector
           GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
           ConfigReader cr = configReader.GetComponent<ConfigReader>();
        
-          LevelConfigObj configObj = cr.configResult.LevelConfigObj[level-1];
+          LevelConfig configObj = cr.configResult;
           indexMap = new Dictionary<string, int>();
           randomMap = new List<int>();
           for(int i=0;i<ingredientSourceObject.Length;i++){
@@ -42,7 +42,7 @@ public class RoadTrigger : MonoBehaviour
     public bool  startToCreate = false;
 
     // ingredient type guarantee
-    bool  gachaGuarantee = true;
+    // bool  gachaGuarantee = true;
 
     GameObject[] roadObject;  
     GameObject triggerObject;
