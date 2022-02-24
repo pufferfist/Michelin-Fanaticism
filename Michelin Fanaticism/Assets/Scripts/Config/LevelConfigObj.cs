@@ -17,7 +17,7 @@ public class LevelConfigObj {
 }
 [Serializable]
 public class LevelConfigList {
-    public int Level;
+    
     public LevelConfigObj[] LevelConfigObj;
     
 }

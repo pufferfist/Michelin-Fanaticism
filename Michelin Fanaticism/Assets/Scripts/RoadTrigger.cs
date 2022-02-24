@@ -108,7 +108,7 @@ public class RoadTrigger : MonoBehaviour
     void CreateIngredients(GameObject road){
         IngredientSelector ingredientSelector = new IngredientSelector();
         ingredientSelector.init(1,ingredientSourceObject);
-        Debug.Log("create ingredient for "+road.name);
+        // Debug.Log("create ingredient for "+road.name);
 
 
         int lengthMapCount = (roadLength/ingredientInterval)+1;
@@ -128,11 +128,10 @@ public class RoadTrigger : MonoBehaviour
             
             int x = Random.Range(0,lengthMapCount);
             int y = Random.Range(0,roadWidthCount);
-            Debug.Log("x:"+x.ToString());
-            Debug.Log("y:"+y.ToString());
-            Debug.Log("lengthMapCount:"+lengthMapCount.ToString());
-
-            Debug.Log("roadWidthCount:"+roadWidthCount.ToString());
+            // Debug.Log("x:"+x.ToString());
+            // Debug.Log("y:"+y.ToString());
+            // Debug.Log("lengthMapCount:"+lengthMapCount.ToString());
+            // Debug.Log("roadWidthCount:"+roadWidthCount.ToString());
             if(ingredientMap[x*roadWidthCount+y]){
                 //Debug.Log("ingredient not pass "+x.ToString() + " " +y.ToString());
                 i--;
