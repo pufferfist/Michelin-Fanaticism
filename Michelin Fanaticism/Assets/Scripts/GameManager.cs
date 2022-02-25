@@ -18,11 +18,12 @@ public class GameManager : MonoBehaviour
     private UIHandler uiHandler;
     private MenuHandler menuHandler;
     private CollectedHandler collectedHandler;
-
+    
     private int currentActiveBag;//indicates which bag is currently used  0: the left one 1: the right one
     
     private int currentScore;
     public int resTime = 60;
+    public int lives = 5;
     public int successScore;
     private float gameProcessingTimer;//game timer last update time
     
@@ -41,7 +42,6 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         setGameState(GameState.Playing);
-        
         if (gm == null)
             gm = GetComponent<GameManager>();
         uiHandler = new UIHandler(ui);
@@ -50,9 +50,10 @@ public class GameManager : MonoBehaviour
         
         currentScore = 0;
         currentActiveBag = 0;
-        
+
         uiHandler.updateScore(currentScore);
         uiHandler.updateTime(resTime);
+        uiHandler.updateLives(lives);
         
         gameProcessingTimer = Time.time;
 
@@ -162,5 +163,22 @@ public class GameManager : MonoBehaviour
             //todo prompt player that bag is full
         }
         return false;
+    }
+
+    public void looseLife()
+    {
+        if (lives == 0)
+        {
+            gameState = GameState.GameOver;
+            return;
+        }
+        lives -= 1;
+        uiHandler.updateLives(lives);
+    }
+
+    public void addLife()
+    {
+        lives += 1;
+        uiHandler.updateLives(lives);
     }
 }

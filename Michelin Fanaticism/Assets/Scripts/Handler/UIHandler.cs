@@ -12,6 +12,7 @@ namespace DefaultNamespace
         private GameObject[] menuPanel;
         private Text score;
         private Text timer;
+        private Text lives;
 
         //init: find ui elements' reference
         public UIHandler(GameObject ui)
@@ -43,6 +44,9 @@ namespace DefaultNamespace
 
             //find timer
             timer = hud.Find("TimeBar").Find("Time").GetComponent<Text>();
+            
+            //find lives
+            lives = hud.Find("Health").Find("Lives").GetComponent<Text>();
         }
 
         public void updateCollectedPanel(int id, Stack<String> ingres)
@@ -108,6 +112,11 @@ namespace DefaultNamespace
         public void updateTime(int time)
         {
             this.timer.text = $"{time / 60:D2}:{time % 60:D2}";
+        }
+
+        public void updateLives(int lives)
+        {
+            this.lives.text = lives.ToString();
         }
 
         public void switchBag(int activeBag)
