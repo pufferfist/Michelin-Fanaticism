@@ -5,17 +5,16 @@ using UnityEngine;
 
 using UnityEngine.Networking;
 public class ConfigReader :  MonoBehaviour{
-
-    public  string fileName = "LevelConfig.json"; 
     public bool configReady = false;
-    public  string result = "";
-    public   LevelConfigList configResult;
+    public LevelConfig configResult;
     public void GetConfig()
     {
        // StartCoroutine(Example());//开启协程运行函数
     }
 
-    public  IEnumerator Example(System.Action<bool> done) {
+    public  IEnumerator Load(int level, System.Action<bool> done) {
+        string fileName = "Level" + level.ToString() + ".Config.json";
+        string result = "";
         if(Application.platform == RuntimePlatform.WebGLPlayer){
             var  uri = new  System.Uri(Path.Combine(Application.streamingAssetsPath,fileName));
             Debug.Log(uri.ToString());
@@ -42,7 +41,8 @@ public class ConfigReader :  MonoBehaviour{
              result = System.IO.File.ReadAllText(filePath);
         }
         Debug.Log("finish get config");
-        configResult = JsonUtility.FromJson<LevelConfigList>(result);
+        configResult = JsonUtility.FromJson<LevelConfig>(result);
+        Debug.Log(Newtonsoft.Json.JsonConvert.SerializeObject(configResult));
         configReady  = true;
         done(true);
        
