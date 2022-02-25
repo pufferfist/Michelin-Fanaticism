@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     
     private int currentActiveBag;//indicates which bag is currently used  0: the left one 1: the right one
     
+	private int currentLevel;
     private int currentScore;
     public int resTime = 60;
     public int lives = 5;
@@ -51,7 +52,7 @@ public class GameManager : MonoBehaviour
         uiHandler = new UIHandler(ui);
         menuHandler = new MenuHandler(uiHandler, levelConfig);
         collectedHandler = new CollectedHandler(uiHandler);
-        
+        currentLevel = levelConfig.Level;
         currentScore = 0;
         currentActiveBag = 0;
 

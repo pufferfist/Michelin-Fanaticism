@@ -19,11 +19,7 @@ public class RecipeInfo{
 }
 [Serializable]
 public class LevelConfig {
+	public int Level;
 	public RecipeInfo[] Recipes;
     public IngredientWeights[] IngredientsWeights;    
-}
-
-public class MenuConfig
-{
-    public Recipe[] menus;
 }
