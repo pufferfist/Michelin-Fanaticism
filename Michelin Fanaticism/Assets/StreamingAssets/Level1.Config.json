@@ -50,6 +50,14 @@
         {
             "Name":"Beef",
             "Weight":10
+        },
+        {
+            "Name":"Heart",
+            "Weight":10
+        },
+        {
+            "Name":"ConeStop",
+            "Weight":10
         }
     ]
     
