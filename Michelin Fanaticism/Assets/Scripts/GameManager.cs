@@ -31,6 +31,17 @@ public class GameManager : MonoBehaviour
     public GameObject successPanel;
     public GameObject failPanel;
 
+    public bool isStart = false;
+    public GameObject stuPanel;
+
+    private GameObject player;
+
+    public static GameManager instance;
+
+    void Awake(){
+        instance = this;
+    }
+
     //data tracking
     private Dictionary<String, int> recipePopularity;
 
@@ -42,7 +53,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        setGameState(GameState.Playing);
+        player = GameObject.FindGameObjectWithTag("Player");
+        setGameState(GameState.OnHold);
         if (gm == null)
             gm = GetComponent<GameManager>();
         GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
@@ -77,6 +89,7 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Playing:
+                isStart = true;
                 if (Input.GetKeyUp(KeyCode.S))
                 {
                     currentActiveBag ^= 1;
@@ -128,7 +141,7 @@ public class GameManager : MonoBehaviour
 
 
                 //stop game--by speed
-                GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>().velocity = Vector3.zero;
+                //GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>().velocity = Vector3.zero;
 
                 if (currentScore >= successScore)
                 {
@@ -142,6 +155,9 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.OnHold:
+                isStart = false;
+                //stop game--by speed
+                player.GetComponent<Rigidbody>().velocity = Vector3.zero;
                 break;
         }
     }
@@ -185,5 +201,13 @@ public class GameManager : MonoBehaviour
     {
         lives += 1;
         uiHandler.updateLives(lives);
+    }
+
+    public void StartGame(){
+        stuPanel.SetActive(false);
+        isStart = true;
+        GameObject.Find("CollectedPanel1").GetComponent<RectTransform>().anchoredPosition = new Vector3(-516, -261, 0);
+        player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<MainCharacter>().forwardSpeed, 0, 0);
+        setGameState(GameState.Playing);
     }
 }
