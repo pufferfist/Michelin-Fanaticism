@@ -29,11 +29,11 @@ public class MainCharacter : MonoBehaviour
                 var position = rb.position;
                 if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
-                    rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z + 6, -7, 7));
+                    rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z + 6, -6, 6));
                 }
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
-                    rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z - 6, -7, 7));
+                    rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z - 6, -6, 6));
                 }
                 //rb.velocity = new Vector3(velocity.x,velocity.y,-h*speed);
                 //rb.position = new Vector3 (position.x, position.y, Mathf.Clamp(position.z ,-14, 14));

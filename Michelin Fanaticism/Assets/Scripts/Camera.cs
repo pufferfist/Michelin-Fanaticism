@@ -17,7 +17,7 @@ public class Camera : MonoBehaviour
     void Update()
     {
 
-        transform.position =new Vector3(CameraTransform.position.x + distance.x,CameraTransform.position.y + distance.y, 0);
+        transform.position =new Vector3(CameraTransform.position.x + distance.x - 2,CameraTransform.position.y + distance.y, 0);
 
     }
 }
