@@ -23,7 +23,9 @@ public class Obstacle : MonoBehaviour
             obstacleName = strArray[0];
             if (obstacleName.Equals("ConeStop"))
             {
+                
                 GameManager.gm.looseLife();
+                gameObject.SetActive(false);
             }
         }
     }

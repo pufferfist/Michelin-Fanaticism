@@ -5,7 +5,6 @@ using UnityEngine;
 public class Camera : MonoBehaviour
 {
     public Transform CameraTransform;
-
     public Vector3 distance;
     // Use this for initialization
     void Start()
@@ -17,7 +16,8 @@ public class Camera : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = CameraTransform.position + distance;
+
+        transform.position =new Vector3(CameraTransform.position.x + distance.x - 2,CameraTransform.position.y + distance.y, 0);
 
     }
 }

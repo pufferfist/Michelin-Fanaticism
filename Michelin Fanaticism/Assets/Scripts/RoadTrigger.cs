@@ -145,7 +145,7 @@ public class RoadTrigger : MonoBehaviour
         
             obj.name  = ingredientSourceObject[sourceIndex].name +" "+ Random.Range(0,maxIngredientId).ToString();
             int roadWidthInterval = roadWidth/roadWidthCount;
-            obj.transform.position = road.transform.position + new Vector3(-roadLength/2+x*ingredientInterval, 0 , -roadWidth/2+roadWidthInterval/2 + y*roadWidthInterval);
+            obj.transform.position = road.transform.position + new Vector3(-roadLength/2+x*ingredientInterval, ingredientSourceObject[sourceIndex].transform.position.y , -roadWidth/2+roadWidthInterval/2 + y*roadWidthInterval);
             obj.SetActive(true);
             ingredientDynamicObjectYoung.Add(obj);
             

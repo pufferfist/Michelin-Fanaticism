@@ -24,6 +24,7 @@ public class Buff : MonoBehaviour
             if (buffName.Equals("Heart"))
             {
                 GameManager.gm.addLife();
+                gameObject.SetActive(false);
             }
         }
     }
