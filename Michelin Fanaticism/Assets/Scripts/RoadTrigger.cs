@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
 public class IngredientSelector
 {
     LevelConfig m_configObj;
@@ -50,7 +49,8 @@ public class RoadTrigger : MonoBehaviour
     GameObject nextRoadObject;
     List<GameObject> ingredientDynamicObject;
     List<GameObject> ingredientDynamicObjectYoung;
-    List<bool>  ingredientMap;
+    Dictionary<int , bool> ingredientMap;
+
     public double densityRatio = 0.01;
     int maxIngredientId = 2147483647;
     public int roadWidthCount = 3;
@@ -121,24 +121,24 @@ public class RoadTrigger : MonoBehaviour
         Debug.Log("lengthMapCount:"+lengthMapCount.ToString());
 
         // map to check overlapped
-        ingredientMap = new List<bool>(new bool[(roadWidthCount)*(lengthMapCount)]);
+        ingredientMap = new Dictionary<int , bool>();
         List<int> staticWidth = new List<int>{-5,0,5};
 
         for(int i=0;i<ingredientCounts;i++){
             
-            int x = Random.Range(0,lengthMapCount);
+            int x = Random.Range(1,lengthMapCount);
             int y = Random.Range(0,roadWidthCount);
             // Debug.Log("x:"+x.ToString());
             // Debug.Log("y:"+y.ToString());
             // Debug.Log("lengthMapCount:"+lengthMapCount.ToString());
             // Debug.Log("roadWidthCount:"+roadWidthCount.ToString());
-            if(ingredientMap[x*roadWidthCount+y]){
+            if(ingredientMap.ContainsKey(x*roadWidthCount+y)){
                 //Debug.Log("ingredient not pass "+x.ToString() + " " +y.ToString());
                 i--;
                 continue;
             }
 
-            ingredientMap[x*roadWidthCount+y] = true;
+            ingredientMap.Add(x*roadWidthCount+y, true);
            
             int sourceIndex = ingredientSelector.nextIngredientTypeIndex();
             GameObject obj = (GameObject)Instantiate(ingredientSourceObject[sourceIndex]);
