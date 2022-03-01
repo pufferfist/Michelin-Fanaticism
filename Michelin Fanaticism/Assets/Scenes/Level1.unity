@@ -1924,7 +1924,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3178786104909440173, guid: d1e3a6c529e9c4ecc9260a8dcbc4e6bc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 104.64954
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3178786104909440173, guid: d1e3a6c529e9c4ecc9260a8dcbc4e6bc, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1932,7 +1932,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3178786104909440173, guid: d1e3a6c529e9c4ecc9260a8dcbc4e6bc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3178786104909440173, guid: d1e3a6c529e9c4ecc9260a8dcbc4e6bc, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2775,15 +2775,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5600202417887500693, guid: b86fe5a33c8524b9f9d684a6be7b177a, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 68
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 5600202417887500693, guid: b86fe5a33c8524b9f9d684a6be7b177a, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5600202417887500693, guid: b86fe5a33c8524b9f9d684a6be7b177a, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 7
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5600202417887500693, guid: b86fe5a33c8524b9f9d684a6be7b177a, type: 3}
       propertyPath: m_LocalRotation.w
@@ -4615,6 +4615,10 @@ PrefabInstance:
     - target: {fileID: 6708397511902187703, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_Name
       value: UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708397511902187703, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6708397513477515529, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_IsActive
