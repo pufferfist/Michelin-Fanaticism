@@ -1,5 +1,7 @@
 {
     "Level": 1,
+    "BagSlot": 1,
+    "RecipeSlot": 1,
     "Recipes": [
         {
             "ID": 1,
@@ -30,7 +32,7 @@
             "Ingredients": ["Bread", "Strawberry", "Beef"]
         }
     ],
-    "IngredientsWeights":[
+    "IngredientWeights":[
         {
             "Name":"Chicken",
             "Weight":10
@@ -58,6 +60,16 @@
         {
             "Name":"ConeStop",
             "Weight":10
+        }
+    ],
+    "ItemsWeights":[
+        {
+            "Name":"Obstacle",
+            "Weight":0
+        },
+        {
+            "Name":"Life",
+            "Weight":0
         }
     ]
     

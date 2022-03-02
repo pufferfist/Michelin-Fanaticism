@@ -18,9 +18,9 @@ public class IngredientSelector
           for(int i=0;i<ingredientSourceObject.Length;i++){
               indexMap[ingredientSourceObject[i].name] = i;
           }
-          for(int i=0;i<configObj.IngredientsWeights.Length;i++){
-              for(int j=0;j<configObj.IngredientsWeights[i].Weight;j++){
-                    randomMap.Add(indexMap[configObj.IngredientsWeights[i].Name]);
+          for(int i=0;i<configObj.IngredientWeights.Length;i++){
+              for(int j=0;j<configObj.IngredientWeights[i].Weight;j++){
+                    randomMap.Add(indexMap[configObj.IngredientWeights[i].Name]);
               }
           }
     }

@@ -10,6 +10,11 @@ public class IngredientWeights{
     public int Weight;
 }
 [Serializable]
+public class ItemWeights{
+    public string Name;
+    public int Weight;
+}
+[Serializable]
 public class RecipeInfo{
     public int ID;
     public string Name;
@@ -20,6 +25,9 @@ public class RecipeInfo{
 [Serializable]
 public class LevelConfig {
 	public int Level;
+	public int BagSlot;
+	public int RecipeSlot;
 	public RecipeInfo[] Recipes;
-    public IngredientWeights[] IngredientsWeights;    
+    public IngredientWeights[] IngredientWeights;
+	public ItemWeights[] ItemWeights;
 }
