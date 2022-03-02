@@ -13,6 +13,7 @@ namespace DefaultNamespace
         private Text score;
         private Text timer;
         private Text lives;
+        private Sprite sprite;
 
         //init: find ui elements' reference
         public UIHandler(GameObject ui)
@@ -55,7 +56,7 @@ namespace DefaultNamespace
             int i = 0;
             foreach (String ingre in ingres)
             {
-                collectedPanel[id].transform.GetChild(i).GetComponent<Text>().text = ingre;
+                collectedPanel[id].transform.GetChild(i).GetComponent<Image>().sprite = ImageHelper.getInstance().getImageDictionary(ingre);
                 i++;
             }
         }
@@ -68,12 +69,12 @@ namespace DefaultNamespace
                 GameObject recipe = menuPanel[i];
                 if (recipeList[i] != null && !recipe.activeSelf)
                 {
-                    //empty the ingre list in one recipe
+                    //empty the ingredient list in one recipe
                     foreach (Transform obj in recipe.transform)
                     {
                         if (obj.CompareTag("Ingredient"))
                         {
-                            obj.GetComponent<Text>().text = "";
+                            obj.GetComponent<Image>().sprite = null;
                         }
                         else // this is timer
                         {
@@ -87,7 +88,9 @@ namespace DefaultNamespace
                     //update the displayed recipe using input recipe list
                     for (int j = 0; j < recipeList[i].ingredients.Count; j++)
                     {
-                        recipe.transform.GetChild(j).GetComponent<Text>().text = recipeList[i].ingredients[j];
+                        Debug.Log(recipeList[i].ingredients[j]);
+                        recipe.transform.GetChild(j).GetComponent<Image>().sprite = 
+                            ImageHelper.getInstance().getImageDictionary(recipeList[i].ingredients[j]);
                     }
 
                     recipe.SetActive(true);
@@ -127,9 +130,11 @@ namespace DefaultNamespace
 
         private void resetCollectedPanel(int index)
         {
+            
             foreach (Transform ingre in collectedPanel[index].transform)
             {
-                ingre.GetComponent<Text>().text = "";
+                Debug.Log(ingre.gameObject.name);
+                ingre.GetComponent<Image>().sprite = null;
             }
         }
     }

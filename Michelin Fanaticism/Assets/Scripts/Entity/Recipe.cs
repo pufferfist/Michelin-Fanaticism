@@ -3,6 +3,7 @@ using UnityEngine.TestTools;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 namespace MenuNameSpace
 {
@@ -16,7 +17,7 @@ namespace MenuNameSpace
         public int score;
         public List<string> ingredients;
 
-        public Recipe(int id, string name, float totalTime, int score,List<string> ingredients)
+        public Recipe(int id, string name, float totalTime, int score, List<string> ingredients)
         {
             this.id = id;
             this.name = name;
@@ -28,7 +29,7 @@ namespace MenuNameSpace
 
         public object Clone()
         {
-            Recipe newRecipe=new Recipe(this.id, this.name, this.totalTime, this.score,ingredients);
+            Recipe newRecipe = new Recipe(this.id, this.name, this.totalTime, this.score, this.ingredients);
             newRecipe.startTime = Time.time;
             return newRecipe;
         }

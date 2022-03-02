@@ -61,12 +61,14 @@ public class GameManager : MonoBehaviour
         ConfigReader cr = configReader.GetComponent<ConfigReader>();
        
         LevelConfig levelConfig = cr.configResult;
+        ImageHelper.init(levelConfig);
         uiHandler = new UIHandler(ui);
         menuHandler = new MenuHandler(uiHandler, levelConfig);
         collectedHandler = new CollectedHandler(uiHandler);
         currentLevel = levelConfig.Level;
         currentScore = 0;
         currentActiveBag = 0;
+        
 
         uiHandler.updateScore(currentScore);
         uiHandler.updateTime(resTime);
