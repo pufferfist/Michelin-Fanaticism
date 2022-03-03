@@ -53,16 +53,16 @@ namespace DefaultNamespace
             Transform health = hud.Find("Health");
             Transform bloodTipAndProps = hud.Find("BloodTipAndProps");
             Transform skey = hud.Find("Skey");
-            if (levelConfig.Level<=2){
-                skey.gameObject.SetActive(false);
-            }else{
-                 skey.gameObject.SetActive(true);
-            }
+//            if (levelConfig.Level<=2){
+//                skey.gameObject.SetActive(false);
+//            }else{
+//                 skey.gameObject.SetActive(true);
+//            }
 
             if (levelConfig.Level<=3)
             {
                 health.gameObject.SetActive(false);
-                bloodTipAndProps.gameObject.SetActive(false);
+//                bloodTipAndProps.gameObject.SetActive(false);
             }
             else
             {
