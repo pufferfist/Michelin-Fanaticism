@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657815, g: 0.49641192, b: 0.57481617, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3172,7 +3172,6 @@ MonoBehaviour:
   successScore: 5
   successPanel: {fileID: 1772188738}
   failPanel: {fileID: 1005591986}
-  isStart: 0
   stuPanel: {fileID: 4875216380315535312}
 --- !u!4 &2018899424
 Transform:
@@ -3365,6 +3364,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3145171267367068059, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145171267399186541, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_Name
+      value: BloodTipAndProps
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145171267760763916, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_Text
+      value: Play
+      objectReference: {fileID: 0}
     - target: {fileID: 3145171267896372363, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -3375,11 +3386,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3824919563043339015, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 451
+      value: 405.6
       objectReference: {fileID: 0}
     - target: {fileID: 3824919563043339015, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 723
+      value: 726.1
       objectReference: {fileID: 0}
     - target: {fileID: 3824919563043339015, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3429,6 +3440,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7497890766566613397, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7497890766778275176, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -3440,6 +3455,10 @@ PrefabInstance:
     - target: {fileID: 7497890767150033847, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_Name
       value: UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 7497890767510623266, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b92541840f824e0c9190485418740d5, type: 3}

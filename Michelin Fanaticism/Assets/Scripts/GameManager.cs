@@ -5,6 +5,7 @@ using DefaultNamespace;
 using UnityEngine;
 using MenuNameSpace;
 using UnityEngine.Analytics;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -213,4 +214,7 @@ public class GameManager : MonoBehaviour
         stuPanel.SetActive(false);
         setGameState(GameState.Playing);
     }
+
+
+
 }
