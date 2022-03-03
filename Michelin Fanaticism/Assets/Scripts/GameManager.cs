@@ -71,8 +71,11 @@ public class GameManager : MonoBehaviour
 
         uiHandler.updateScore(currentScore);
         uiHandler.updateTime(resTime);
-        uiHandler.updateLives(lives);
-        
+        if (currentLevel >= 4)
+        {
+            uiHandler.updateLives(lives);
+        }
+
         gameProcessingTimer = Time.time;
 
         //init data tracking variables
