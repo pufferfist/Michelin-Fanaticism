@@ -51,18 +51,18 @@ namespace DefaultNamespace
             
             //find lives
             Transform health = hud.Find("Health");
-            Transform bloodTipAndProps = hud.Find("BloodTipAndProps");
-            Transform skey = hud.Find("Skey");
-//            if (levelConfig.Level<=2){
-//                skey.gameObject.SetActive(false);
-//            }else{
-//                 skey.gameObject.SetActive(true);
-//            }
+            GameObject bloodTipAndProps = GameObject.Find("BloodTipAndProps");
+            GameObject skey = GameObject.Find("Skey");
+            if (levelConfig.Level<=2){
+                skey.SetActive(false);
+            }else{
+                 skey.SetActive(true);
+            }
 
             if (levelConfig.Level<=3)
             {
                 health.gameObject.SetActive(false);
-//                bloodTipAndProps.gameObject.SetActive(false);
+                bloodTipAndProps.SetActive(false);
             }
             else
             {
@@ -138,9 +138,10 @@ namespace DefaultNamespace
             this.timer.text = $"{time / 60:D2}:{time % 60:D2}";
         }
         
-        public void updateLives(int lives)
+        public void updateLives(int live)
         {
-            this.lives.text = lives.ToString();
+            if(lives == null) return;
+            this.lives.text = live.ToString();
         }
 
         public void switchBag(int activeBag)
