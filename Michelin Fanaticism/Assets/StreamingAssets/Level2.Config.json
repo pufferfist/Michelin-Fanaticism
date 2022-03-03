@@ -52,25 +52,8 @@
     {
       "Name":"Beef",
       "Weight":10
-    },
-    {
-      "Name":"Heart",
-      "Weight":10
-    },
-    {
-      "Name":"ConeStop",
-      "Weight":10
     }
   ],
-  "ItemsWeights":[
-    {
-      "Name":"Obstacle",
-      "Weight":0
-    },
-    {
-      "Name":"Life",
-      "Weight":0
-    }
-  ]
+  "ItemsWeights":[]
 
 }

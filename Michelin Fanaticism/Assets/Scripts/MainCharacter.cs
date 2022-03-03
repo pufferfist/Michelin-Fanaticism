@@ -46,6 +46,15 @@ public class MainCharacter : MonoBehaviour
 
     public void changeState(GameState state)
     {
+        switch (state)
+        {
+            case GameState.Playing:
+                rb.velocity = new Vector3(forwardSpeed,0,0);
+                break;
+            default:
+                rb.velocity = Vector3.zero;
+                break;
+        }
         this.gameState = state;
     }
 }

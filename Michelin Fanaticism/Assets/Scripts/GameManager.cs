@@ -62,9 +62,9 @@ public class GameManager : MonoBehaviour
        
         LevelConfig levelConfig = cr.configResult;
         ImageHelper.init(levelConfig);
-        uiHandler = new UIHandler(ui);
+        uiHandler = new UIHandler(ui,levelConfig);
         menuHandler = new MenuHandler(uiHandler, levelConfig);
-        collectedHandler = new CollectedHandler(uiHandler);
+        collectedHandler = new CollectedHandler(uiHandler,levelConfig);
         currentLevel = levelConfig.Level;
         currentScore = 0;
         currentActiveBag = 0;
@@ -92,13 +92,20 @@ public class GameManager : MonoBehaviour
         {
             case GameState.Playing:
                 isStart = true;
-                if (Input.GetKeyUp(KeyCode.S))
+                if (Input.GetKeyUp(KeyCode.A)&&currentLevel>=3&&currentActiveBag==1)
                 {
-                    currentActiveBag ^= 1;
+                    currentActiveBag = 0;
                     uiHandler.switchBag(currentActiveBag);
+                    Debug.Log("A pressed");
+                }
+                if (Input.GetKeyUp(KeyCode.D)&&currentLevel>=3&&currentActiveBag==0)
+                {
+                    currentActiveBag = 1;
+                    uiHandler.switchBag(currentActiveBag);
+                    Debug.Log("D pressed");
                 }
                 
-                if (Input.GetKeyUp(KeyCode.X))
+                if (Input.GetKeyUp(KeyCode.Space)||Input.GetKeyUp(KeyCode.S))
                 {
                     collectedHandler.drop(currentActiveBag);
                 }
@@ -125,25 +132,20 @@ public class GameManager : MonoBehaviour
             case GameState.GameOver:
                 setGameState(GameState.OnHold);
                 //score tracking
-                //todo add a enum object to indicate current level
                 AnalyticsResult scoreAnalytics = Analytics.CustomEvent("TotalScore",
                     new Dictionary<string, object>
                     {
-                        {"level", "tbf"},
+                        {"level", currentLevel},
                         {"score", currentScore}
                     });
-                Debug.Log("analyticResult:" + scoreAnalytics + ", current score: " + currentScore);
+                // Debug.Log("analyticResult:" + scoreAnalytics + ", current score: " + currentScore);
                 
                 Dictionary<String, object> popularityResult = new Dictionary<string, object>();
                 recipePopularity.ToList().ForEach(x => popularityResult.Add(x.Key, x.Value));
                 AnalyticsResult popularityAnalytics = Analytics.CustomEvent("Recipe Popularity",
                     popularityResult);
-                Debug.Log("popularityResult:" + popularityAnalytics);
-                recipePopularity.ToList().ForEach(x => Debug.Log(x.Key + " " + x.Value));
-
-
-                //stop game--by speed
-                //GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>().velocity = Vector3.zero;
+                // Debug.Log("popularityResult:" + popularityAnalytics);
+                // recipePopularity.ToList().ForEach(x => Debug.Log(x.Key + " " + x.Value));
 
                 if (currentScore >= successScore)
                 {
@@ -157,6 +159,8 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.OnHold:
+                gameProcessingTimer = Time.time;
+                
                 isStart = false;
                 //stop game--by speed
                 player.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -192,7 +196,7 @@ public class GameManager : MonoBehaviour
     {
         if (lives == 0)
         {
-            gameState = GameState.GameOver;
+            setGameState(GameState.GameOver);
             return;
         }
         lives -= 1;

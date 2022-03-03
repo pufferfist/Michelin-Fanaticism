@@ -8,16 +8,17 @@ namespace DefaultNamespace
 {
     public class UIHandler
     {
+        private LevelConfig levelConfig;
         private GameObject[] collectedPanel;
         private GameObject[] menuPanel;
         private Text score;
         private Text timer;
         private Text lives;
-        private Sprite sprite;
 
         //init: find ui elements' reference
-        public UIHandler(GameObject ui)
+        public UIHandler(GameObject ui,LevelConfig levelConfig)
         {
+            this.levelConfig = levelConfig;
             Transform hud = ui.transform.Find("Hud");
             collectedPanel = new GameObject[2];
             menuPanel = new GameObject[3];
@@ -27,17 +28,19 @@ namespace DefaultNamespace
             {
                 collectedPanel[i] = hud.Find("CollectedPanel" + (i + 1)).gameObject;
                 resetCollectedPanel(i);
-                Debug.Log(collectedPanel[i].name);
+                if (i+1>levelConfig.BagSlot)
+                {
+                    collectedPanel[i].SetActive(false);
+                }
             }
 
-            collectedPanel[0].transform.position += new Vector3(0, 20, 0);
+            // collectedPanel[0].transform.position += new Vector3(0, 20, 0);
             
             //find menu panel
             for (int i = 0; i < menuPanel.Length; i++)
             {
                 menuPanel[i] = hud.Find("MenuPanel").Find("Recipe" + (i + 1)).gameObject;
                 menuPanel[i].SetActive(false);
-                Debug.Log(menuPanel[i].name);
             }
 
             //find score
@@ -47,7 +50,16 @@ namespace DefaultNamespace
             timer = hud.Find("TimeBar").Find("Time").GetComponent<Text>();
             
             //find lives
-            lives = hud.Find("Health").Find("Lives").GetComponent<Text>();
+            Transform health = hud.Find("Health");
+            if (levelConfig.Level<=3)
+            {
+                health.gameObject.SetActive(false);
+            }
+            else
+            {
+                lives = health.Find("Lives").GetComponent<Text>();
+            }
+            
         }
 
         public void updateCollectedPanel(int id, Stack<String> ingres)
@@ -124,16 +136,18 @@ namespace DefaultNamespace
 
         public void switchBag(int activeBag)
         {
+            if (levelConfig.Level<=2)
+            {
+                return;
+            }
             collectedPanel[activeBag].transform.position += new Vector3(0, 20, 0);
-            collectedPanel[activeBag^=1].transform.position += new Vector3(0, -20, 0);
+            collectedPanel[activeBag^1].transform.position += new Vector3(0, -20, 0);
         }
 
         private void resetCollectedPanel(int index)
         {
-            
             foreach (Transform ingre in collectedPanel[index].transform)
             {
-                Debug.Log(ingre.gameObject.name);
                 ingre.GetComponent<Image>().sprite = null;
             }
         }

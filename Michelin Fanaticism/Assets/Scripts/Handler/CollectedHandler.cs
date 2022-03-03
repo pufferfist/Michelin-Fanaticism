@@ -8,9 +8,9 @@ namespace DefaultNamespace
         private Stack<String>[] collected;
         private UIHandler uiHandler;
 
-        public CollectedHandler(UIHandler uiHandler)
+        public CollectedHandler(UIHandler uiHandler,LevelConfig levelConfig)
         {
-            collected = new Stack<string>[2];
+            collected = new Stack<string>[levelConfig.BagSlot];
             for (int i = 0; i < collected.Length; i++)
             {
                 collected[i] = new Stack<string>();
