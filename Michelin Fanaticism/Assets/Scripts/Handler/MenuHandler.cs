@@ -29,6 +29,7 @@ namespace DefaultNamespace
 										   levelConfig.Recipes[i].Score,
 										   levelConfig.Recipes[i].Ingredients));
 			}
+            updateTimer = Time.time;
 			addRecipe();
         }
         /*
@@ -85,6 +86,13 @@ namespace DefaultNamespace
             {
                 addRecipe();
             }
+        }
+        
+        //called by gameManager per frame when on hold
+        public void updateOnHoldTimer()
+        {
+            modifyTimer = Time.time;
+            updateTimer = Time.time;
         }
 
         //fill empty menu slot

@@ -128,7 +128,7 @@ namespace DefaultNamespace
         {
             this.timer.text = $"{time / 60:D2}:{time % 60:D2}";
         }
-
+        
         public void updateLives(int lives)
         {
             this.lives.text = lives.ToString();

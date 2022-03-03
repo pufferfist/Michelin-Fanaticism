@@ -31,7 +31,6 @@ public class GameManager : MonoBehaviour
     public GameObject successPanel;
     public GameObject failPanel;
 
-    public bool isStart = false;
     public GameObject stuPanel;
 
     private GameObject player;
@@ -53,8 +52,8 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
         setGameState(GameState.OnHold);
+        player = GameObject.FindGameObjectWithTag("Player");
         if (gm == null)
             gm = GetComponent<GameManager>();
         GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
@@ -91,7 +90,6 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Playing:
-                isStart = true;
                 if (Input.GetKeyUp(KeyCode.A)&&currentLevel>=3&&currentActiveBag==1)
                 {
                     currentActiveBag = 0;
@@ -160,10 +158,7 @@ public class GameManager : MonoBehaviour
 
             case GameState.OnHold:
                 gameProcessingTimer = Time.time;
-                
-                isStart = false;
-                //stop game--by speed
-                player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                menuHandler.updateOnHoldTimer();
                 break;
         }
     }
@@ -209,11 +204,13 @@ public class GameManager : MonoBehaviour
         uiHandler.updateLives(lives);
     }
 
+    public float getCurrentProcess()
+    {
+        return gameProcessingTimer;
+    }
+
     public void StartGame(){
         stuPanel.SetActive(false);
-        isStart = true;
-        GameObject.Find("CollectedPanel1").GetComponent<RectTransform>().anchoredPosition = new Vector3(-516, -261, 0);
-        player.GetComponent<Rigidbody>().velocity = new Vector3(player.GetComponent<MainCharacter>().forwardSpeed, 0, 0);
         setGameState(GameState.Playing);
     }
 }
