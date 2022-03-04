@@ -7,7 +7,7 @@ public class IngredientSelector
     LevelConfig m_configObj;
     Dictionary<string, int> indexMap;
     List<int> randomMap;
-    public void init(int level,GameObject[] ingredientSourceObject){
+    public void init(GameObject[] ingredientSourceObject){
       
           GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
           ConfigReader cr = configReader.GetComponent<ConfigReader>();
@@ -23,6 +23,14 @@ public class IngredientSelector
                     randomMap.Add(indexMap[configObj.IngredientWeights[i].Name]);
               }
           }
+          if(configObj.ItemsWeights!=null){
+            for(int i=0;i<configObj.ItemsWeights.Length;i++){
+                        for(int j=0;j<configObj.ItemsWeights[i].Weight;j++){
+                                randomMap.Add(indexMap[configObj.ItemsWeights[i].Name]);
+                        }
+                    }
+          }
+          
     }
     public int nextIngredientTypeIndex(){
         return randomMap[Random.Range(0,randomMap.Count-1)];
@@ -99,15 +107,11 @@ public class RoadTrigger : MonoBehaviour
         }
         ingredientDynamicObjectYoung.Clear();
     }
-    void GetIngredientsConfig(int level){
-        // LevelConfigObj configObj = ConfigReader.LoadJsonFromFile<LevelConfigObj>(level);
-     
-        
-    }
+  
     // create ingredients randomly
     void CreateIngredients(GameObject road){
         IngredientSelector ingredientSelector = new IngredientSelector();
-        ingredientSelector.init(1,ingredientSourceObject);
+        ingredientSelector.init(ingredientSourceObject);
         // Debug.Log("create ingredient for "+road.name);
 
 
