@@ -23,16 +23,12 @@ public class ConfigReader :  MonoBehaviour{
             yield return www.SendWebRequest();
     
             if(www.isNetworkError || www.isHttpError) {
-        
                 Debug.Log(www.error);
             }
             else
             {
-        
                 Debug.Log(www.downloadHandler.text);
                 result = www.downloadHandler.text;
-                
-                
             }
         }else{
               string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);

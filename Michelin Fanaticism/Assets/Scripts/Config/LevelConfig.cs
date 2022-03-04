@@ -11,7 +11,7 @@ public class IngredientWeights{
     public int Weight;
 }
 [Serializable]
-public class ItemWeights{
+public class ItemsWeights{
     public string Name;
     public int Weight;
 }
@@ -30,5 +30,5 @@ public class LevelConfig {
 	public int RecipeSlot;
 	public RecipeInfo[] Recipes;
     public IngredientWeights[] IngredientWeights;
-	public ItemWeights[] ItemWeights;
+	public ItemsWeights[] ItemsWeights;
 }
