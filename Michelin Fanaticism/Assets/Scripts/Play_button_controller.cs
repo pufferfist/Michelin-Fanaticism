@@ -36,20 +36,42 @@ public class Play_button_controller : MonoBehaviour
                     default:
                         break;
         }
+        loadLevel(index);
+    }
+
+    public void nextLevel()
+    {
+        int currentLevel = GameManager.gm.currentLevel;
+        if (currentLevel==4)
+        {
+            SceneManager.LoadScene(0);
+        }
+        else
+        {
+            loadLevel(currentLevel+1);
+        }
+    }
+
+    public void retry()
+    {
+        loadLevel(GameManager.gm.currentLevel);
+    }
+
+    private void loadLevel(int level)
+    {
         GameObject configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
         GameObject.DontDestroyOnLoad(configReader);
         ConfigReader cr = configReader.GetComponent<ConfigReader>();
         //上边创建完以后，先不要读配置，先选关，选完关以后，根据选的关来配置.
-        StartCoroutine(cr.Load(index, done => {
+        StartCoroutine(cr.Load(level, done => {
             if(done != null) {
                 if(done) {
-                     // 读取配置文件成功
+                    // 读取配置文件成功
                     SceneManager.LoadScene(1);
                 } else {
 
                 }
             }
         }));
-        //cr.GetConfig();
     }
 }

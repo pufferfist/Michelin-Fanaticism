@@ -28,6 +28,10 @@ public class LevelConfig {
 	public int Level;
 	public int BagSlot;
 	public int RecipeSlot;
+	public int LevelTime;
+	public int MaxHealth;
+	public int SuccessScore;
+	public int newRecipeSpeed;
 	public RecipeInfo[] Recipes;
     public IngredientWeights[] IngredientWeights;
 	public ItemsWeights[] ItemsWeights;

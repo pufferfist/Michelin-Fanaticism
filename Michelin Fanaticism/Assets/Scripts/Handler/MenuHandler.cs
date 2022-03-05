@@ -16,11 +16,13 @@ namespace DefaultNamespace
         private float modifyTimer; //last modify time(menu finished, expired or added)
         private bool lastAdd;// true if last modifyTimer change is by add;
         private float updateTimer; //last slider update time
+        private int newRecipeSpeed;
 
         public MenuHandler(UIHandler uiHandler, LevelConfig levelConfig)
         {
             this.uiHandler = uiHandler;
             recipes = new Recipe[levelConfig.RecipeSlot];
+            newRecipeSpeed = levelConfig.newRecipeSpeed==0?5:levelConfig.newRecipeSpeed;//default speed: per 5s
 			candidateRecipes = new List<Recipe>();
 			for (int i = 0; i < levelConfig.Recipes.Length; ++i) {
 				candidateRecipes.Add(new Recipe(levelConfig.Recipes[i].ID,
@@ -82,7 +84,7 @@ namespace DefaultNamespace
             }
 
             //add one menu per 5s
-            if (Time.time - modifyTimer > 5)
+            if (Time.time - modifyTimer > newRecipeSpeed)
             {
                 addRecipe();
             }
