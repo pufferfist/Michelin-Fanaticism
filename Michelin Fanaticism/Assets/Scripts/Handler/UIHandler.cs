@@ -55,6 +55,7 @@ namespace DefaultNamespace
 
             GameObject akey = GameObject.Find("Akey");
             GameObject dkey = GameObject.Find("Dkey");
+            GameObject recipeTip = GameObject.Find("RecipeTip");
             GameObject skey = GameObject.Find("Skey");
             GameObject spacekey = GameObject.Find("Spacekey");
             GameObject targetTip = GameObject.Find("TargetTip");
@@ -62,9 +63,11 @@ namespace DefaultNamespace
             if (levelConfig.Level==1){
                 skey.SetActive(true);
                 spacekey.SetActive(true);
+                recipeTip.SetActive(true);
             }else{
                  skey.SetActive(false);
                  spacekey.SetActive(false);
+                 recipeTip.SetActive(false);
             }
 
             //第二关增加更多菜谱
