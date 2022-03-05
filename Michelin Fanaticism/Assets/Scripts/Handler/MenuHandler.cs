@@ -12,23 +12,26 @@ namespace DefaultNamespace
         private UIHandler uiHandler;
 
         private Recipe[] recipes;
-        private List<Recipe> easyRecipes;
+        private List<Recipe> candidateRecipes;
         private float modifyTimer; //last modify time(menu finished, expired or added)
         private bool lastAdd;// true if last modifyTimer change is by add;
         private float updateTimer; //last slider update time
+        private int newRecipeSpeed;
 
         public MenuHandler(UIHandler uiHandler, LevelConfig levelConfig)
         {
             this.uiHandler = uiHandler;
-            recipes = new Recipe[3];
-			easyRecipes = new List<Recipe>();
+            recipes = new Recipe[levelConfig.RecipeSlot];
+            newRecipeSpeed = levelConfig.newRecipeSpeed==0?5:levelConfig.newRecipeSpeed;//default speed: per 5s
+			candidateRecipes = new List<Recipe>();
 			for (int i = 0; i < levelConfig.Recipes.Length; ++i) {
-				easyRecipes.Add(new Recipe(levelConfig.Recipes[i].ID,
+				candidateRecipes.Add(new Recipe(levelConfig.Recipes[i].ID,
 										   levelConfig.Recipes[i].Name,
 										   levelConfig.Recipes[i].TotalTime,
 										   levelConfig.Recipes[i].Score,
 										   levelConfig.Recipes[i].Ingredients));
 			}
+            updateTimer = Time.time;
 			addRecipe();
         }
         /*
@@ -81,10 +84,17 @@ namespace DefaultNamespace
             }
 
             //add one menu per 5s
-            if (Time.time - modifyTimer > 5)
+            if (Time.time - modifyTimer > newRecipeSpeed)
             {
                 addRecipe();
             }
+        }
+        
+        //called by gameManager per frame when on hold
+        public void updateOnHoldTimer()
+        {
+            modifyTimer = Time.time;
+            updateTimer = Time.time;
         }
 
         //fill empty menu slot
@@ -95,7 +105,7 @@ namespace DefaultNamespace
             {
                 if (recipes[i] == null)
                 {
-                    recipes[i] = easyRecipes[UnityEngine.Random.Range(0, easyRecipes.Count)].Clone() as Recipe;
+                    recipes[i] = candidateRecipes[UnityEngine.Random.Range(0, candidateRecipes.Count)].Clone() as Recipe;
                     modifyTimer = Time.time;
                     lastAdd = true;
                     break;

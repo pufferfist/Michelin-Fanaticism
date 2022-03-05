@@ -8,6 +8,7 @@ namespace DefaultNamespace
 {
     public class UIHandler
     {
+        private LevelConfig levelConfig;
         private GameObject[] collectedPanel;
         private GameObject[] menuPanel;
         private Text score;
@@ -15,8 +16,9 @@ namespace DefaultNamespace
         private Text lives;
 
         //init: find ui elements' reference
-        public UIHandler(GameObject ui)
+        public UIHandler(GameObject ui,LevelConfig levelConfig)
         {
+            this.levelConfig = levelConfig;
             Transform hud = ui.transform.Find("Hud");
             collectedPanel = new GameObject[2];
             menuPanel = new GameObject[3];
@@ -26,17 +28,22 @@ namespace DefaultNamespace
             {
                 collectedPanel[i] = hud.Find("CollectedPanel" + (i + 1)).gameObject;
                 resetCollectedPanel(i);
-                Debug.Log(collectedPanel[i].name);
+                if (i+1>levelConfig.BagSlot)
+                {
+                    collectedPanel[i].SetActive(false);
+                }
             }
 
-            collectedPanel[0].transform.position += new Vector3(0, 20, 0);
+            if (levelConfig.Level>=3)
+            {
+                collectedPanel[0].transform.position += new Vector3(0, 20, 0);
+            }
             
             //find menu panel
             for (int i = 0; i < menuPanel.Length; i++)
             {
                 menuPanel[i] = hud.Find("MenuPanel").Find("Recipe" + (i + 1)).gameObject;
                 menuPanel[i].SetActive(false);
-                Debug.Log(menuPanel[i].name);
             }
 
             //find score
@@ -46,7 +53,61 @@ namespace DefaultNamespace
             timer = hud.Find("TimeBar").Find("Time").GetComponent<Text>();
             
             //find lives
-            lives = hud.Find("Health").Find("Lives").GetComponent<Text>();
+            Transform health = hud.Find("Health");
+            GameObject bloodTipAndProps = hud.Find("StuPanel").Find("BloodTipAndProps").gameObject;
+
+            GameObject akey = hud.Find("StuPanel").Find("Bg").Find("Akey").gameObject;
+            GameObject dkey = hud.Find("StuPanel").Find("Bg").Find("Dkey").gameObject;
+            GameObject recipeTip = hud.Find("StuPanel").Find("RecipeTip").gameObject;
+            GameObject skey = hud.Find("StuPanel").Find("Bg").Find("Skey").gameObject;
+            GameObject spacekey = hud.Find("StuPanel").Find("Bg").Find("Spacekey").gameObject;
+            GameObject targetTip = hud.Find("StuPanel").Find("TargetTip").gameObject;
+            //第一关基础的AD控制
+            if (levelConfig.Level==1){
+                skey.SetActive(true);
+                spacekey.SetActive(true);
+                recipeTip.SetActive(true);
+            }else{
+                 skey.SetActive(false);
+                 spacekey.SetActive(false);
+                 recipeTip.SetActive(false);
+            }
+
+            //第二关增加更多菜谱
+            if (levelConfig.Level==2){
+                targetTip.SetActive(true);
+            }else{
+                 targetTip.SetActive(false);
+            }
+
+            //第三关切换背包
+            if(levelConfig.Level==3){
+                akey.SetActive(true);
+                dkey.SetActive(true);
+            }else{
+                akey.SetActive(false);
+                dkey.SetActive(false);
+            }
+
+
+
+            if(levelConfig.Level==4){
+                bloodTipAndProps.SetActive(true);
+            }else{
+                bloodTipAndProps.SetActive(false);
+            }            
+            
+            
+
+            if (levelConfig.Level<=3)
+            {
+                health.gameObject.SetActive(false);
+            }
+            else
+            {
+                lives = health.Find("Lives").GetComponent<Text>();
+            }
+            
         }
 
         public void updateCollectedPanel(int id, Stack<String> ingres)
@@ -55,7 +116,7 @@ namespace DefaultNamespace
             int i = 0;
             foreach (String ingre in ingres)
             {
-                collectedPanel[id].transform.GetChild(i).GetComponent<Text>().text = ingre;
+                collectedPanel[id].transform.GetChild(i).GetComponent<Image>().sprite = ImageHelper.getInstance().getImageDictionary(ingre);
                 i++;
             }
         }
@@ -68,12 +129,12 @@ namespace DefaultNamespace
                 GameObject recipe = menuPanel[i];
                 if (recipeList[i] != null && !recipe.activeSelf)
                 {
-                    //empty the ingre list in one recipe
+                    //empty the ingredient list in one recipe
                     foreach (Transform obj in recipe.transform)
                     {
                         if (obj.CompareTag("Ingredient"))
                         {
-                            obj.GetComponent<Text>().text = "";
+                            obj.GetComponent<Image>().sprite = null;
                         }
                         else // this is timer
                         {
@@ -87,7 +148,8 @@ namespace DefaultNamespace
                     //update the displayed recipe using input recipe list
                     for (int j = 0; j < recipeList[i].ingredients.Count; j++)
                     {
-                        recipe.transform.GetChild(j).GetComponent<Text>().text = recipeList[i].ingredients[j];
+                        recipe.transform.GetChild(j).GetComponent<Image>().sprite = 
+                            ImageHelper.getInstance().getImageDictionary(recipeList[i].ingredients[j]);
                     }
 
                     recipe.SetActive(true);
@@ -113,23 +175,28 @@ namespace DefaultNamespace
         {
             this.timer.text = $"{time / 60:D2}:{time % 60:D2}";
         }
-
-        public void updateLives(int lives)
+        
+        public void updateLives(int live)
         {
-            this.lives.text = lives.ToString();
+            if(lives == null) return;
+            this.lives.text = live.ToString();
         }
 
         public void switchBag(int activeBag)
         {
+            if (levelConfig.Level<=2)
+            {
+                return;
+            }
             collectedPanel[activeBag].transform.position += new Vector3(0, 20, 0);
-            collectedPanel[activeBag^=1].transform.position += new Vector3(0, -20, 0);
+            collectedPanel[activeBag^1].transform.position += new Vector3(0, -20, 0);
         }
 
         private void resetCollectedPanel(int index)
         {
             foreach (Transform ingre in collectedPanel[index].transform)
             {
-                ingre.GetComponent<Text>().text = "";
+                ingre.GetComponent<Image>().sprite = null;
             }
         }
     }

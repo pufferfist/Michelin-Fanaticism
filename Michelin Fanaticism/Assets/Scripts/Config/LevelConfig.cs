@@ -3,9 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using MenuNameSpace;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class IngredientWeights{
+    public string Name;
+    public int Weight;
+}
+[Serializable]
+public class ItemsWeights{
     public string Name;
     public int Weight;
 }
@@ -20,6 +26,13 @@ public class RecipeInfo{
 [Serializable]
 public class LevelConfig {
 	public int Level;
+	public int BagSlot;
+	public int RecipeSlot;
+	public int LevelTime;
+	public int MaxHealth;
+	public int SuccessScore;
+	public int newRecipeSpeed;
 	public RecipeInfo[] Recipes;
-    public IngredientWeights[] IngredientsWeights;    
+    public IngredientWeights[] IngredientWeights;
+	public ItemsWeights[] ItemsWeights;
 }
