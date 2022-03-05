@@ -36,6 +36,7 @@ public class MainCharacter : MonoBehaviour
                     rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z - 5, -5, 5));
                 }
                 //rb.velocity = new Vector3(velocity.x,velocity.y,-h*speed);
+                //rb.velocity = new Vector3(velocity.x,velocity.y,-h*speed);
                 //rb.position = new Vector3 (position.x, position.y, Mathf.Clamp(position.z ,-14, 14));
 
                 break;

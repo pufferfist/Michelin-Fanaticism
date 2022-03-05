@@ -52,17 +52,50 @@ namespace DefaultNamespace
             //find lives
             Transform health = hud.Find("Health");
             GameObject bloodTipAndProps = GameObject.Find("BloodTipAndProps");
+
+            GameObject akey = GameObject.Find("Akey");
+            GameObject dkey = GameObject.Find("Dkey");
             GameObject skey = GameObject.Find("Skey");
-            if (levelConfig.Level<=2){
-                skey.SetActive(false);
+            GameObject spacekey = GameObject.Find("Spacekey");
+            GameObject targetTip = GameObject.Find("TargetTip");
+            //第一关基础的AD控制
+            if (levelConfig.Level==1){
+                skey.SetActive(true);
+                spacekey.SetActive(true);
             }else{
-                 skey.SetActive(true);
+                 skey.SetActive(false);
+                 spacekey.SetActive(false);
             }
+
+            //第二关增加更多菜谱
+            if (levelConfig.Level==2){
+                targetTip.SetActive(true);
+            }else{
+                 targetTip.SetActive(false);
+            }
+
+            //第三关切换背包
+            if(levelConfig.Level==3){
+                akey.SetActive(true);
+                dkey.SetActive(true);
+            }else{
+                akey.SetActive(false);
+                dkey.SetActive(false);
+            }
+
+
+
+            if(levelConfig.Level==4){
+                bloodTipAndProps.SetActive(true);
+            }else{
+                bloodTipAndProps.SetActive(false);
+            }            
+            
+            
 
             if (levelConfig.Level<=3)
             {
                 health.gameObject.SetActive(false);
-                bloodTipAndProps.SetActive(false);
             }
             else
             {
