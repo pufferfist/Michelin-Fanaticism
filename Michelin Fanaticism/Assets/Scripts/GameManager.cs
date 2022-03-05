@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviour
     
     private int currentActiveBag;//indicates which bag is currently used  0: the left one 1: the right one
     
-	private int currentLevel;
+	public int currentLevel;
     private int currentScore;
     public int resTime;
     public int lives;
