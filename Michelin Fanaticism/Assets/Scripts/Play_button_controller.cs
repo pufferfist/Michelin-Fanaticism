@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 public class Play_button_controller : MonoBehaviour
 {
     public GameObject selectPanel;
-
+    public GameObject startPanel;
     public void PlayBtnClick(){
+        startPanel.SetActive(false);
         selectPanel.SetActive(true);
     }
 
