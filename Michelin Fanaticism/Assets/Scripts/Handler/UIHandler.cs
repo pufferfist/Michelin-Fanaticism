@@ -34,7 +34,10 @@ namespace DefaultNamespace
                 }
             }
 
-            // collectedPanel[0].transform.position += new Vector3(0, 20, 0);
+            if (levelConfig.Level>=4)
+            {
+                collectedPanel[0].transform.position += new Vector3(0, 20, 0);
+            }
             
             //find menu panel
             for (int i = 0; i < menuPanel.Length; i++)
@@ -109,7 +112,6 @@ namespace DefaultNamespace
                     //update the displayed recipe using input recipe list
                     for (int j = 0; j < recipeList[i].ingredients.Count; j++)
                     {
-                        Debug.Log(recipeList[i].ingredients[j]);
                         recipe.transform.GetChild(j).GetComponent<Image>().sprite = 
                             ImageHelper.getInstance().getImageDictionary(recipeList[i].ingredients[j]);
                     }

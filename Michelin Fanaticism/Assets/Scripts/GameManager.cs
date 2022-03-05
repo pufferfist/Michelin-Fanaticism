@@ -10,6 +10,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager gm;
+    private LevelConfig levelConfig;
 
     public GameState gameState;
 
@@ -19,16 +20,19 @@ public class GameManager : MonoBehaviour
     private UIHandler uiHandler;
     private MenuHandler menuHandler;
     private CollectedHandler collectedHandler;
+    private AnalyticsHandler analyticsHandler;
     
     private int currentActiveBag;//indicates which bag is currently used  0: the left one 1: the right one
     
 	private int currentLevel;
     private int currentScore;
-    public int resTime = 60;
-    public int lives = 5;
+    public int resTime;
+    public int lives;
     public int successScore;
     private float gameProcessingTimer;//game timer last update time
-    
+    private float lastFrameTime;
+    private float gameTimer;//a fake timer. Time will pause when game pauses
+
     public GameObject successPanel;
     public GameObject failPanel;
 
@@ -44,6 +48,10 @@ public class GameManager : MonoBehaviour
 
     //data tracking
     private Dictionary<String, int> recipePopularity;
+    private Dictionary<int, float> trackPopularity;
+    private int barrierEncountered;
+    private float lastSwitch;//the time player last switch track
+    private int currentTrack;
 
     private void setGameState(GameState state)
     {
@@ -60,16 +68,20 @@ public class GameManager : MonoBehaviour
         GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
         ConfigReader cr = configReader.GetComponent<ConfigReader>();
        
-        LevelConfig levelConfig = cr.configResult;
+        levelConfig = cr.configResult;
         ImageHelper.init(levelConfig);
         uiHandler = new UIHandler(ui,levelConfig);
         menuHandler = new MenuHandler(uiHandler, levelConfig);
         collectedHandler = new CollectedHandler(uiHandler,levelConfig);
+        analyticsHandler = new AnalyticsHandler(levelConfig);
         currentLevel = levelConfig.Level;
         currentScore = 0;
         currentActiveBag = 0;
-        
 
+        successScore = levelConfig.SuccessScore;
+        resTime = levelConfig.LevelTime;
+        lives = levelConfig.MaxHealth;
+        
         uiHandler.updateScore(currentScore);
         uiHandler.updateTime(resTime);
         if (currentLevel >= 4)
@@ -77,16 +89,21 @@ public class GameManager : MonoBehaviour
             uiHandler.updateLives(lives);
         }
 
-        gameProcessingTimer = Time.time;
+        gameTimer = Time.time;
+        gameProcessingTimer = gameTimer;
+        lastFrameTime = gameTimer;
 
         //init data tracking variables
-        recipePopularity = new Dictionary<string, int>
+        RecipeInfo[] levelRecipes = levelConfig.Recipes;
+        recipePopularity = new Dictionary<string, int>{};
+        foreach (RecipeInfo recipeInfo in levelRecipes)
         {
-            {"ChickenSandwich", 0},
-            {"Burger", 0},
-            {"SummerPudding", 0},
-            {"HealthyFood", 0}
-        };
+            recipePopularity.Add(recipeInfo.Name,0);
+        }
+        trackPopularity = new Dictionary<int, float>{{0,0},{1,0},{2,0}};
+        barrierEncountered = 0;
+        currentTrack = 1;
+        lastSwitch = gameTimer;
     }
 
     private void Update()
@@ -94,17 +111,17 @@ public class GameManager : MonoBehaviour
         switch (gameState)
         {
             case GameState.Playing:
+                gameTimer += Time.time - lastFrameTime;
+                
                 if (Input.GetKeyUp(KeyCode.A)&&currentLevel>=3&&currentActiveBag==1)
                 {
                     currentActiveBag = 0;
                     uiHandler.switchBag(currentActiveBag);
-                    Debug.Log("A pressed");
                 }
                 if (Input.GetKeyUp(KeyCode.D)&&currentLevel>=3&&currentActiveBag==0)
                 {
                     currentActiveBag = 1;
                     uiHandler.switchBag(currentActiveBag);
-                    Debug.Log("D pressed");
                 }
                 
                 if (Input.GetKeyUp(KeyCode.Space)||Input.GetKeyUp(KeyCode.S))
@@ -115,9 +132,9 @@ public class GameManager : MonoBehaviour
                 uiHandler.updateScore(currentScore);
 
                 //Update every second and display the remaining time.
-                if ((Time.time - gameProcessingTimer) >= 1)
+                if ((gameTimer - gameProcessingTimer) >= 1)
                 {
-                    gameProcessingTimer = Time.time;
+                    gameProcessingTimer = gameTimer;
                     resTime--;
                     uiHandler.updateTime(resTime);
                 }
@@ -134,21 +151,8 @@ public class GameManager : MonoBehaviour
             case GameState.GameOver:
                 setGameState(GameState.OnHold);
                 //score tracking
-                AnalyticsResult scoreAnalytics = Analytics.CustomEvent("TotalScore",
-                    new Dictionary<string, object>
-                    {
-                        {"level", currentLevel},
-                        {"score", currentScore}
-                    });
-                // Debug.Log("analyticResult:" + scoreAnalytics + ", current score: " + currentScore);
+                analyticsHandler.upload(currentScore,recipePopularity,barrierEncountered,trackPopularity);
                 
-                Dictionary<String, object> popularityResult = new Dictionary<string, object>();
-                recipePopularity.ToList().ForEach(x => popularityResult.Add(x.Key, x.Value));
-                AnalyticsResult popularityAnalytics = Analytics.CustomEvent("Recipe Popularity",
-                    popularityResult);
-                // Debug.Log("popularityResult:" + popularityAnalytics);
-                // recipePopularity.ToList().ForEach(x => Debug.Log(x.Key + " " + x.Value));
-
                 if (currentScore >= successScore)
                 {
                     successPanel.SetActive(true);
@@ -161,10 +165,11 @@ public class GameManager : MonoBehaviour
                 break;
 
             case GameState.OnHold:
-                gameProcessingTimer = Time.time;
                 menuHandler.updateOnHoldTimer();
                 break;
         }
+
+        lastFrameTime = Time.time;
     }
 
 
@@ -193,31 +198,45 @@ public class GameManager : MonoBehaviour
 
     public void looseLife()
     {
+        lives -= 1;
+        uiHandler.updateLives(lives);
+        barrierEncountered++;
+        
         if (lives == 0)
         {
             setGameState(GameState.GameOver);
             return;
         }
-        lives -= 1;
-        uiHandler.updateLives(lives);
     }
 
     public void addLife()
     {
+        if (lives>=levelConfig.MaxHealth)
+        {
+            return;
+        }
         lives += 1;
         uiHandler.updateLives(lives);
     }
-
-    public float getCurrentProcess()
-    {
-        return gameProcessingTimer;
-    }
-
+    
     public void StartGame(){
         stuPanel.SetActive(false);
         setGameState(GameState.Playing);
     }
 
-
-
+    public void switchTrack(bool direction)
+    {
+        if (direction&&currentTrack>0)
+        {
+            trackPopularity[currentTrack] += gameTimer - lastSwitch;
+            lastSwitch = gameTimer;
+            currentTrack--;
+        }
+        else if(!direction&&currentTrack<2)
+        {
+            trackPopularity[currentTrack] += gameTimer - lastSwitch;
+            lastSwitch = gameTimer;
+            currentTrack++;
+        }
+    }
 }

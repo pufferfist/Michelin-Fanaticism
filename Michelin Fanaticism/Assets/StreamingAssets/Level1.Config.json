@@ -2,6 +2,9 @@
     "Level": 1,
     "BagSlot": 1,
     "RecipeSlot": 1,
+    "LevelTime": 60,
+    "SuccessScore": 20,
+    "newRecipeSpeed": 1,
     "Recipes": [
         {
             "ID": 1,
