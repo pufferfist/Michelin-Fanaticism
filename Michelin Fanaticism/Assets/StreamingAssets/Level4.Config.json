@@ -4,7 +4,7 @@
   "RecipeSlot": 3,
   "LevelTime": 150,
   "MaxHealth": 3,
-  "SuccessScore": 80,
+  "SuccessScore": 250,
   "Recipes": [
     {
       "ID": 1,
@@ -64,7 +64,7 @@
     },
     {
       "Name":"ConeStop",
-      "Weight":3
+      "Weight":7
     }
   ]
 

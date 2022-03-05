@@ -53,6 +53,12 @@ public class Play_button_controller : MonoBehaviour
         }
     }
 
+    public void goBack()
+    {
+        Debug.Log("go back");
+        SceneManager.LoadScene(0);
+    }
+
     public void retry()
     {
         loadLevel(GameManager.gm.currentLevel);

@@ -34,7 +34,7 @@ namespace DefaultNamespace
                 }
             }
 
-            if (levelConfig.Level>=4)
+            if (levelConfig.Level>=3)
             {
                 collectedPanel[0].transform.position += new Vector3(0, 20, 0);
             }
@@ -54,14 +54,14 @@ namespace DefaultNamespace
             
             //find lives
             Transform health = hud.Find("Health");
-            GameObject bloodTipAndProps = GameObject.Find("BloodTipAndProps");
+            GameObject bloodTipAndProps = hud.Find("StuPanel").Find("BloodTipAndProps").gameObject;
 
-            GameObject akey = GameObject.Find("Akey");
-            GameObject dkey = GameObject.Find("Dkey");
-            GameObject recipeTip = GameObject.Find("RecipeTip");
-            GameObject skey = GameObject.Find("Skey");
-            GameObject spacekey = GameObject.Find("Spacekey");
-            GameObject targetTip = GameObject.Find("TargetTip");
+            GameObject akey = hud.Find("StuPanel").Find("Bg").Find("Akey").gameObject;
+            GameObject dkey = hud.Find("StuPanel").Find("Bg").Find("Dkey").gameObject;
+            GameObject recipeTip = hud.Find("StuPanel").Find("RecipeTip").gameObject;
+            GameObject skey = hud.Find("StuPanel").Find("Bg").Find("Skey").gameObject;
+            GameObject spacekey = hud.Find("StuPanel").Find("Bg").Find("Spacekey").gameObject;
+            GameObject targetTip = hud.Find("StuPanel").Find("TargetTip").gameObject;
             //第一关基础的AD控制
             if (levelConfig.Level==1){
                 skey.SetActive(true);
