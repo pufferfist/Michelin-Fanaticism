@@ -1473,6 +1473,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MainCharacter
       objectReference: {fileID: 0}
+    - target: {fileID: 8685653510391110490, guid: fa2dad240df8045cc968b746520675ff, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fa2dad240df8045cc968b746520675ff, type: 3}
 --- !u!43 &843957986
@@ -1774,7 +1778,7 @@ Transform:
   m_LocalScale: {x: 6, y: 9, z: 60}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &969509939
 MonoBehaviour:
@@ -2064,7 +2068,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 9ffa76256007445eea62cd98812d50af, type: 2}
     - target: {fileID: 5186818781549621857, guid: a05c996766eda4bd897db81cd017daac, type: 3}
       propertyPath: m_RootOrder
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5186818781549621857, guid: a05c996766eda4bd897db81cd017daac, type: 3}
       propertyPath: m_LocalScale.x
@@ -2149,7 +2153,7 @@ Transform:
   - {fileID: 866548952}
   - {fileID: 1037887441}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1276647320
 PrefabInstance:
@@ -2208,7 +2212,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 0f9aab712d21d4b779d37d49b5eb266c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3451118302482216456, guid: 0f9aab712d21d4b779d37d49b5eb266c, type: 3}
       propertyPath: m_Convex
@@ -2947,7 +2951,7 @@ Transform:
   m_Children:
   - {fileID: 1989995817}
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1989995816 stripped
 GameObject:
@@ -3186,7 +3190,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2059385710
 GameObject:
@@ -3217,7 +3221,7 @@ Transform:
   m_Children:
   - {fileID: 1276647321}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2084011141
 PrefabInstance:
@@ -3369,9 +3373,13 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2018899423}
+    - target: {fileID: 3145171268746925521, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_Text
+      value: your remaining health
+      objectReference: {fileID: 0}
     - target: {fileID: 3824919563043339015, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3824919563043339015, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3413,6 +3421,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4834817328940542217, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_Text
+      value: Your collected ingredients will be here
+      objectReference: {fileID: 0}
     - target: {fileID: 7497890766040606305, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -3440,6 +3452,10 @@ PrefabInstance:
     - target: {fileID: 7497890767150033847, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_Name
       value: UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 7497890767709265432, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_Text
+      value: Dodge this, or get hurt!
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b92541840f824e0c9190485418740d5, type: 3}

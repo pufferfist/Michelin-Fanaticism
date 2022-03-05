@@ -54,23 +54,25 @@ namespace DefaultNamespace
             
             //find lives
             Transform health = hud.Find("Health");
-            GameObject bloodTipAndProps = hud.Find("StuPanel").Find("BloodTipAndProps").gameObject;
 
-            GameObject akey = hud.Find("StuPanel").Find("Bg").Find("Akey").gameObject;
-            GameObject dkey = hud.Find("StuPanel").Find("Bg").Find("Dkey").gameObject;
+            Transform stuPanel = hud.Find("StuPanel");
+            GameObject switchTip = stuPanel.Find("SwitchTip").gameObject;
+            GameObject dropTip = stuPanel.Find("DropTip").gameObject;
+            GameObject healthTip = stuPanel.Find("HealthTip").gameObject;
+            GameObject barrierTip = stuPanel.Find("BarrierTip").gameObject;
+            GameObject heartTip = stuPanel.Find("HeartTip").gameObject;
+            GameObject backPackTip = stuPanel.Find("BackpackTip").gameObject;
             GameObject recipeTip = hud.Find("StuPanel").Find("RecipeTip").gameObject;
-            GameObject skey = hud.Find("StuPanel").Find("Bg").Find("Skey").gameObject;
-            GameObject spacekey = hud.Find("StuPanel").Find("Bg").Find("Spacekey").gameObject;
             GameObject targetTip = hud.Find("StuPanel").Find("TargetTip").gameObject;
             //第一关基础的AD控制
             if (levelConfig.Level==1){
-                skey.SetActive(true);
-                spacekey.SetActive(true);
+                dropTip.SetActive(true);
                 recipeTip.SetActive(true);
+                backPackTip.SetActive(true);
             }else{
-                 skey.SetActive(false);
-                 spacekey.SetActive(false);
+                dropTip.SetActive(false);
                  recipeTip.SetActive(false);
+                 backPackTip.SetActive(false);
             }
 
             //第二关增加更多菜谱
@@ -82,19 +84,19 @@ namespace DefaultNamespace
 
             //第三关切换背包
             if(levelConfig.Level==3){
-                akey.SetActive(true);
-                dkey.SetActive(true);
+                switchTip.SetActive(true);
             }else{
-                akey.SetActive(false);
-                dkey.SetActive(false);
+                switchTip.SetActive(false);
             }
 
-
-
             if(levelConfig.Level==4){
-                bloodTipAndProps.SetActive(true);
+                healthTip.SetActive(true);
+                barrierTip.SetActive(true);
+                    heartTip.SetActive(true);
             }else{
-                bloodTipAndProps.SetActive(false);
+                healthTip.SetActive(false);
+                barrierTip.SetActive(false);
+                heartTip.SetActive(false);
             }            
             
             
