@@ -24,17 +24,20 @@ public class MainCharacter : MonoBehaviour
         switch (gameState)
         {
             case GameState.Playing:
+                //var h = Input.GetAxis("Horizontal");
+                //var velocity = rb.velocity;
                 var position = rb.position;
                 if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
-                    GameManager.gm.switchTrack(true);//this call is to update analytic data, don't delete
                     rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z + 5, -5, 5));
                 }
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
-                    GameManager.gm.switchTrack(false);//this call is to update analytic data, don't delete
                     rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z - 5, -5, 5));
                 }
+                //rb.velocity = new Vector3(velocity.x,velocity.y,-h*speed);
+                //rb.velocity = new Vector3(velocity.x,velocity.y,-h*speed);
+                //rb.position = new Vector3 (position.x, position.y, Mathf.Clamp(position.z ,-14, 14));
 
                 break;
             default:
