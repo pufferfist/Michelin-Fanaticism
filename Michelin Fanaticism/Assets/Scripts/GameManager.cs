@@ -38,8 +38,6 @@ public class GameManager : MonoBehaviour
 
     public GameObject stuPanel;
 
-    private GameObject player;
-
     public static GameManager instance;
 
     void Awake(){
@@ -61,8 +59,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        setGameState(GameState.OnHold);
-        player = GameObject.FindGameObjectWithTag("Player");
         if (gm == null)
             gm = GetComponent<GameManager>();
         GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
@@ -88,22 +84,24 @@ public class GameManager : MonoBehaviour
         {
             uiHandler.updateLives(lives);
         }
-
         gameTimer = Time.time;
         gameProcessingTimer = gameTimer;
         lastFrameTime = gameTimer;
-
         //init data tracking variables
+        
         RecipeInfo[] levelRecipes = levelConfig.Recipes;
         recipePopularity = new Dictionary<string, int>{};
         foreach (RecipeInfo recipeInfo in levelRecipes)
         {
             recipePopularity.Add(recipeInfo.Name,0);
         }
+        
         trackPopularity = new Dictionary<int, float>{{0,0},{1,0},{2,0}};
         barrierEncountered = 0;
         currentTrack = 1;
         lastSwitch = gameTimer;
+        
+        setGameState(GameState.OnHold);
     }
 
     private void Update()
