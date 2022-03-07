@@ -15,12 +15,14 @@ namespace DefaultNamespace
             this.levelConfig = levelConfig;
         }
 
-        public void upload(int score, Dictionary<string, int> recipePopularity,int barrierEncounter,Dictionary<int, float> trackPopularity)
+        public void upload(int score, Dictionary<string, int> recipePopularity,int barrierEncounter,Dictionary<int, float> trackPopularity,bool success
+        )
         {
             Dictionary<string, object> statistics = new Dictionary<string, object>
             {
                 {"level", levelConfig.Level},
                 {"score", score},
+                {"success",success},
                 {"barrierEncountered", barrierEncounter},
                 {"leftTrackTime", trackPopularity[0]},
                 {"middleTrackTime", trackPopularity[1]},

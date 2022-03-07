@@ -149,7 +149,11 @@ public class GameManager : MonoBehaviour
             case GameState.GameOver:
                 setGameState(GameState.OnHold);
                 //score tracking
-                analyticsHandler.upload(currentScore,recipePopularity,barrierEncountered,trackPopularity);
+                analyticsHandler.upload(currentScore,recipePopularity,barrierEncountered,trackPopularity,currentScore >= successScore);
+                foreach (KeyValuePair<int,float> statistic in trackPopularity)
+                {
+                    Debug.Log(statistic.Key+": "+statistic.Value);
+                }
                 
                 if (currentScore >= successScore)
                 {
