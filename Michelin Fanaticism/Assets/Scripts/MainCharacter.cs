@@ -7,10 +7,12 @@ using UnityEngine.XR;
 public class MainCharacter : MonoBehaviour
 {
     private Rigidbody rb;
-    public float speed = 0.1f;
+    public float hSpeed = 20;
+    public int widthLimit = 5;
+    
     public float forwardSpeed = 15;
     private GameState gameState;
-    private int target = 0;
+    
     private int checkBit;
     private float prePos = 0;
     private const int CHECKMID = 1; 
@@ -18,7 +20,6 @@ public class MainCharacter : MonoBehaviour
     private const int CHECKLEFT = 2; 
 
     private const int CHECKRIGHT = 4; 
-    private bool begin = true;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,14 +39,14 @@ public class MainCharacter : MonoBehaviour
         }
          // check for left arrival
         if((checkBit & CHECKLEFT) >0){
-             if((prePos-5) * (z-5)<=0){
+             if((prePos-widthLimit) * (z-widthLimit)<=0){
                   rb.velocity = new Vector3(forwardSpeed, 0, 0);
                   checkBit = CHECKMID;
             }
         }
         // check for right arrival
         if((checkBit & CHECKRIGHT) >0){
-             if((prePos+5) * (z+5)<=0){
+             if((prePos+widthLimit) * (z+widthLimit)<=0){
                   rb.velocity = new Vector3(forwardSpeed, 0, 0);
                   checkBit = CHECKMID;
             }
@@ -62,14 +63,19 @@ public class MainCharacter : MonoBehaviour
             case GameState.Playing:
                 if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
-                    GameManager.gm.switchTrack(true);//used for analytic, don't delete!
-                    rb.velocity = new Vector3(forwardSpeed, 0, 20);
+                    if(position.z<widthLimit){
+                         GameManager.gm.switchTrack(true);//used for analytic, don't delete!
+                        rb.velocity = new Vector3(forwardSpeed, 0, hSpeed);
+                    }
+                   
                     //rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z + 5, -5, 5));
                 }
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
-                    GameManager.gm.switchTrack(false);//used for analytic, don't delete!
-                    rb.velocity = new Vector3(forwardSpeed, 0, -20);
+                    if(position.z>-1*widthLimit){     
+                        GameManager.gm.switchTrack(false);//used for analytic, don't delete!
+                        rb.velocity = new Vector3(forwardSpeed, 0, -1* hSpeed);
+                    }
                     //rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z - 5, -5, 5));
                 }
 
