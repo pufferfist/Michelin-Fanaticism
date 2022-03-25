@@ -171,7 +171,7 @@ namespace DefaultNamespace
 
         public void updateScore(int score)
         {
-            this.score.text = score.ToString();
+            this.score.text = score + "/" + levelConfig.SuccessScore;
         }
 
         public void updateTime(int time)
