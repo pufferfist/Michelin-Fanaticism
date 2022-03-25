@@ -38,8 +38,10 @@ namespace DefaultNamespace
          * return null: no finished recipe
          * called by gameManager if a pickup happens
          */
-        public Recipe checkFinish(Stack<String> collected)
+        public Recipe checkFinish(List<String> collected)
         {
+            int expireIndex=-1;
+            float minRemainTime = float.MaxValue;
             for (int i = 0; i < recipes.Length; i++)
             {
                 Recipe recipe = recipes[i];
@@ -47,16 +49,23 @@ namespace DefaultNamespace
                 {
                     bool equal = collected.ToArray().OrderBy(i => i).SequenceEqual(
                         recipe.ingredients.ToArray().OrderBy(i => i));
-                    if (equal)
+                    if (equal&&recipe.remainTime<minRemainTime)
                     {
-                        expireRecipe(i);
-                        uiHandler.updateMenuPanel(recipes);
-                        return recipe;
+                        expireIndex = i;
+                        minRemainTime = recipe.remainTime;
                     }
                 }
             }
 
-            return null;
+            if (expireIndex==-1)
+            {
+                return null;
+            }
+
+            Recipe expired = recipes[expireIndex];
+            expireRecipe(expireIndex);
+            uiHandler.updateMenuPanel(recipes);
+            return expired;
         }
 
         //called by gameManager per frame

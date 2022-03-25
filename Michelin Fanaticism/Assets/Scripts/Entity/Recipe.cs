@@ -25,6 +25,7 @@ namespace MenuNameSpace
             this.remainTime = totalTime;
             this.score = score;
             this.ingredients = ingredients;
+            this.ingredients.Sort();
         }
 
         public object Clone()

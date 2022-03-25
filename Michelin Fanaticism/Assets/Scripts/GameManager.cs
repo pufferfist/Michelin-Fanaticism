@@ -177,7 +177,7 @@ public class GameManager : MonoBehaviour
 
     public bool canPickUp(string ingredient)
     {
-        Stack<String> pickUp = collectedHandler.pickUp(currentActiveBag,ingredient);//collected handler will update the ui
+        List<String> pickUp = collectedHandler.pickUp(currentActiveBag,ingredient);//collected handler will update the ui
         if (pickUp != null)
         {
             Recipe finish = menuHandler.checkFinish(pickUp);//menu handler will update the ui
