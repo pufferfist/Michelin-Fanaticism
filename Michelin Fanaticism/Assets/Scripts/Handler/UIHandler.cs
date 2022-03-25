@@ -119,6 +119,7 @@ namespace DefaultNamespace
             foreach (String ingre in ingres)
             {
                 collectedPanel[id].transform.GetChild(i).GetComponent<Image>().sprite = ImageHelper.getInstance().getImageDictionary(ingre);
+                collectedPanel[id].transform.GetChild(i).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f); // set transparency to 0%
                 i++;
             }
         }
@@ -198,7 +199,8 @@ namespace DefaultNamespace
         {
             foreach (Transform ingre in collectedPanel[index].transform)
             {
-                ingre.GetComponent<Image>().sprite = null;
+                ingre.GetComponent<Image>().sprite = null; // reset sprite to null
+                ingre.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // set transparency to 100%
             }
         }
     }
