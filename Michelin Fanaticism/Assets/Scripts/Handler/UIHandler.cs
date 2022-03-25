@@ -112,7 +112,7 @@ namespace DefaultNamespace
             
         }
 
-        public void updateCollectedPanel(int id, Stack<String> ingres)
+        public void updateCollectedPanel(int id, List<String> ingres)
         {
             resetCollectedPanel(id);
             int i = 0;

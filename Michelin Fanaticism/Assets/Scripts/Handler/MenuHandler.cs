@@ -38,7 +38,7 @@ namespace DefaultNamespace
          * return null: no finished recipe
          * called by gameManager if a pickup happens
          */
-        public Recipe checkFinish(Stack<String> collected)
+        public Recipe checkFinish(List<String> collected)
         {
             int expireIndex=-1;
             float minRemainTime = float.MaxValue;
