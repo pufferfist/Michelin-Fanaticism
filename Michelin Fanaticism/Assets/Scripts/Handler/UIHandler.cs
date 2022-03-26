@@ -132,7 +132,7 @@ namespace DefaultNamespace
             foreach (String ingre in ingres)
             {
                 collectedPanel[id].transform.GetChild(i).GetComponent<Image>().sprite = ImageHelper.getInstance().getImageDictionary(ingre);
-                collectedPanel[id].transform.GetChild(i).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f); // set transparency to 0%
+                collectedPanel[id].transform.GetChild(i).GetComponent<Image>().color = new Color(1f,1f,1f,1f); // set transparency to 0%
                 i++;
             }
         }
@@ -151,6 +151,7 @@ namespace DefaultNamespace
                         if (obj.CompareTag("Ingredient"))
                         {
                             obj.GetComponent<Image>().sprite = null;
+                            obj.GetComponent<Image>().color = new Color(1f,1f,1f,0f); // set all ingredient to 100% transparent
                         }
                         else // this is timer
                         {
@@ -166,6 +167,7 @@ namespace DefaultNamespace
                     {
                         recipe.transform.GetChild(j).GetComponent<Image>().sprite = 
                             ImageHelper.getInstance().getImageDictionary(recipeList[i].ingredients[j]);
+                        recipe.transform.GetChild(j).GetComponent<Image>().color = new Color(1f,1f,1f,1f);
                     }
 
                     recipe.SetActive(true);
@@ -213,7 +215,7 @@ namespace DefaultNamespace
             foreach (Transform ingre in collectedPanel[index].transform)
             {
                 ingre.GetComponent<Image>().sprite = null; // reset sprite to null
-                ingre.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // set transparency to 100%
+                ingre.GetComponent<Image>().color = new Color(1f,1f,1f,0f); // set transparency to 100%
             }
         }
 
