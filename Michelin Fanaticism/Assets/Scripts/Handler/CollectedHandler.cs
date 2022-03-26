@@ -36,7 +36,7 @@ namespace DefaultNamespace
 
         public List<String> drop(int index, int k = 0)
         {
-            if (collected[index].Count>=1)
+            if (collected[index].Count>=1 && k < collected[index].Count)
             {
                 collected[index].RemoveAt(k);
                 uiHandler.updateCollectedPanel(index,collected[index]);
