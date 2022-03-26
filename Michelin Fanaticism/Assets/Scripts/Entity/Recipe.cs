@@ -16,6 +16,7 @@ namespace MenuNameSpace
         public float remainTime;
         public int score;
         public List<string> ingredients;
+        public int index;
 
         public Recipe(int id, string name, float totalTime, int score, List<string> ingredients)
         {
