@@ -9,6 +9,7 @@ namespace DefaultNamespace
     public class UIHandler
     {
         private LevelConfig levelConfig;
+		private CollectedHandler collectedHandler;
         private GameObject[] collectedPanel;
         private GameObject[] menuPanel;
         private Text score;
@@ -32,6 +33,13 @@ namespace DefaultNamespace
                 {
                     collectedPanel[i].SetActive(false);
                 }
+				for (int j = 0; j < 3; ++j)
+				{
+					MouseHandler mouseHandler = collectedPanel[i].transform.GetChild(j).GetComponent<MouseHandler>();
+					mouseHandler.collectedHandler = collectedHandler;
+					mouseHandler.index = i;
+					mouseHandler.k = j;
+				}
             }
 
             if (levelConfig.Level>=3)
@@ -203,5 +211,10 @@ namespace DefaultNamespace
                 ingre.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // set transparency to 100%
             }
         }
+
+		public void setCollectedHandler(CollectedHandler collectedHandler)
+		{
+			this.collectedHandler = collectedHandler;
+		}
     }
 }

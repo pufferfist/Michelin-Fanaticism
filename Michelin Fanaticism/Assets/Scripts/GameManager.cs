@@ -69,6 +69,7 @@ public class GameManager : MonoBehaviour
         uiHandler = new UIHandler(ui,levelConfig);
         menuHandler = new MenuHandler(uiHandler, levelConfig);
         collectedHandler = new CollectedHandler(uiHandler,levelConfig);
+		uiHandler.setCollectedHandler(collectedHandler);
         analyticsHandler = new AnalyticsHandler(levelConfig);
         currentLevel = levelConfig.Level;
         currentScore = 0;
