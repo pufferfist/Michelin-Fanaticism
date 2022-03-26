@@ -17,9 +17,9 @@ namespace DefaultNamespace
         private Text score;
         private Text timer;
         private Text lives;
-        private GameObject[] shineImages;
+        private RawImage[] shineImages;
         private float colorChangeSpeed = 1f;
-        private static Color shineColor = new Color(94, 250, 4, 204);
+        private static Color shineColor = new Color(94, 250, 4, 1);
 
         //init: find ui elements' reference
         public UIHandler(GameObject ui,LevelConfig levelConfig)
@@ -28,12 +28,12 @@ namespace DefaultNamespace
             Transform hud = ui.transform.Find("Hud");
             collectedPanel = new GameObject[2];
             menuPanel = new GameObject[3];
-            shineImages = new GameObject[3];
+            shineImages = new RawImage[3];
             
             for (var i = 0; i < shineImages.Length; i++)
             {
-                shineImages[i] = hud.Find("MenuPanel").Find("ShineRawImage" + (i + 1)).gameObject;
-                shineImages[i].GetComponent<RawImage>().color = Color.clear;
+                shineImages[i] = hud.Find("MenuPanel").Find("ShineRawImage" + (i + 1)).GetComponent<RawImage>();
+                shineImages[i].color = Color.clear;
             }
 
             //find collected panel
@@ -177,6 +177,7 @@ namespace DefaultNamespace
                 }
                 else
                 {
+                    shineImages[i].color = Color.clear;
                     recipe.SetActive(false);
                 }
             }
@@ -215,6 +216,18 @@ namespace DefaultNamespace
                 ingre.GetComponent<Image>().sprite = null; // reset sprite to null
                 ingre.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // set transparency to 100%
             }
+        }
+        
+        public IEnumerator shineBeforeUpdateMenuPanel(int finishedIndex)
+        {
+            var rawImage = shineImages[finishedIndex].GetComponent<RawImage>();
+            for (int i = 0; i < 9; i++)
+            {
+                rawImage.color = new Color(0.367078f, 0.9811321f, 0.01388392f, i * 0.05f);
+                yield return new WaitForSeconds(0.1f);
+                
+            }
+            // rawImage.color = Color.clear;
         }
 
 		public void setCollectedHandler(CollectedHandler collectedHandler)

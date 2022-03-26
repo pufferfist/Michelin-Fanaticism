@@ -73,8 +73,8 @@ namespace DefaultNamespace
         public IEnumerator Fadeout(Recipe finishedRecipe,Action<bool> done)
         {
             //do your thing here
-            
-            yield return null;
+            yield return uiHandler.shineBeforeUpdateMenuPanel(finishedRecipe.index);
+            // yield return null;
 
             expireRecipe(finishedRecipe.index);
             done(true);
