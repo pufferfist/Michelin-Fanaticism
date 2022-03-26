@@ -79,6 +79,9 @@ public class MainCharacter : MonoBehaviour
                     //rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z - 5, -5, 5));
                 }
 
+                rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z, -5, 5));
+
+
                 break;
             default:
                 break;
