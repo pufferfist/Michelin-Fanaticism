@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MenuNameSpace;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DefaultNamespace
 {
@@ -63,9 +65,21 @@ namespace DefaultNamespace
             }
 
             Recipe expired = recipes[expireIndex];
-            expireRecipe(expireIndex);
-            uiHandler.updateMenuPanel(recipes);
+            // expireRecipe(expireIndex);
+            // uiHandler.updateMenuPanel(recipes);
             return expired;
+        }
+        
+        public IEnumerator Fadeout(Recipe finishedRecipe,Action<bool> done)
+        {
+            //do your thing
+            Debug.Log(Time.time);
+            yield return new WaitForSeconds(1f);
+            // yield return null;
+            
+            expireRecipe(finishedRecipe.index);
+            Debug.Log(Time.time);
+            done(true);
         }
 
         //called by gameManager per frame
@@ -115,6 +129,7 @@ namespace DefaultNamespace
                 if (recipes[i] == null)
                 {
                     recipes[i] = candidateRecipes[UnityEngine.Random.Range(0, candidateRecipes.Count)].Clone() as Recipe;
+                    recipes[i].index = i;
                     modifyTimer = Time.time;
                     lastAdd = true;
                     break;
@@ -123,7 +138,7 @@ namespace DefaultNamespace
             uiHandler.updateMenuPanel(recipes);
         }
 
-        private void expireRecipe(int index)
+        public void expireRecipe(int index)
         {
             recipes[index] = null;
             if (lastAdd)
