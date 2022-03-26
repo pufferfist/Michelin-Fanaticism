@@ -33,13 +33,6 @@ namespace DefaultNamespace
                 {
                     collectedPanel[i].SetActive(false);
                 }
-				for (int j = 0; j < 3; ++j)
-				{
-					MouseHandler mouseHandler = collectedPanel[i].transform.GetChild(j).GetComponent<MouseHandler>();
-					mouseHandler.collectedHandler = collectedHandler;
-					mouseHandler.index = i;
-					mouseHandler.k = j;
-				}
             }
 
             if (levelConfig.Level>=3)
@@ -215,6 +208,16 @@ namespace DefaultNamespace
 		public void setCollectedHandler(CollectedHandler collectedHandler)
 		{
 			this.collectedHandler = collectedHandler;
+			for (int i = 0; i < collectedPanel.Length; i++)
+            {
+				for (int j = 0; j < 3; ++j)
+				{
+					MouseHandler mouseHandler = collectedPanel[i].transform.GetChild(j).GetComponent<MouseHandler>();
+					mouseHandler.collectedHandler = collectedHandler;
+					mouseHandler.index = i;
+					mouseHandler.k = j;
+				}
+            }
 		}
     }
 }
