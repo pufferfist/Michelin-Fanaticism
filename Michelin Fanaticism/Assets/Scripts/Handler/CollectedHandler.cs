@@ -41,7 +41,8 @@ namespace DefaultNamespace
                 collected[index].RemoveAt(k);
                 uiHandler.updateCollectedPanel(index,collected[index]);
             }
-
+            GameManager.gm.finish(collected[index]);
+            
             return collected[index];
         }
 

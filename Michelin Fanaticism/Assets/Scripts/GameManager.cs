@@ -181,15 +181,7 @@ public class GameManager : MonoBehaviour
         List<String> pickUp = collectedHandler.pickUp(currentActiveBag,ingredient);//collected handler will update the ui
         if (pickUp != null)
         {
-            Recipe finish = menuHandler.checkFinish(pickUp);//menu handler will update the ui
-            if (finish != null)
-            {
-                collectedHandler.finish(currentActiveBag);
-                currentScore += finish.score;
-                uiHandler.updateScore(currentScore);
-                recipePopularity[finish.name]++;
-            }
-
+            finish(pickUp);
             return true;
         }
         else
@@ -197,6 +189,18 @@ public class GameManager : MonoBehaviour
             //todo prompt player that bag is full
         }
         return false;
+    }
+
+    public void finish(List<String>collectedList)
+    {
+        Recipe finish = menuHandler.checkFinish(collectedList);//menu handler will update the ui
+        if (finish != null)
+        {
+            collectedHandler.finish(currentActiveBag);
+            currentScore += finish.score;
+            uiHandler.updateScore(currentScore);
+            recipePopularity[finish.name]++;
+        }
     }
 
     public void looseLife()
