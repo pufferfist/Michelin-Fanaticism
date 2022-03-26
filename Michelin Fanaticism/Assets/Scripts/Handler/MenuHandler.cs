@@ -72,7 +72,7 @@ namespace DefaultNamespace
             
             Recipe expired = recipes[expireIndex];
             expireRecipe(expireIndex);
-            StartCoroutine(uhr.shineBeforeUpdateMenuPanel(recipes, expireIndex));
+            StartCoroutine(uiHandler.shineBeforeUpdateMenuPanel(recipes, expireIndex));
             return expired;
         }
 
