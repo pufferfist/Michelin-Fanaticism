@@ -1,14 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Gnome;
 using MenuNameSpace;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DefaultNamespace
 {
-    public class UIHandler:MonoBehaviour
+    public class UIHandler
     {
         private LevelConfig levelConfig;
 		private CollectedHandler collectedHandler;
