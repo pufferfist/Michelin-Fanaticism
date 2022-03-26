@@ -1,12 +1,14 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using Gnome;
 using MenuNameSpace;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DefaultNamespace
 {
-    public class UIHandler
+    public class UIHandler:MonoBehaviour
     {
         private LevelConfig levelConfig;
 		private CollectedHandler collectedHandler;
@@ -15,6 +17,9 @@ namespace DefaultNamespace
         private Text score;
         private Text timer;
         private Text lives;
+        private GameObject[] shineImages;
+        private float colorChangeSpeed = 1f;
+        private static Color shineColor = new Color(94, 250, 4, 204);
 
         //init: find ui elements' reference
         public UIHandler(GameObject ui,LevelConfig levelConfig)
@@ -23,6 +28,13 @@ namespace DefaultNamespace
             Transform hud = ui.transform.Find("Hud");
             collectedPanel = new GameObject[2];
             menuPanel = new GameObject[3];
+            shineImages = new GameObject[3];
+            
+            for (var i = 0; i < shineImages.Length; i++)
+            {
+                shineImages[i] = hud.Find("MenuPanel").Find("ShineRawImage" + (i + 1)).gameObject;
+                shineImages[i].GetComponent<RawImage>().color = Color.clear;
+            }
 
             //find collected panel
             for (int i = 0; i < collectedPanel.Length; i++)
