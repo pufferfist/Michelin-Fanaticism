@@ -72,13 +72,11 @@ namespace DefaultNamespace
         
         public IEnumerator Fadeout(Recipe finishedRecipe,Action<bool> done)
         {
-            //do your thing
-            Debug.Log(Time.time);
-            yield return new WaitForSeconds(1f);
-            // yield return null;
+            //do your thing here
             
+            yield return null;
+
             expireRecipe(finishedRecipe.index);
-            Debug.Log(Time.time);
             done(true);
         }
 
