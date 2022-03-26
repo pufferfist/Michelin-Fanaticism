@@ -6,10 +6,12 @@ using UnityEngine;
 
 namespace DefaultNamespace
 {
-    public class MenuHandler
+    public class MenuHandler:MonoBehaviour
     {
         //service dependency
         private UIHandler uiHandler;
+
+        private UIHandler uhr;
 
         private Recipe[] recipes;
         private List<Recipe> candidateRecipes;
@@ -20,6 +22,12 @@ namespace DefaultNamespace
 
         public MenuHandler(UIHandler uiHandler, LevelConfig levelConfig)
         {
+
+
+            GameObject UIhandler = GameObject.FindGameObjectsWithTag("UI handler")[0];
+            GameObject.DontDestroyOnLoad(UIhandler);
+            uhr = UIhandler.GetComponent<UIHandler>();
+            
             this.uiHandler = uiHandler;
             recipes = new Recipe[levelConfig.RecipeSlot];
             newRecipeSpeed = levelConfig.newRecipeSpeed==0?5:levelConfig.newRecipeSpeed;//default speed: per 5s
@@ -61,10 +69,10 @@ namespace DefaultNamespace
             {
                 return null;
             }
-
+            
             Recipe expired = recipes[expireIndex];
             expireRecipe(expireIndex);
-            uiHandler.updateMenuPanel(recipes);
+            StartCoroutine(uhr.shineBeforeUpdateMenuPanel(recipes, expireIndex));
             return expired;
         }
 

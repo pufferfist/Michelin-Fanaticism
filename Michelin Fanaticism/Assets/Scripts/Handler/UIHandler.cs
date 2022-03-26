@@ -137,6 +137,19 @@ namespace DefaultNamespace
             }
         }
 
+        public IEnumerator shineBeforeUpdateMenuPanel(Recipe[] recipeList, int finished)
+        {
+            var rawImage = shineImages[finished].GetComponent<RawImage>();
+            for (int i = 0; i < 80; i++)
+            {
+                rawImage.color = Color.Lerp(rawImage.color, shineColor, 0.5f);
+                yield return new WaitForSeconds(0.1f);
+            }
+            //图片淡入
+            updateMenuPanel(recipeList);
+            yield return null;
+        }
+
         public void updateMenuPanel(Recipe[] recipeList)
         {
             for (int i = 0; i < recipeList.Length; i++)

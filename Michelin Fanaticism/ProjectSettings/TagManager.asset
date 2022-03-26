@@ -8,6 +8,7 @@ TagManager:
   - RoadTrigger
   - Ingredient
   - ConfigReader
+  - UI handler
   layers:
   - Default
   - TransparentFX
