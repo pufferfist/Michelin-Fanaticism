@@ -206,8 +206,9 @@ namespace DefaultNamespace
             {
                 return;
             }
-            collectedPanel[activeBag].transform.position += new Vector3(0, 20, 0);
-            collectedPanel[activeBag^1].transform.position += new Vector3(0, -20, 0);
+
+            collectedPanel[activeBag].transform.GetChild(0).GetComponent<Image>().color = new Color(244, 236, 194);
+            collectedPanel[activeBag^1].transform.GetChild(0).GetComponent<Image>().color = new Color(244,236,194);
         }
 
         private void resetCollectedPanel(int index)
