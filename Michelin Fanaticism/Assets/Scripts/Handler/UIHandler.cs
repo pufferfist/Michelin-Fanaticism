@@ -18,7 +18,7 @@ namespace DefaultNamespace
         private Text lives;
         private RawImage[] shineImages;
         private int colorChangeTimes = 16;
-        private float colorChangeTime = 0.8f;
+        private float colorChangeTime = 0.5f;
 
         //init: find ui elements' reference
         public UIHandler(GameObject ui,LevelConfig levelConfig)
