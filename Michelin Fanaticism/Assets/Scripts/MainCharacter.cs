@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
@@ -52,6 +53,18 @@ public class MainCharacter : MonoBehaviour
             }
         }
     }
+    IEnumerator WaitandSlowDown()
+    {
+        for (int i = 0; i < 40; i++)
+        {
+            yield return new WaitForSeconds(0.25f);
+            if (forwardSpeed > 15)
+            {
+                forwardSpeed -= 1;
+                rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+            }
+        }
+    }
     void Update()
     {
         
@@ -61,6 +74,17 @@ public class MainCharacter : MonoBehaviour
         switch (gameState)
         {
             case GameState.Playing:
+                if (Input.GetKeyDown(KeyCode.UpArrow))
+                {
+                    if (forwardSpeed == 15)
+                    {
+                        forwardSpeed += 40;
+                        rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+                        StartCoroutine(WaitandSlowDown());
+                    }
+                    
+                }
+
                 if (Input.GetKeyDown(KeyCode.LeftArrow))
                 {
                     if(position.z<widthLimit){
@@ -87,6 +111,7 @@ public class MainCharacter : MonoBehaviour
                 break;
         }
     }
+
 
     public void changeState(GameState state)
     {
