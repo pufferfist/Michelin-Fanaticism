@@ -55,15 +55,19 @@ public class MainCharacter : MonoBehaviour
     }
     IEnumerator WaitandSlowDown()
     {
+        yield return new WaitForSeconds(8f);
+        forwardSpeed -= 20;
+        rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+        /*
         for (int i = 0; i < 40; i++)
         {
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.5f);
             if (forwardSpeed > 15)
             {
                 forwardSpeed -= 1;
                 rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
             }
-        }
+        }*/
     }
     void Update()
     {
@@ -78,7 +82,7 @@ public class MainCharacter : MonoBehaviour
                 {
                     if (forwardSpeed == 15)
                     {
-                        forwardSpeed += 40;
+                        forwardSpeed += 20;
                         rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
                         StartCoroutine(WaitandSlowDown());
                     }
