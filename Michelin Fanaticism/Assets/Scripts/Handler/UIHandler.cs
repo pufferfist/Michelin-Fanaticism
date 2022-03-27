@@ -150,6 +150,7 @@ namespace DefaultNamespace
                         if (obj.CompareTag("Ingredient"))
                         {
                             obj.GetComponent<Image>().sprite = null;
+                            obj.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
                         }
                         else // this is timer
                         {
@@ -165,6 +166,7 @@ namespace DefaultNamespace
                     {
                         recipe.transform.GetChild(j).GetComponent<Image>().sprite = 
                             ImageHelper.getInstance().getImageDictionary(recipeList[i].ingredients[j]);
+                        recipe.transform.GetChild(j).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
                     }
 
                     recipe.SetActive(true);
