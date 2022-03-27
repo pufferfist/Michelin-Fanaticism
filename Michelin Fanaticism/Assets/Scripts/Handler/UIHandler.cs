@@ -1,14 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Gnome;
 using MenuNameSpace;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DefaultNamespace
 {
-    public class UIHandler:MonoBehaviour
+    public class UIHandler
     {
         private LevelConfig levelConfig;
 		private CollectedHandler collectedHandler;
@@ -17,9 +16,9 @@ namespace DefaultNamespace
         private Text score;
         private Text timer;
         private Text lives;
-        private GameObject[] shineImages;
-        private float colorChangeSpeed = 1f;
-        private static Color shineColor = new Color(94, 250, 4, 204);
+        private RawImage[] shineImages;
+        private int colorChangeTimes = 16;
+        private float colorChangeTime = 0.5f;
 
         //init: find ui elements' reference
         public UIHandler(GameObject ui,LevelConfig levelConfig)
@@ -28,12 +27,12 @@ namespace DefaultNamespace
             Transform hud = ui.transform.Find("Hud");
             collectedPanel = new GameObject[2];
             menuPanel = new GameObject[3];
-            shineImages = new GameObject[3];
+            shineImages = new RawImage[3];
             
             for (var i = 0; i < shineImages.Length; i++)
             {
-                shineImages[i] = hud.Find("MenuPanel").Find("ShineRawImage" + (i + 1)).gameObject;
-                shineImages[i].GetComponent<RawImage>().color = Color.clear;
+                shineImages[i] = hud.Find("MenuPanel").Find("ShineRawImage" + (i + 1)).GetComponent<RawImage>();
+                shineImages[i].color = Color.clear;
             }
 
             //find collected panel
@@ -151,6 +150,7 @@ namespace DefaultNamespace
                         if (obj.CompareTag("Ingredient"))
                         {
                             obj.GetComponent<Image>().sprite = null;
+                            obj.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
                         }
                         else // this is timer
                         {
@@ -166,6 +166,7 @@ namespace DefaultNamespace
                     {
                         recipe.transform.GetChild(j).GetComponent<Image>().sprite = 
                             ImageHelper.getInstance().getImageDictionary(recipeList[i].ingredients[j]);
+                        recipe.transform.GetChild(j).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
                     }
 
                     recipe.SetActive(true);
@@ -177,6 +178,7 @@ namespace DefaultNamespace
                 }
                 else
                 {
+                    shineImages[i].color = Color.clear;
                     recipe.SetActive(false);
                 }
             }
@@ -204,8 +206,11 @@ namespace DefaultNamespace
             {
                 return;
             }
-            collectedPanel[activeBag].transform.position += new Vector3(0, 20, 0);
-            collectedPanel[activeBag^1].transform.position += new Vector3(0, -20, 0);
+
+            collectedPanel[activeBag].transform.localScale += new Vector3(0.4f, 0.4f, 0);
+            collectedPanel[activeBag].transform.position += new Vector3(65, 0, 0);
+            collectedPanel[activeBag ^ 1].transform.localScale += new Vector3(-0.4f, -0.4f, -0.1f);
+            collectedPanel[activeBag ^ 1].transform.position += new Vector3(-65, 0, 0);
         }
 
         private void resetCollectedPanel(int index)
@@ -214,6 +219,18 @@ namespace DefaultNamespace
             {
                 ingre.GetComponent<Image>().sprite = null; // reset sprite to null
                 ingre.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // set transparency to 100%
+            }
+        }
+        
+        public IEnumerator shineBeforeUpdateMenuPanel(int finishedIndex)
+        {
+            float changeSpeed = (float)1 / colorChangeTimes;
+            float waitTime = colorChangeTime / colorChangeTimes;
+            var rawImage = shineImages[finishedIndex];
+            for (int i = 0; i < colorChangeTimes; i++)
+            {
+                rawImage.color = new Color(0.367078f, 0.9811321f, 0.01388392f, 0.4f*i*changeSpeed);
+                yield return new WaitForSeconds(waitTime);
             }
         }
 

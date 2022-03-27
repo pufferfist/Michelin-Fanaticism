@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
@@ -197,9 +198,13 @@ public class GameManager : MonoBehaviour
         if (finish != null)
         {
             collectedHandler.finish(currentActiveBag);
-            currentScore += finish.score;
-            uiHandler.updateScore(currentScore);
-            recipePopularity[finish.name]++;
+            StartCoroutine(menuHandler.Fadeout(finish, done => {
+                if(done != null && done) {
+                    currentScore += finish.score;
+                    uiHandler.updateScore(currentScore);
+                    recipePopularity[finish.name]++;
+                }
+            }));
         }
     }
 
