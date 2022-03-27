@@ -17,8 +17,8 @@ namespace DefaultNamespace
         private Text timer;
         private Text lives;
         private RawImage[] shineImages;
-        private int colorChangeTime = 8;
-        private static Color shineColor = new Color(0.367078f, 0.9811321f, 0.01388392f, 0.4f);
+        private int colorChangeTimes = 16;
+        private float colorChangeTime = 0.8f;
 
         //init: find ui elements' reference
         public UIHandler(GameObject ui,LevelConfig levelConfig)
@@ -219,12 +219,13 @@ namespace DefaultNamespace
         
         public IEnumerator shineBeforeUpdateMenuPanel(int finishedIndex)
         {
-            float changeSpeed = (float)1 / colorChangeTime;
+            float changeSpeed = (float)1 / colorChangeTimes;
+            float waitTime = colorChangeTime / colorChangeTimes;
             var rawImage = shineImages[finishedIndex];
-            for (int i = 0; i < colorChangeTime; i++)
+            for (int i = 0; i < colorChangeTimes; i++)
             {
-                rawImage.color = Color.Lerp(rawImage.color, shineColor,changeSpeed);
-                yield return new WaitForSeconds(0.1f);
+                rawImage.color = new Color(0.367078f, 0.9811321f, 0.01388392f, 0.4f*i*changeSpeed);
+                yield return new WaitForSeconds(waitTime);
             }
         }
 
