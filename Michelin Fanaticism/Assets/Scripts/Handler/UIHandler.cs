@@ -207,8 +207,10 @@ namespace DefaultNamespace
                 return;
             }
 
-            collectedPanel[activeBag].transform.GetChild(0).GetComponent<Image>().color = new Color(244, 236, 194);
-            collectedPanel[activeBag^1].transform.GetChild(0).GetComponent<Image>().color = new Color(244,236,194);
+            collectedPanel[activeBag].transform.localScale += new Vector3(0.4f, 0.4f, 0);
+            collectedPanel[activeBag].transform.position += new Vector3(65, 0, 0);
+            collectedPanel[activeBag ^ 1].transform.localScale += new Vector3(-0.4f, -0.4f, -0.1f);
+            collectedPanel[activeBag ^ 1].transform.position += new Vector3(-65, 0, 0);
         }
 
         private void resetCollectedPanel(int index)
