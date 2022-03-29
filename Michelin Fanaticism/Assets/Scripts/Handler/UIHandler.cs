@@ -46,10 +46,10 @@ namespace DefaultNamespace
                 }
             }
 
-            if (levelConfig.Level>=3)
-            {
-                collectedPanel[0].transform.position += new Vector3(0, 20, 0);
-            }
+            // if (levelConfig.Level>=3)
+            // {
+            //     collectedPanel[0].transform.position += new Vector3(0, 20, 0);
+            // }
             
             //find menu panel
             for (int i = 0; i < menuPanel.Length; i++)
@@ -207,10 +207,10 @@ namespace DefaultNamespace
                 return;
             }
 
+            collectedPanel[activeBag].transform.position += new Vector3(-47, 0, 0);
             collectedPanel[activeBag].transform.localScale += new Vector3(0.4f, 0.4f, 0);
-            collectedPanel[activeBag].transform.position += new Vector3(65, 0, 0);
-            collectedPanel[activeBag ^ 1].transform.localScale += new Vector3(-0.4f, -0.4f, -0.1f);
-            collectedPanel[activeBag ^ 1].transform.position += new Vector3(-65, 0, 0);
+            collectedPanel[activeBag ^ 1].transform.localScale += new Vector3(-0.4f, -0.4f, 0);
+            collectedPanel[activeBag ^ 1].transform.position += new Vector3(47, 0, 0);
         }
 
         private void resetCollectedPanel(int index)

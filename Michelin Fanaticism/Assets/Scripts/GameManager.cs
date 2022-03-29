@@ -113,21 +113,22 @@ public class GameManager : MonoBehaviour
             case GameState.Playing:
                 gameTimer += Time.time - lastFrameTime;
                 
-                if (Input.GetKeyUp(KeyCode.A)&&currentLevel>=3&&currentActiveBag==1)
+                float dv = Input.GetAxis("Mouse ScrollWheel");
+                if (dv > 0&&currentLevel>=3&&currentActiveBag==1)
                 {
                     currentActiveBag = 0;
                     uiHandler.switchBag(currentActiveBag);
                 }
-                if (Input.GetKeyUp(KeyCode.D)&&currentLevel>=3&&currentActiveBag==0)
+                if (dv < 0&&currentLevel>=3&&currentActiveBag==0)
                 {
                     currentActiveBag = 1;
                     uiHandler.switchBag(currentActiveBag);
                 }
                 
-                if (Input.GetKeyUp(KeyCode.Space)||Input.GetKeyUp(KeyCode.S))
-                {
-                    collectedHandler.drop(currentActiveBag);
-                }
+                // if (Input.GetKeyUp(KeyCode.Space)||Input.GetKeyUp(KeyCode.S))
+                // {
+                //     collectedHandler.drop(currentActiveBag);
+                // }
 
                 uiHandler.updateScore(currentScore);
 

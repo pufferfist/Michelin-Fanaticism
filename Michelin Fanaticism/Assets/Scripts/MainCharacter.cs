@@ -89,7 +89,7 @@ public class MainCharacter : MonoBehaviour
                     
                 }
 
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                if (Input.GetKeyDown(KeyCode.A))
                 {
                     if(position.z<widthLimit){
                          GameManager.gm.switchTrack(true);//used for analytic, don't delete!
@@ -98,7 +98,7 @@ public class MainCharacter : MonoBehaviour
                    
                     //rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z + 5, -5, 5));
                 }
-                if (Input.GetKeyDown(KeyCode.RightArrow))
+                if (Input.GetKeyDown(KeyCode.D))
                 {
                     if(position.z>-1*widthLimit){     
                         GameManager.gm.switchTrack(false);//used for analytic, don't delete!
