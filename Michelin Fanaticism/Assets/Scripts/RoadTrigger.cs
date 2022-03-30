@@ -25,7 +25,8 @@ public class IngredientSelector
           }
           if(configObj.ItemsWeights!=null){
             for(int i=0;i<configObj.ItemsWeights.Length;i++){
-                        for(int j=0;j<configObj.ItemsWeights[i].Weight;j++){
+                        for(int j=0;j<configObj.ItemsWeights[i].Weight;j++)
+                        {
                                 randomMap.Add(indexMap[configObj.ItemsWeights[i].Name]);
                         }
                     }

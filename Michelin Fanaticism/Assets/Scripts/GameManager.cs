@@ -231,6 +231,11 @@ public class GameManager : MonoBehaviour
         lives += 1;
         uiHandler.updateLives(lives);
     }
+
+	public void speedChange(int delta)
+    {
+        character.changeSpeed(delta);
+    }
     
     public void StartGame(){
         stuPanel.SetActive(false);

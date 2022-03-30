@@ -130,4 +130,11 @@ public class MainCharacter : MonoBehaviour
         }
         this.gameState = state;
     }
+
+    public void changeSpeed(int delta)
+    {
+        forwardSpeed += delta;
+        forwardSpeed = Math.Max(forwardSpeed, 5);
+        rb.velocity = new Vector3(forwardSpeed, 0, 0);
+    }
 }

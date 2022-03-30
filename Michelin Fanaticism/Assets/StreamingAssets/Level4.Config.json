@@ -65,6 +65,14 @@
     {
       "Name":"ConeStop",
       "Weight":7
+    },
+    {
+      "Name":"SpeedUp",
+      "Weight":3
+    },
+    {
+      "Name":"SpeedDown",
+      "Weight":3
     }
   ]
 
