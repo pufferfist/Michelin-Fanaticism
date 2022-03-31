@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DefaultNamespace;
@@ -38,8 +39,6 @@ public class GameManager : MonoBehaviour
 
     public GameObject stuPanel;
 
-    private GameObject player;
-
     public static GameManager instance;
 
     void Awake(){
@@ -61,8 +60,6 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        setGameState(GameState.OnHold);
-        player = GameObject.FindGameObjectWithTag("Player");
         if (gm == null)
             gm = GetComponent<GameManager>();
         GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
@@ -73,6 +70,7 @@ public class GameManager : MonoBehaviour
         uiHandler = new UIHandler(ui,levelConfig);
         menuHandler = new MenuHandler(uiHandler, levelConfig);
         collectedHandler = new CollectedHandler(uiHandler,levelConfig);
+		uiHandler.setCollectedHandler(collectedHandler);
         analyticsHandler = new AnalyticsHandler(levelConfig);
         currentLevel = levelConfig.Level;
         currentScore = 0;
@@ -88,22 +86,24 @@ public class GameManager : MonoBehaviour
         {
             uiHandler.updateLives(lives);
         }
-
         gameTimer = Time.time;
         gameProcessingTimer = gameTimer;
         lastFrameTime = gameTimer;
-
         //init data tracking variables
+        
         RecipeInfo[] levelRecipes = levelConfig.Recipes;
         recipePopularity = new Dictionary<string, int>{};
         foreach (RecipeInfo recipeInfo in levelRecipes)
         {
             recipePopularity.Add(recipeInfo.Name,0);
         }
+        
         trackPopularity = new Dictionary<int, float>{{0,0},{1,0},{2,0}};
         barrierEncountered = 0;
         currentTrack = 1;
         lastSwitch = gameTimer;
+        
+        setGameState(GameState.OnHold);
     }
 
     private void Update()
@@ -113,21 +113,22 @@ public class GameManager : MonoBehaviour
             case GameState.Playing:
                 gameTimer += Time.time - lastFrameTime;
                 
-                if (Input.GetKeyUp(KeyCode.A)&&currentLevel>=3&&currentActiveBag==1)
+                float dv = Input.GetAxis("Mouse ScrollWheel");
+                if (dv > 0&&currentLevel>=3&&currentActiveBag==1)
                 {
                     currentActiveBag = 0;
                     uiHandler.switchBag(currentActiveBag);
                 }
-                if (Input.GetKeyUp(KeyCode.D)&&currentLevel>=3&&currentActiveBag==0)
+                if (dv < 0&&currentLevel>=3&&currentActiveBag==0)
                 {
                     currentActiveBag = 1;
                     uiHandler.switchBag(currentActiveBag);
                 }
                 
-                if (Input.GetKeyUp(KeyCode.Space)||Input.GetKeyUp(KeyCode.S))
-                {
-                    collectedHandler.drop(currentActiveBag);
-                }
+                // if (Input.GetKeyUp(KeyCode.Space)||Input.GetKeyUp(KeyCode.S))
+                // {
+                //     collectedHandler.drop(currentActiveBag);
+                // }
 
                 uiHandler.updateScore(currentScore);
 
@@ -151,7 +152,11 @@ public class GameManager : MonoBehaviour
             case GameState.GameOver:
                 setGameState(GameState.OnHold);
                 //score tracking
-                analyticsHandler.upload(currentScore,recipePopularity,barrierEncountered,trackPopularity);
+                analyticsHandler.upload(currentScore,recipePopularity,barrierEncountered,trackPopularity,currentScore >= successScore);
+                foreach (KeyValuePair<int,float> statistic in trackPopularity)
+                {
+                    Debug.Log(statistic.Key+": "+statistic.Value);
+                }
                 
                 if (currentScore >= successScore)
                 {
@@ -175,18 +180,10 @@ public class GameManager : MonoBehaviour
 
     public bool canPickUp(string ingredient)
     {
-        Stack<String> pickUp = collectedHandler.pickUp(currentActiveBag,ingredient);//collected handler will update the ui
+        List<String> pickUp = collectedHandler.pickUp(currentActiveBag,ingredient);//collected handler will update the ui
         if (pickUp != null)
         {
-            Recipe finish = menuHandler.checkFinish(pickUp);//menu handler will update the ui
-            if (finish != null)
-            {
-                collectedHandler.finish(currentActiveBag);
-                currentScore += finish.score;
-                uiHandler.updateScore(currentScore);
-                recipePopularity[finish.name]++;
-            }
-
+            finish(pickUp);
             return true;
         }
         else
@@ -194,6 +191,22 @@ public class GameManager : MonoBehaviour
             //todo prompt player that bag is full
         }
         return false;
+    }
+
+    public void finish(List<String>collectedList)
+    {
+        Recipe finish = menuHandler.checkFinish(collectedList);//menu handler will update the ui
+        if (finish != null)
+        {
+            collectedHandler.finish(currentActiveBag);
+            StartCoroutine(menuHandler.Fadeout(finish, done => {
+                if(done != null && done) {
+                    currentScore += finish.score;
+                    uiHandler.updateScore(currentScore);
+                    recipePopularity[finish.name]++;
+                }
+            }));
+        }
     }
 
     public void looseLife()
@@ -217,6 +230,11 @@ public class GameManager : MonoBehaviour
         }
         lives += 1;
         uiHandler.updateLives(lives);
+    }
+
+	public void speedChange(int delta)
+    {
+        character.changeSpeed(delta);
     }
     
     public void StartGame(){

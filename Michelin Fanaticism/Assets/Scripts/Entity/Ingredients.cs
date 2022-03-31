@@ -16,8 +16,8 @@ public class Ingredients : MonoBehaviour
             string ingredientName;
             string[] strArray = gameObject.name.Split(' ');
             ingredientName = strArray[0];
-            bool colleced = GameManager.gm.canPickUp(ingredientName);
-            gameObject.SetActive(!colleced);
+            bool collected = GameManager.gm.canPickUp(ingredientName);
+            gameObject.SetActive(!collected);
         }
     }
 

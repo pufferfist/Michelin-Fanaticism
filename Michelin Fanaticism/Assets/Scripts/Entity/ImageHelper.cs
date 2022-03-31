@@ -20,6 +20,7 @@ public class ImageHelper
         {
             string path = levelConfig.IngredientWeights[i].Name;
             Sprite sprite = Resources.Load<Sprite>(path);
+            // Sprite sprite = null;
             imageDict.Add(levelConfig.IngredientWeights[i].Name, sprite);
         }
     }

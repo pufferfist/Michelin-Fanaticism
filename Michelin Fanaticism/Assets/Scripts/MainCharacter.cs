@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
@@ -7,43 +8,114 @@ using UnityEngine.XR;
 public class MainCharacter : MonoBehaviour
 {
     private Rigidbody rb;
-    public float speed = 25;
+    public float hSpeed = 20;
+    public int widthLimit = 5;
+    
     public float forwardSpeed = 15;
     private GameState gameState;
+    
+    private int checkBit;
+    private float prePos = 0;
+    private const int CHECKMID = 1; 
 
+    private const int CHECKLEFT = 2; 
+
+    private const int CHECKRIGHT = 4; 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.velocity = new Vector3(forwardSpeed, 0, 0);
+        checkBit = CHECKLEFT| CHECKRIGHT;
     }
 
     // Update is called once per frame
+    void checkArrival(float z){
+        // check for mid arrival
+        if((checkBit & CHECKMID) >0){
+            if(prePos * z<=0){
+                  rb.velocity = new Vector3(forwardSpeed, 0, 0);
+                  checkBit = CHECKLEFT| CHECKRIGHT;
+            }
+        }
+         // check for left arrival
+        if((checkBit & CHECKLEFT) >0){
+             if((prePos-widthLimit) * (z-widthLimit)<=0){
+                  rb.velocity = new Vector3(forwardSpeed, 0, 0);
+                  checkBit = CHECKMID;
+            }
+        }
+        // check for right arrival
+        if((checkBit & CHECKRIGHT) >0){
+             if((prePos+widthLimit) * (z+widthLimit)<=0){
+                  rb.velocity = new Vector3(forwardSpeed, 0, 0);
+                  checkBit = CHECKMID;
+            }
+        }
+    }
+    IEnumerator WaitandSlowDown()
+    {
+        yield return new WaitForSeconds(8f);
+        forwardSpeed -= 20;
+        rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+        /*
+        for (int i = 0; i < 40; i++)
+        {
+            yield return new WaitForSeconds(0.5f);
+            if (forwardSpeed > 15)
+            {
+                forwardSpeed -= 1;
+                rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+            }
+        }*/
+    }
     void Update()
     {
+        
+        var position = rb.position;
+        checkArrival(position.z);
+        prePos = position.z;
         switch (gameState)
         {
             case GameState.Playing:
-                //var h = Input.GetAxis("Horizontal");
-                //var velocity = rb.velocity;
-                var position = rb.position;
-                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                if (Input.GetKeyDown(KeyCode.UpArrow))
                 {
-                    rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z + 5, -5, 5));
+                    if (forwardSpeed == 15)
+                    {
+                        forwardSpeed += 20;
+                        rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+                        StartCoroutine(WaitandSlowDown());
+                    }
+                    
                 }
-                if (Input.GetKeyDown(KeyCode.RightArrow))
+
+                if (Input.GetKeyDown(KeyCode.A))
                 {
-                    rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z - 5, -5, 5));
+                    if(position.z<widthLimit){
+                         GameManager.gm.switchTrack(true);//used for analytic, don't delete!
+                        rb.velocity = new Vector3(forwardSpeed, 0, hSpeed);
+                    }
+                   
+                    //rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z + 5, -5, 5));
                 }
-                //rb.velocity = new Vector3(velocity.x,velocity.y,-h*speed);
-                //rb.velocity = new Vector3(velocity.x,velocity.y,-h*speed);
-                //rb.position = new Vector3 (position.x, position.y, Mathf.Clamp(position.z ,-14, 14));
+                if (Input.GetKeyDown(KeyCode.D))
+                {
+                    if(position.z>-1*widthLimit){     
+                        GameManager.gm.switchTrack(false);//used for analytic, don't delete!
+                        rb.velocity = new Vector3(forwardSpeed, 0, -1* hSpeed);
+                    }
+                    //rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z - 5, -5, 5));
+                }
+
+                rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z, -5, 5));
+
 
                 break;
             default:
                 break;
         }
     }
+
 
     public void changeState(GameState state)
     {
@@ -57,5 +129,12 @@ public class MainCharacter : MonoBehaviour
                 break;
         }
         this.gameState = state;
+    }
+
+    public void changeSpeed(int delta)
+    {
+        forwardSpeed += delta;
+        forwardSpeed = Math.Max(forwardSpeed, 5);
+        rb.velocity = new Vector3(forwardSpeed, 0, 0);
     }
 }

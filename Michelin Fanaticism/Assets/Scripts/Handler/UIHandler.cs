@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using MenuNameSpace;
 using UnityEngine;
@@ -9,11 +10,15 @@ namespace DefaultNamespace
     public class UIHandler
     {
         private LevelConfig levelConfig;
+		private CollectedHandler collectedHandler;
         private GameObject[] collectedPanel;
         private GameObject[] menuPanel;
         private Text score;
         private Text timer;
         private Text lives;
+        private RawImage[] shineImages;
+        private int colorChangeTimes = 16;
+        private float colorChangeTime = 0.5f;
 
         //init: find ui elements' reference
         public UIHandler(GameObject ui,LevelConfig levelConfig)
@@ -22,6 +27,13 @@ namespace DefaultNamespace
             Transform hud = ui.transform.Find("Hud");
             collectedPanel = new GameObject[2];
             menuPanel = new GameObject[3];
+            shineImages = new RawImage[3];
+            
+            for (var i = 0; i < shineImages.Length; i++)
+            {
+                shineImages[i] = hud.Find("MenuPanel").Find("ShineRawImage" + (i + 1)).GetComponent<RawImage>();
+                shineImages[i].color = Color.clear;
+            }
 
             //find collected panel
             for (int i = 0; i < collectedPanel.Length; i++)
@@ -34,10 +46,10 @@ namespace DefaultNamespace
                 }
             }
 
-            if (levelConfig.Level>=3)
-            {
-                collectedPanel[0].transform.position += new Vector3(0, 20, 0);
-            }
+            // if (levelConfig.Level>=3)
+            // {
+            //     collectedPanel[0].transform.position += new Vector3(0, 20, 0);
+            // }
             
             //find menu panel
             for (int i = 0; i < menuPanel.Length; i++)
@@ -54,23 +66,25 @@ namespace DefaultNamespace
             
             //find lives
             Transform health = hud.Find("Health");
-            GameObject bloodTipAndProps = hud.Find("StuPanel").Find("BloodTipAndProps").gameObject;
 
-            GameObject akey = hud.Find("StuPanel").Find("Bg").Find("Akey").gameObject;
-            GameObject dkey = hud.Find("StuPanel").Find("Bg").Find("Dkey").gameObject;
+            Transform stuPanel = hud.Find("StuPanel");
+            GameObject switchTip = stuPanel.Find("SwitchTip").gameObject;
+            GameObject dropTip = stuPanel.Find("DropTip").gameObject;
+            GameObject healthTip = stuPanel.Find("HealthTip").gameObject;
+            GameObject barrierTip = stuPanel.Find("BarrierTip").gameObject;
+            GameObject heartTip = stuPanel.Find("HeartTip").gameObject;
+            GameObject backPackTip = stuPanel.Find("BackpackTip").gameObject;
             GameObject recipeTip = hud.Find("StuPanel").Find("RecipeTip").gameObject;
-            GameObject skey = hud.Find("StuPanel").Find("Bg").Find("Skey").gameObject;
-            GameObject spacekey = hud.Find("StuPanel").Find("Bg").Find("Spacekey").gameObject;
             GameObject targetTip = hud.Find("StuPanel").Find("TargetTip").gameObject;
             //第一关基础的AD控制
             if (levelConfig.Level==1){
-                skey.SetActive(true);
-                spacekey.SetActive(true);
+                dropTip.SetActive(true);
                 recipeTip.SetActive(true);
+                backPackTip.SetActive(true);
             }else{
-                 skey.SetActive(false);
-                 spacekey.SetActive(false);
+                dropTip.SetActive(false);
                  recipeTip.SetActive(false);
+                 backPackTip.SetActive(false);
             }
 
             //第二关增加更多菜谱
@@ -82,19 +96,19 @@ namespace DefaultNamespace
 
             //第三关切换背包
             if(levelConfig.Level==3){
-                akey.SetActive(true);
-                dkey.SetActive(true);
+                switchTip.SetActive(true);
             }else{
-                akey.SetActive(false);
-                dkey.SetActive(false);
+                switchTip.SetActive(false);
             }
 
-
-
             if(levelConfig.Level==4){
-                bloodTipAndProps.SetActive(true);
+                healthTip.SetActive(true);
+                barrierTip.SetActive(true);
+                    heartTip.SetActive(true);
             }else{
-                bloodTipAndProps.SetActive(false);
+                healthTip.SetActive(false);
+                barrierTip.SetActive(false);
+                heartTip.SetActive(false);
             }            
             
             
@@ -110,13 +124,14 @@ namespace DefaultNamespace
             
         }
 
-        public void updateCollectedPanel(int id, Stack<String> ingres)
+        public void updateCollectedPanel(int id, List<String> ingres)
         {
             resetCollectedPanel(id);
             int i = 0;
             foreach (String ingre in ingres)
             {
                 collectedPanel[id].transform.GetChild(i).GetComponent<Image>().sprite = ImageHelper.getInstance().getImageDictionary(ingre);
+                collectedPanel[id].transform.GetChild(i).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f); // set transparency to 0%
                 i++;
             }
         }
@@ -135,6 +150,7 @@ namespace DefaultNamespace
                         if (obj.CompareTag("Ingredient"))
                         {
                             obj.GetComponent<Image>().sprite = null;
+                            obj.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f);
                         }
                         else // this is timer
                         {
@@ -150,6 +166,7 @@ namespace DefaultNamespace
                     {
                         recipe.transform.GetChild(j).GetComponent<Image>().sprite = 
                             ImageHelper.getInstance().getImageDictionary(recipeList[i].ingredients[j]);
+                        recipe.transform.GetChild(j).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
                     }
 
                     recipe.SetActive(true);
@@ -161,6 +178,7 @@ namespace DefaultNamespace
                 }
                 else
                 {
+                    shineImages[i].color = Color.clear;
                     recipe.SetActive(false);
                 }
             }
@@ -168,7 +186,7 @@ namespace DefaultNamespace
 
         public void updateScore(int score)
         {
-            this.score.text = score.ToString();
+            this.score.text = score + "/" + levelConfig.SuccessScore;
         }
 
         public void updateTime(int time)
@@ -188,16 +206,47 @@ namespace DefaultNamespace
             {
                 return;
             }
-            collectedPanel[activeBag].transform.position += new Vector3(0, 20, 0);
-            collectedPanel[activeBag^1].transform.position += new Vector3(0, -20, 0);
+
+            collectedPanel[activeBag].transform.position += new Vector3(-47, 0, 0);
+            collectedPanel[activeBag].transform.localScale += new Vector3(0.4f, 0.4f, 0);
+            collectedPanel[activeBag ^ 1].transform.localScale += new Vector3(-0.4f, -0.4f, 0);
+            collectedPanel[activeBag ^ 1].transform.position += new Vector3(47, 0, 0);
         }
 
         private void resetCollectedPanel(int index)
         {
             foreach (Transform ingre in collectedPanel[index].transform)
             {
-                ingre.GetComponent<Image>().sprite = null;
+                ingre.GetComponent<Image>().sprite = null; // reset sprite to null
+                ingre.GetComponent<Image>().color = new Color(1f, 1f, 1f, 0f); // set transparency to 100%
             }
         }
+        
+        public IEnumerator shineBeforeUpdateMenuPanel(int finishedIndex)
+        {
+            float changeSpeed = (float)1 / colorChangeTimes;
+            float waitTime = colorChangeTime / colorChangeTimes;
+            var rawImage = shineImages[finishedIndex];
+            for (int i = 0; i < colorChangeTimes; i++)
+            {
+                rawImage.color = new Color(0.367078f, 0.9811321f, 0.01388392f, 0.4f*i*changeSpeed);
+                yield return new WaitForSeconds(waitTime);
+            }
+        }
+
+		public void setCollectedHandler(CollectedHandler collectedHandler)
+		{
+			this.collectedHandler = collectedHandler;
+			for (int i = 0; i < collectedPanel.Length; i++)
+            {
+				for (int j = 0; j < 3; ++j)
+				{
+					MouseHandler mouseHandler = collectedPanel[i].transform.GetChild(j).GetComponent<MouseHandler>();
+					mouseHandler.collectedHandler = collectedHandler;
+					mouseHandler.index = i;
+					mouseHandler.k = j;
+				}
+            }
+		}
     }
 }

@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using MenuNameSpace;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace DefaultNamespace
 {
@@ -38,8 +40,10 @@ namespace DefaultNamespace
          * return null: no finished recipe
          * called by gameManager if a pickup happens
          */
-        public Recipe checkFinish(Stack<String> collected)
+        public Recipe checkFinish(List<String> collected)
         {
+            int expireIndex=-1;
+            float minRemainTime = float.MaxValue;
             for (int i = 0; i < recipes.Length; i++)
             {
                 Recipe recipe = recipes[i];
@@ -47,16 +51,33 @@ namespace DefaultNamespace
                 {
                     bool equal = collected.ToArray().OrderBy(i => i).SequenceEqual(
                         recipe.ingredients.ToArray().OrderBy(i => i));
-                    if (equal)
+                    if (equal&&recipe.remainTime<minRemainTime)
                     {
-                        expireRecipe(i);
-                        uiHandler.updateMenuPanel(recipes);
-                        return recipe;
+                        expireIndex = i;
+                        minRemainTime = recipe.remainTime;
                     }
                 }
             }
 
-            return null;
+            if (expireIndex==-1)
+            {
+                return null;
+            }
+
+            Recipe expired = recipes[expireIndex];
+            // expireRecipe(expireIndex);
+            // uiHandler.updateMenuPanel(recipes);
+            return expired;
+        }
+        
+        public IEnumerator Fadeout(Recipe finishedRecipe,Action<bool> done)
+        {
+            //do your thing here
+            yield return uiHandler.shineBeforeUpdateMenuPanel(finishedRecipe.index);
+            // yield return null;
+
+            expireRecipe(finishedRecipe.index);
+            done(true);
         }
 
         //called by gameManager per frame
@@ -106,6 +127,7 @@ namespace DefaultNamespace
                 if (recipes[i] == null)
                 {
                     recipes[i] = candidateRecipes[UnityEngine.Random.Range(0, candidateRecipes.Count)].Clone() as Recipe;
+                    recipes[i].index = i;
                     modifyTimer = Time.time;
                     lastAdd = true;
                     break;
@@ -114,7 +136,7 @@ namespace DefaultNamespace
             uiHandler.updateMenuPanel(recipes);
         }
 
-        private void expireRecipe(int index)
+        public void expireRecipe(int index)
         {
             recipes[index] = null;
             if (lastAdd)

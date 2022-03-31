@@ -26,6 +26,16 @@ public class Buff : MonoBehaviour
                 GameManager.gm.addLife();
                 gameObject.SetActive(false);
             }
+            else if (buffName.Equals("SpeedUp"))
+            {
+                GameManager.gm.speedChange(5);
+                gameObject.SetActive(false);
+            }
+            else if (buffName.Equals("SpeedDown"))
+            {
+                GameManager.gm.speedChange(-5);
+                gameObject.SetActive(false);
+            }
         }
     }
 
