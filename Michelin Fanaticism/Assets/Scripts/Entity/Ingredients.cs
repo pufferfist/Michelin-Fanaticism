@@ -19,8 +19,9 @@ public class Ingredients : MonoBehaviour
             bool collected = GameManager.gm.canPickUp(ingredientName);
             if (collected)
             {
-                    Debug.Log("Play Sound.");
-                    GetComponent<AudioSource>().Play();
+                    AudioSource[] audioSources = player.GetComponents<AudioSource>();
+                    AudioSource audioSource = audioSources[0];
+                    audioSource.Play();
             }
             gameObject.SetActive(!collected);
         }

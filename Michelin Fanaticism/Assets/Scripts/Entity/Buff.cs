@@ -24,6 +24,9 @@ public class Buff : MonoBehaviour
             if (buffName.Equals("Heart"))
             {
                 GameManager.gm.addLife();
+                AudioSource[] audioSources = player.GetComponents<AudioSource>();
+                AudioSource audioSource = audioSources[3];
+                audioSource.Play();
                 gameObject.SetActive(false);
             }
             else if (buffName.Equals("SpeedUp"))

@@ -23,8 +23,10 @@ public class Obstacle : MonoBehaviour
             obstacleName = strArray[0];
             if (obstacleName.Equals("ConeStop"))
             {
-                
                 GameManager.gm.looseLife();
+                AudioSource[] audioSources = player.GetComponents<AudioSource>();
+                AudioSource audioSource = audioSources[2];
+                audioSource.Play();
                 gameObject.SetActive(false);
             }
         }

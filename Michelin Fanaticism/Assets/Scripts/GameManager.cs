@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
     public GameObject failPanel;
 
     public GameObject stuPanel;
-
     public static GameManager instance;
 
     void Awake(){
@@ -64,7 +63,6 @@ public class GameManager : MonoBehaviour
             gm = GetComponent<GameManager>();
         GameObject  configReader = GameObject.FindGameObjectsWithTag("ConfigReader")[0];
         ConfigReader cr = configReader.GetComponent<ConfigReader>();
-       
         levelConfig = cr.configResult;
         ImageHelper.init(levelConfig);
         uiHandler = new UIHandler(ui,levelConfig);
@@ -102,7 +100,6 @@ public class GameManager : MonoBehaviour
         barrierEncountered = 0;
         currentTrack = 1;
         lastSwitch = gameTimer;
-        
         setGameState(GameState.OnHold);
     }
 
@@ -203,6 +200,9 @@ public class GameManager : MonoBehaviour
                 if(done != null && done) {
                     currentScore += finish.score;
                     uiHandler.updateScore(currentScore);
+                    AudioSource[] audioSources = character.GetComponents<AudioSource>();
+                    AudioSource audioSource = audioSources[1];
+                    audioSource.Play();
                     recipePopularity[finish.name]++;
                 }
             }));
