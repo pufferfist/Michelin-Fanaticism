@@ -207,10 +207,10 @@ namespace DefaultNamespace
                 return;
             }
 
-            collectedPanel[activeBag].transform.position += new Vector3(-47, 0, 0);
+            collectedPanel[activeBag].transform.position += new Vector3(-66, 0, 0);
             collectedPanel[activeBag].transform.localScale += new Vector3(0.4f, 0.4f, 0);
             collectedPanel[activeBag ^ 1].transform.localScale += new Vector3(-0.4f, -0.4f, 0);
-            collectedPanel[activeBag ^ 1].transform.position += new Vector3(47, 0, 0);
+            collectedPanel[activeBag ^ 1].transform.position += new Vector3(66, 0, 0);
         }
 
         private void resetCollectedPanel(int index)
