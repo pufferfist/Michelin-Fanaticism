@@ -206,12 +206,20 @@ namespace DefaultNamespace
             {
                 return;
             }
+
+            float scaleDiff = Math.Abs(collectedPanel[activeBag].transform.GetComponent<RectTransform>().localScale.x -
+                                collectedPanel[activeBag ^ 1].transform.GetComponent<RectTransform>().localScale.x);
+            float xPosDiff = collectedPanel[activeBag].transform.GetComponent<RectTransform>().localPosition.x -
+                             collectedPanel[activeBag ^ 1].transform.GetComponent<RectTransform>().localPosition.x;
             
-            collectedPanel[activeBag].transform.position += new Vector3(-143, 0, 0);
-            collectedPanel[activeBag].transform.localScale += new Vector3(0.4f, 0.4f, 0);
-            
-            collectedPanel[activeBag ^ 1].transform.localScale += new Vector3(-0.4f, -0.4f, 0);
-            collectedPanel[activeBag ^ 1].transform.position += new Vector3(143, 0, 0);
+            Debug.Log(scaleDiff);
+            collectedPanel[activeBag].transform.localScale += new Vector3(scaleDiff, scaleDiff, 0);
+            collectedPanel[activeBag].transform.GetComponent<RectTransform>().localPosition +=
+                new Vector3(-xPosDiff, 0, 0);
+
+            collectedPanel[activeBag ^ 1].transform.localScale += new Vector3(-scaleDiff, -scaleDiff, 0);
+            collectedPanel[activeBag ^ 1].transform.GetComponent<RectTransform>().localPosition +=
+                new Vector3(xPosDiff, 0, 0);
         }
 
         private void resetCollectedPanel(int index)
