@@ -10,6 +10,7 @@ public class MainCharacter : MonoBehaviour
     private Rigidbody rb;
     public float hSpeed = 20;
     public int widthLimit = 5;
+    public Boolean canJump=true;
     
     public float forwardSpeed = 15;
     private GameState gameState;
@@ -55,9 +56,9 @@ public class MainCharacter : MonoBehaviour
     }
     IEnumerator WaitandSlowDown()
     {
-        yield return new WaitForSeconds(8f);
+        yield return new WaitForSeconds(4f);
         forwardSpeed -= 20;
-        rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+        rb.velocity = new Vector3(forwardSpeed, -10, rb.velocity.z);
         /*
         for (int i = 0; i < 40; i++)
         {
@@ -69,6 +70,12 @@ public class MainCharacter : MonoBehaviour
             }
         }*/
     }
+    IEnumerator WaitandJumpDown()
+    {
+        yield return new WaitForSeconds(1.5f);
+        rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+        canJump = true;
+    }
     void Update()
     {
         
@@ -78,7 +85,7 @@ public class MainCharacter : MonoBehaviour
         switch (gameState)
         {
             case GameState.Playing:
-                if (Input.GetKeyDown(KeyCode.UpArrow))
+                if (Input.GetKeyDown(KeyCode.W))
                 {
                     if (forwardSpeed == 15)
                     {
@@ -88,7 +95,15 @@ public class MainCharacter : MonoBehaviour
                     }
                     
                 }
-
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    if (canJump==true)
+                    {
+                        canJump = false;
+                        rb.velocity = new Vector3(forwardSpeed, 7, rb.velocity.z); 
+                        StartCoroutine(WaitandJumpDown());
+                    }
+                }
                 if (Input.GetKeyDown(KeyCode.A))
                 {
                     if(position.z<widthLimit){
@@ -100,7 +115,8 @@ public class MainCharacter : MonoBehaviour
                 }
                 if (Input.GetKeyDown(KeyCode.D))
                 {
-                    if(position.z>-1*widthLimit){     
+                    if(position.z>-1*widthLimit)
+                    {     
                         GameManager.gm.switchTrack(false);//used for analytic, don't delete!
                         rb.velocity = new Vector3(forwardSpeed, 0, -1* hSpeed);
                     }
