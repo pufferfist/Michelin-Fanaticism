@@ -168,6 +168,10 @@ public class GameManager : MonoBehaviour
 
             case GameState.OnHold:
                 menuHandler.updateOnHoldTimer();
+                //right status and press any key to continue
+                if(Input.anyKeyDown && stuPanel.activeInHierarchy){
+                    StartGame();
+                }
                 break;
         }
 

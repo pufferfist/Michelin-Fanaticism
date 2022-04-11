@@ -4390,10 +4390,50 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 117
       objectReference: {fileID: 0}
+    - target: {fileID: 3145171267760763916, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_Text
+      value: Press any key to continues
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145171267760763916, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_FontData.m_MinSize
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145171267760763916, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_FontData.m_FontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145171267760763917, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -1.7062
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145171267760763917, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -0.85310364
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145171267896372363, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3145171267896372363, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2018899423}
+    - target: {fileID: 3145171267896372372, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 168.404
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145171267896372372, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 54.639
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145171267896372372, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 4.202
+      objectReference: {fileID: 0}
+    - target: {fileID: 3145171267896372372, guid: 1b92541840f824e0c9190485418740d5, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -84.3195
+      objectReference: {fileID: 0}
     - target: {fileID: 3145171268684761728, guid: 1b92541840f824e0c9190485418740d5, type: 3}
       propertyPath: m_IsActive
       value: 1
