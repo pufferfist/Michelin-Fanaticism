@@ -906,6 +906,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8df80956dd2310e40800b735e0eec529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sourcePath: level_4_movie.mp4
 --- !u!328 &316196222
 VideoPlayer:
   m_ObjectHideFlags: 0
@@ -2467,6 +2468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8df80956dd2310e40800b735e0eec529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sourcePath: Level1.mp4
 --- !u!114 &1068519777
 MonoBehaviour:
   m_ObjectHideFlags: 0
