@@ -1,7 +1,10 @@
 {
-    "Level": 1,
-    "BagSlot": 1,
-    "RecipeSlot": 1,
+    "Level": 4,
+    "BagSlot": 2,
+    "RecipeSlot": 3,
+    "LevelTime": 150,
+    "MaxHealth": 3,
+    "SuccessScore": 450,
     "Recipes": [
         {
             "ID": 1,
@@ -9,28 +12,28 @@
             "TotalTime": 30,
             "Score": 30,
             "Ingredients": ["Beef", "Lettuce", "Bread"]
-        },
-        {
+          },
+          {
             "ID": 2,
             "Name": "ChickenSandwich",
             "TotalTime": 30,
             "Score": 40,
             "Ingredients": ["Chicken", "Lettuce", "Bread"]
-        },
-        {
+          },
+          {
             "ID": 3,
             "Name": "SummerPudding",
             "TotalTime": 30,
             "Score": 20,
             "Ingredients": ["Bread", "Strawberry"]
-        },
-        {
+          },
+          {
             "ID": 4,
             "Name": "HealthyFood",
             "TotalTime": 30,
             "Score": 35,
             "Ingredients": ["Bread", "Strawberry", "Beef"]
-        }
+          }
     ],
     "IngredientWeights":[
         {
@@ -54,6 +57,19 @@
             "Weight":10
         }
     ],
-    "ItemsWeights":[]
+    "ItemsWeights":[
+        {
+            "Name":"Heart",
+            "Weight":2
+          },
+          {
+            "Name":"ConeStop",
+            "Weight":7
+          },
+          {
+            "Name":"SpeedUp",
+            "Weight":3
+          }
+    ]
     
 }
