@@ -93,16 +93,16 @@ public class MainCharacter : MonoBehaviour
         switch (gameState)
         {
             case GameState.Playing:
-                if (Input.GetKeyDown(KeyCode.W))
-                {
-                    if (forwardSpeed == 15)
-                    {
-                        forwardSpeed += 20;
-                        rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
-                        StartCoroutine(WaitandSlowDown());
-                    }
+                // if (Input.GetKeyDown(KeyCode.W))
+                // {
+                //     if (forwardSpeed == 15)
+                //     {
+                //         forwardSpeed += 20;
+                //         rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+                //         StartCoroutine(WaitandSlowDown());
+                //     }
                     
-                }
+                // }
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     if (canJump==true)
