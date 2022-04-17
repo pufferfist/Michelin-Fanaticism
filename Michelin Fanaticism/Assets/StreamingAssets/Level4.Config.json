@@ -4,7 +4,7 @@
   "RecipeSlot": 3,
   "LevelTime": 150,
   "MaxHealth": 3,
-  "SuccessScore": 400,
+  "SuccessScore": 450,
   "Recipes": [
     {
       "ID": 1,
@@ -50,7 +50,7 @@
     },
     {
       "Name":"Bread",
-      "Weight":20
+      "Weight":10
     },
     {
       "Name":"Beef",
@@ -65,14 +65,6 @@
     {
       "Name":"ConeStop",
       "Weight":7
-    },
-    {
-      "Name":"SpeedUp",
-      "Weight":3
-    },
-    {
-      "Name":"SpeedDown",
-      "Weight":0
     }
   ]
 
