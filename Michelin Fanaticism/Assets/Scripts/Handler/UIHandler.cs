@@ -76,6 +76,9 @@ namespace DefaultNamespace
             GameObject backPackTip = stuPanel.Find("BackpackTip").gameObject;
             GameObject recipeTip = hud.Find("StuPanel").Find("RecipeTip").gameObject;
             GameObject targetTip = hud.Find("StuPanel").Find("TargetTip").gameObject;
+            GameObject level5_VideoShow = hud.Find("StuPanel").Find("Level5_VideoShow").gameObject;
+
+
             //第一关基础的AD控制
             if (levelConfig.Level==1){
                 dropTip.SetActive(true);
@@ -101,16 +104,25 @@ namespace DefaultNamespace
                 switchTip.SetActive(false);
             }
 
+            //第四关障碍和血条
             if(levelConfig.Level==4){
                 healthTip.SetActive(true);
                 barrierTip.SetActive(true);
-                    heartTip.SetActive(true);
+                heartTip.SetActive(true);
             }else{
                 healthTip.SetActive(false);
                 barrierTip.SetActive(false);
                 heartTip.SetActive(false);
             }            
-            
+
+            //第五关加速道具
+            if(levelConfig.Level==5){
+                // Debug.Log(levelConfig.Level);
+                level5_VideoShow.SetActive(true);
+            }else{
+                // Debug.Log(levelConfig.Level);
+                level5_VideoShow.SetActive(false);              
+            }
             
 
             if (levelConfig.Level<=3)
