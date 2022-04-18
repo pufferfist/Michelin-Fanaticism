@@ -61,3 +61,5 @@ crashlytics-build.properties
 *.idea/
 *.DS_Store
 /EditorUserSetting.asset
+PreBuildProcessing.cs
+PreBuildProcessing.cs.meta
