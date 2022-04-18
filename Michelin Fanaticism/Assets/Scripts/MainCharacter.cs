@@ -8,23 +8,24 @@ using UnityEngine.XR;
 public class MainCharacter : MonoBehaviour
 {
     private Rigidbody rb;
-    public float hSpeed = 20;
-    public int widthLimit = 5;
-    public Boolean canJump=true;
-    
-    public float forwardSpeed = 15;
     private GameState gameState;
+    private Animator animator;
+
+    public float hSpeed = 1;
+    public int widthLimit = 5;
+    public Boolean canJump = true;
+    public float forwardSpeed = 15;
+
     
     private int checkBit;
     private float prePos = 0;
     private const int CHECKMID = 1; 
-
     private const int CHECKLEFT = 2; 
-
     private const int CHECKRIGHT = 4; 
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         rb.velocity = new Vector3(forwardSpeed, 0, 0);
         checkBit = CHECKLEFT| CHECKRIGHT;
@@ -34,6 +35,8 @@ public class MainCharacter : MonoBehaviour
         {
             forwardSpeed += 20;
             rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+            animator.SetBool("isRun", true);
+            animator.SetBool("isWalk", false);
             StartCoroutine(WaitandSlowDown());
         }
     }
@@ -67,6 +70,8 @@ public class MainCharacter : MonoBehaviour
         yield return new WaitForSeconds(4f);
         forwardSpeed -= 20;
         rb.velocity = new Vector3(forwardSpeed, -10, rb.velocity.z);
+        animator.SetBool("isWalk", true);
+        animator.SetBool("isRun", false);
         /*
         for (int i = 0; i < 40; i++)
         {
@@ -83,6 +88,8 @@ public class MainCharacter : MonoBehaviour
         yield return new WaitForSeconds(1.5f);
         rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
         canJump = true;
+        animator.SetBool("isJump", false);
+        animator.SetFloat("yPosition", rb.position.y);
     }
     void Update()
     {
@@ -90,23 +97,27 @@ public class MainCharacter : MonoBehaviour
         var position = rb.position;
         checkArrival(position.z);
         prePos = position.z;
+        animator.SetFloat("yPosition", position.y);
         switch (gameState)
         {
             case GameState.Playing:
-                // if (Input.GetKeyDown(KeyCode.W))
-                // {
-                //     if (forwardSpeed == 15)
-                //     {
-                //         forwardSpeed += 20;
-                //         rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
-                //         StartCoroutine(WaitandSlowDown());
-                //     }
-                    
-                // }
+                 if (Input.GetKeyDown(KeyCode.W))
+                 {
+                     if (forwardSpeed == 15)
+                     {
+                         forwardSpeed += 20;
+                         rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+                         animator.SetBool("isRun", true);
+                         animator.SetBool("isWalk", false);
+                         StartCoroutine(WaitandSlowDown());
+                     }  
+                 }
+
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     if (canJump==true)
                     {
+                        animator.SetBool("isJump", true);
                         canJump = false;
                         rb.velocity = new Vector3(forwardSpeed, 7, rb.velocity.z); 
                         StartCoroutine(WaitandJumpDown());
@@ -132,7 +143,7 @@ public class MainCharacter : MonoBehaviour
                 }
 
                 rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z, -5, 5));
-
+                transform.LookAt(transform.position + rb.velocity);
 
                 break;
             default:
@@ -147,6 +158,10 @@ public class MainCharacter : MonoBehaviour
         {
             case GameState.Playing:
                 rb.velocity = new Vector3(forwardSpeed,0,0);
+                animator.SetBool("isWalk", true);
+                animator.SetBool("isJump", false);
+                animator.SetBool("isRun", false);
+                animator.SetFloat("yPosition", rb.position.y);
                 break;
             default:
                 rb.velocity = Vector3.zero;
