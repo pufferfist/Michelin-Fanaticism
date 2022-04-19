@@ -4,7 +4,7 @@
   "RecipeSlot": 3,
   "LevelTime": 150,
   "MaxHealth": 3,
-  "SuccessScore": 450,
+  "SuccessScore": 350,
   "Recipes": [
     {
       "ID": 1,
@@ -50,7 +50,7 @@
     },
     {
       "Name":"Bread",
-      "Weight":10
+      "Weight":20
     },
     {
       "Name":"Beef",
