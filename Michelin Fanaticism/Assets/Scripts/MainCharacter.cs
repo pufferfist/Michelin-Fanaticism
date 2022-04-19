@@ -143,7 +143,8 @@ public class MainCharacter : MonoBehaviour
                 }
 
                 rb.position = new Vector3(position.x, position.y, Mathf.Clamp(position.z, -5, 5));
-                transform.LookAt(transform.position + rb.velocity);
+                transform.LookAt(transform.position + new Vector3(rb.velocity.x,0,rb.velocity.z));
+                
 
                 break;
             default:
