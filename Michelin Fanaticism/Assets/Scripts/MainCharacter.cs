@@ -85,7 +85,7 @@ public class MainCharacter : MonoBehaviour
     }
     IEnumerator WaitandJumpDown()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1f);
         rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
         canJump = true;
         animator.SetBool("isJump", false);
