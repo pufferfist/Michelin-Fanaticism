@@ -101,17 +101,17 @@ public class MainCharacter : MonoBehaviour
         switch (gameState)
         {
             case GameState.Playing:
-                 if (Input.GetKeyDown(KeyCode.W))
-                 {
-                     if (forwardSpeed == 15)
-                     {
-                         forwardSpeed += 20;
-                         rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
-                         animator.SetBool("isRun", true);
-                         animator.SetBool("isWalk", false);
-                         StartCoroutine(WaitandSlowDown());
-                     }  
-                 }
+                 // if (Input.GetKeyDown(KeyCode.W))
+                 // {
+                 //     if (forwardSpeed == 15)
+                 //     {
+                 //         forwardSpeed += 20;
+                 //         rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
+                 //         animator.SetBool("isRun", true);
+                 //         animator.SetBool("isWalk", false);
+                 //         StartCoroutine(WaitandSlowDown());
+                 //     }  
+                 // }
 
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
@@ -164,6 +164,9 @@ public class MainCharacter : MonoBehaviour
                 animator.SetFloat("yPosition", rb.position.y);
                 break;
             default:
+                animator.SetBool("isWalk", false);
+                animator.SetBool("isJump", false);
+                animator.SetBool("isRun", false);
                 rb.velocity = Vector3.zero;
                 break;
         }
