@@ -149,6 +149,7 @@ public class MainCharacter : MonoBehaviour
             default:
                 break;
         }
+        animator.SetFloat("speed", rb.velocity.magnitude);
     }
 
 
