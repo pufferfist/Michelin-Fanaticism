@@ -43,7 +43,7 @@ public class Play_button_controller : MonoBehaviour
     public void nextLevel()
     {
         int currentLevel = GameManager.gm.currentLevel;
-        if (currentLevel==4)
+        if (currentLevel==5)
         {
             SceneManager.LoadScene(0);
         }

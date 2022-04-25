@@ -2,9 +2,9 @@
     "Level": 5,
     "BagSlot": 2,
     "RecipeSlot": 3,
-    "LevelTime": 150,
+    "LevelTime": 10,
     "MaxHealth": 4,
-    "SuccessScore": 400,
+    "SuccessScore": 10,
     "Recipes": [
         {
             "ID": 1,
