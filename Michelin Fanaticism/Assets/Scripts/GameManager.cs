@@ -147,6 +147,9 @@ public class GameManager : MonoBehaviour
 
                 break;
             case GameState.GameOver:
+                AudioSource[] audioSources = character.GetComponents<AudioSource>();
+                AudioSource audioSource = audioSources[6];
+                audioSource.Stop();
                 setGameState(GameState.OnHold);
                 //score tracking
                 analyticsHandler.upload(currentScore,recipePopularity,barrierEncountered,trackPopularity,currentScore >= successScore);
@@ -157,10 +160,14 @@ public class GameManager : MonoBehaviour
                 
                 if (currentScore >= successScore)
                 {
+                    AudioSource win = audioSources[7];
+                    win.Play();
                     successPanel.SetActive(true);
                 }
                 else
                 {
+                    AudioSource lose = audioSources[8];
+                    lose.Play();
                     failPanel.SetActive(true);
                 }
 
@@ -242,6 +249,10 @@ public class GameManager : MonoBehaviour
     }
     
     public void StartGame(){
+        AudioSource[] audioSources = character.GetComponents<AudioSource>();
+        AudioSource audioSource = audioSources[6];
+        audioSource.loop = true;
+        audioSource.Play();
         stuPanel.SetActive(false);
         setGameState(GameState.Playing);
     }

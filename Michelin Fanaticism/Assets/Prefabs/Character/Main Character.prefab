@@ -286,6 +286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hSpeed: 20
   widthLimit: 5
+  canJump: 1
   forwardSpeed: 15
 --- !u!82 &4398650857403432268
 AudioSource:
