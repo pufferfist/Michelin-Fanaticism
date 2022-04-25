@@ -120,6 +120,10 @@ public class MainCharacter : MonoBehaviour
                         animator.SetBool("isJump", true);
                         canJump = false;
                         rb.velocity = new Vector3(forwardSpeed, 7, rb.velocity.z); 
+                        MainCharacter mainCharacter = GameManager.gm.character;
+                        AudioSource[] audioSources = mainCharacter.GetComponents<AudioSource>();
+                        AudioSource audioSource = audioSources[5];
+                        audioSource.Play();
                         StartCoroutine(WaitandJumpDown());
                     }
                 }

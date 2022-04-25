@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-
+using UnityEngine;
 namespace DefaultNamespace
 {
     public class CollectedHandler
@@ -38,6 +38,10 @@ namespace DefaultNamespace
         {
             if (collected[index].Count>=1 && k < collected[index].Count)
             {
+                MainCharacter mainCharacter = GameManager.gm.character;
+                AudioSource[] audioSources = mainCharacter.GetComponents<AudioSource>();
+                AudioSource audioSource = audioSources[4];
+                audioSource.Play();
                 collected[index].RemoveAt(k);
                 uiHandler.updateCollectedPanel(index,collected[index]);
             }
