@@ -85,7 +85,7 @@ public class MainCharacter : MonoBehaviour
     }
     IEnumerator WaitandJumpDown()
     {
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1.4f);
         rb.velocity = new Vector3(forwardSpeed, 0, rb.velocity.z);
         canJump = true;
         animator.SetBool("isJump", false);
@@ -119,6 +119,7 @@ public class MainCharacter : MonoBehaviour
                     {
                         animator.SetBool("isJump", true);
                         canJump = false;
+                        animator.SetFloat("yPosition", position.y);
                         rb.velocity = new Vector3(forwardSpeed, 7, rb.velocity.z); 
                         MainCharacter mainCharacter = GameManager.gm.character;
                         AudioSource[] audioSources = mainCharacter.GetComponents<AudioSource>();
